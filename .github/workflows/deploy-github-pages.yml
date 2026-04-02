@@ -46,8 +46,8 @@ jobs:
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
+      # Intentionally no actions/configure-pages: it calls GET /repos/.../pages and returns 404
+      # until Settings → Pages → Build: GitHub Actions is enabled once. We don't need its outputs.
 
       - name: Install & build
         working-directory: frontend

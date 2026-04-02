@@ -143,7 +143,7 @@ npm run preview
 
 ### GitHub Pages
 
-1. **Settings → Pages → Source:** GitHub Actions.  
+1. **One-time —** In the repo: **Settings → Pages → Build and deployment**, set **Source** to **GitHub Actions** (not “Deploy from a branch”). Until this is saved, GitHub’s Pages API returns **404** to actions that query the site (the deploy workflow does not use `configure-pages` for that reason).
 2. Workflow: [`.github/workflows/deploy-github-pages.yml`](.github/workflows/deploy-github-pages.yml) sets **`VITE_BASE`**, builds, uploads `frontend/dist`.  
 3. **`404.html`** duplicates `index.html` for client-side routes.
 
