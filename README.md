@@ -53,8 +53,10 @@ Open **http://localhost:8080** — the UI, **`/api`**, **`/proxy/hls`**, and **`
 | `ADMIN_USER` / `ADMIN_PASSWORD` | Admin HTTP Basic (default password **`changeme`** — change it) |
 | `ADMIN_SESSION_SECRET` | Optional; cookie signing for admin session |
 | `CORS_ORIGINS` | Optional; passed to API |
+| `CHANNELS_JSON_URL` | Optional; HTTP(S) URL to download `channels.json` on **api** startup (written to the **`channels-data`** volume). If unset, the image seed is copied once when the file is missing. |
+| `SKIP_CHANNELS_FETCH` | Set to **`1`** to skip download/seed (use an existing file on the volume only). |
 
-Stop: `docker compose down`. Category data persists in the **`category-db`** volume (`/data/categories.db` in the **api** container).
+Stop: `docker compose down`. The **`category-db`** volume keeps **`categories.db`**; **`channels-data`** keeps **`channels.json`** (fetched or seeded on first **api** start, then reused).
 
 ---
 
@@ -143,9 +145,20 @@ npm run preview
 
 ### GitHub Pages
 
-1. **One-time —** In the repo: **Settings → Pages → Build and deployment**, set **Source** to **GitHub Actions** (not “Deploy from a branch”). Until this is saved, GitHub’s Pages API returns **404** to actions that query the site (the deploy workflow does not use `configure-pages` for that reason).
-2. Workflow: [`.github/workflows/deploy-github-pages.yml`](.github/workflows/deploy-github-pages.yml) sets **`VITE_BASE`**, builds, uploads `frontend/dist`.  
-3. **`404.html`** duplicates `index.html` for client-side routes.
+**You must turn on Pages for this repository before `deploy-pages` can succeed.** The error `Creating Pages deployment failed` / **HttpError: Not Found** means GitHub has no Pages site configured for **Actions** yet (the REST API returns 404 until this is done).
+
+1. Open **`https://github.com/<owner>/<repo>/settings/pages`** (replace with your repo).
+2. Under **Build and deployment → Source**, choose **GitHub Actions** (not “Deploy from a branch”). Save.
+3. Run the workflow again (**Actions** tab → **Deploy frontend to GitHub Pages** → **Run workflow**, or push a commit that touches the workflow paths).
+
+If the **`github-pages`** [environment](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment) has **required reviewers**, approve the pending deployment for the **deploy** job.
+
+After the first successful deploy, the site URL appears under **Settings → Pages** and in the workflow summary.
+
+Other notes:
+
+- Workflow: [`.github/workflows/deploy-github-pages.yml`](.github/workflows/deploy-github-pages.yml) sets **`VITE_BASE`**, builds, uploads `frontend/dist`. It does **not** use `actions/configure-pages` (that step also 404s until step 2 above is done).
+- **`404.html`** duplicates `index.html` for client-side routes.
 
 For a static Pages site **without** the API, the guide uses **fallback** topic ordering unless you build with **`VITE_API_BASE`** pointing at a hosted API.
 

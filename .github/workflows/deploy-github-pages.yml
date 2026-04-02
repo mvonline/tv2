@@ -1,3 +1,6 @@
+# Requires GitHub Pages to use "GitHub Actions" as the build source (repo Settings → Pages).
+# If deploy-pages fails with HttpError 404, open Settings → Pages and set Source to GitHub Actions, then re-run.
+
 name: Deploy frontend to GitHub Pages
 
 on:

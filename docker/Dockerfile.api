@@ -4,12 +4,17 @@ WORKDIR /app
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    CATEGORY_DB_PATH=/data/categories.db
+    CATEGORY_DB_PATH=/data/categories.db \
+    CHANNELS_JSON_PATH=/data/channel-data/channels.json
+
+RUN apt-get update && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY backend/ .
+COPY backend/data/channels.json /app/seed/channels.json
 
 COPY docker/api-entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh && sed -i 's/\r$//' /entrypoint.sh
