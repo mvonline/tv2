@@ -45,11 +45,17 @@ def allowed_host(hostname: str) -> bool:
 
 
 def proxy_base_url(request: Request) -> str:
+    """Public URL of this proxy endpoint (for m3u8 rewrite). Must match the browser origin."""
     u = request.url
     path = u.path
     if not path.endswith("/proxy/hls"):
         path = "/proxy/hls"
-    return f"{u.scheme}://{u.netloc}{path}"
+    # Behind nginx/docker: Host may be wrong if only $host was forwarded (port stripped).
+    forwarded_host = (request.headers.get("x-forwarded-host") or "").strip()
+    host_header = (request.headers.get("host") or "").strip()
+    netloc = forwarded_host or host_header or u.netloc
+    scheme = (request.headers.get("x-forwarded-proto") or "").strip() or u.scheme
+    return f"{scheme}://{netloc}{path}"
 
 
 def rewrite_line(line: str, playlist_base: str, proxy_self: str) -> str:

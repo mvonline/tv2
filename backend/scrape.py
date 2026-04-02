@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -25,8 +26,31 @@ from config import (
 from extract_stream import extract_channel_page
 from logos import download_channel_logo
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_LOGO_DIR = PROJECT_ROOT / "logo"
+
+def _project_root() -> Path:
+    """Repo root locally; in Docker only `backend/` is at `/app`, so parent.parent becomes `/`."""
+    root = Path(__file__).resolve().parent.parent
+    if root == Path("/"):
+        return Path("/app")
+    return root
+
+
+PROJECT_ROOT = _project_root()
+
+
+def _default_logo_dir() -> Path:
+    env = os.environ.get("LOGO_DIR", "").strip()
+    if env:
+        return Path(env)
+    return PROJECT_ROOT / "logo"
+
+
+def _default_channels_output() -> Path:
+    env = os.environ.get("CHANNELS_JSON_PATH", "").strip()
+    if env:
+        return Path(env)
+    return Path(__file__).resolve().parent / "data" / "channels.json"
+
 
 SESSION = requests.Session()
 SESSION.headers.update({"User-Agent": USER_AGENT})
@@ -189,8 +213,8 @@ def main() -> None:
         "-o",
         "--output",
         type=Path,
-        default=Path(__file__).resolve().parent / "data" / "channels.json",
-        help="Output JSON path",
+        default=_default_channels_output(),
+        help="Output JSON path (default: CHANNELS_JSON_PATH env or backend/data/channels.json)",
     )
     p.add_argument(
         "--delay",
@@ -207,8 +231,8 @@ def main() -> None:
     p.add_argument(
         "--logo-dir",
         type=Path,
-        default=DEFAULT_LOGO_DIR,
-        help="Directory to store downloaded logos (default: <project>/logo)",
+        default=_default_logo_dir(),
+        help="Directory to store downloaded logos (default: LOGO_DIR env or <project>/logo)",
     )
     args = p.parse_args()
     run(

@@ -3,6 +3,9 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile.api
+      args:
+        SCRAPE_AT_BUILD: ${SCRAPE_AT_BUILD:-0}
+        SCRAPE_DELAY_BUILD: ${SCRAPE_DELAY_BUILD:-0.8}
     environment:
       ADMIN_USER: ${ADMIN_USER:-admin}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-changeme}
@@ -10,11 +13,16 @@ services:
       CORS_ORIGINS: ${CORS_ORIGINS:-*}
       CATEGORY_DB_PATH: /data/categories.db
       CHANNELS_JSON_PATH: /data/channel-data/channels.json
+      LOGO_DIR: /data/logos
       CHANNELS_JSON_URL: ${CHANNELS_JSON_URL:-}
       SKIP_CHANNELS_FETCH: ${SKIP_CHANNELS_FETCH:-0}
+      # Scraper on container start: once (default, first boot only), always, or never
+      SCRAPE_ON_START: ${SCRAPE_ON_START:-once}
+      SCRAPE_DELAY: ${SCRAPE_DELAY:-1}
     volumes:
       - category-db:/data
       - channels-data:/data/channel-data
+      - logo-data:/data/logos
     restart: unless-stopped
 
   web:
@@ -25,6 +33,7 @@ services:
       - "${WEB_PORT:-8080}:80"
     volumes:
       - channels-data:/usr/share/nginx/html/data:ro
+      - logo-data:/usr/share/nginx/html/logo:ro
     depends_on:
       - api
     restart: unless-stopped
@@ -32,3 +41,4 @@ services:
 volumes:
   category-db:
   channels-data:
+  logo-data:

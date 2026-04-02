@@ -53,10 +53,24 @@ Open **http://localhost:8080** — the UI, **`/api`**, **`/proxy/hls`**, and **`
 | `ADMIN_USER` / `ADMIN_PASSWORD` | Admin HTTP Basic (default password **`changeme`** — change it) |
 | `ADMIN_SESSION_SECRET` | Optional; cookie signing for admin session |
 | `CORS_ORIGINS` | Optional; passed to API |
-| `CHANNELS_JSON_URL` | Optional; HTTP(S) URL to download `channels.json` on **api** startup (written to the **`channels-data`** volume). If unset, the image seed is copied once when the file is missing. |
-| `SKIP_CHANNELS_FETCH` | Set to **`1`** to skip download/seed (use an existing file on the volume only). |
+| `CHANNELS_JSON_URL` | Optional; HTTP(S) URL to download `channels.json` on **api** startup (takes priority over the scraper). |
+| `SKIP_CHANNELS_FETCH` | Set to **`1`** to skip URL fetch, scraper, and seeding (volume must already contain **`channels.json`**). |
+| `LOGO_DIR` | On the **api** container defaults to **`/data/logos`** (persisted **`logo-data`** volume, mounted read-only under **`/logo/`** on **web**). |
+| `SCRAPE_ON_START` | **`once`** (default): run **`scrape.py`** on first boot only (until **`channels-data/.tv2_scraped`** exists). **`always`**: run on every **api** start. **`never`**: never scrape; use **`CHANNELS_JSON_URL`** or seed only. |
+| `SCRAPE_DELAY` | Delay between requests for **`scrape.py`** (default **1** second). |
 
-Stop: `docker compose down`. The **`category-db`** volume keeps **`categories.db`**; **`channels-data`** keeps **`channels.json`** (fetched or seeded on first **api** start, then reused).
+On **first container start** (no `CHANNELS_JSON_URL`, `SKIP_CHANNELS_FETCH` not set), the **api** entrypoint runs **`python scrape.py`**, writing **`channels.json`** and logos to the named volumes (same paths as manual `docker compose exec api python scrape.py`).
+
+**Bake a scrape into the image** (needs network during `docker build`):
+
+```powershell
+$env:SCRAPE_AT_BUILD="1"
+docker compose build --no-cache api
+```
+
+Or one-off: `docker build -f docker/Dockerfile.api --build-arg SCRAPE_AT_BUILD=1 .`
+
+Stop: `docker compose down`. The **`category-db`** volume keeps **`categories.db`**; **`channels-data`** keeps **`channels.json`** and **`.tv2_scraped`**; **`logo-data`** keeps **`logo/`** files.
 
 ---
 
@@ -221,7 +235,7 @@ CDNs often return **403** unless requests use the same **Origin / Referer** as t
 | Mode | What to use |
 |------|-------------|
 | **Vite dev / `npm run preview`** | Built-in **`/proxy/hls`** in [`vite-plugin-hls-proxy.ts`](frontend/vite-plugin-hls-proxy.ts) |
-| **Docker / `main:app` behind nginx** | Browser uses **same origin**; no `VITE_HLS_PROXY_BASE` needed |
+| **Docker / `main:app` behind nginx** | Browser uses **same origin**; no `VITE_HLS_PROXY_BASE` needed. The bundled [`nginx.conf`](docker/nginx.conf) forwards **`Host` with port** (`$http_host`) so rewritten playlist URLs stay on the same host:port (using `$host` alone drops the port and breaks segments). |
 | **Static hosting only** | Run **`hls_proxy.py`** or **`main:app`** somewhere and build with e.g. `VITE_HLS_PROXY_BASE=http://your-host:8787/proxy/hls` |
 
 FastAPI alone: `uvicorn hls_proxy:app --host 127.0.0.1 --port 8787` (proxy only). Full stack: **`uvicorn main:app`** (proxy + API + admin).
