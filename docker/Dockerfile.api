@@ -15,7 +15,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY backend/ .
 COPY backend/data/channels.json /app/seed/channels.json
-COPY logo /app/seed/logo
+# Same layout as repo root (`logo/` next to `backend/`): scrape + entrypoint use this path.
+COPY logo /app/logo
 
 # Optional: network scrape during `docker build --build-arg SCRAPE_AT_BUILD=1` (bakes data + logos into the image).
 ARG SCRAPE_AT_BUILD=0
@@ -24,7 +25,7 @@ RUN if [ "$SCRAPE_AT_BUILD" = "1" ]; then \
       echo "SCRAPE_AT_BUILD=1: running scrape.py"; \
       python scrape.py --delay "$SCRAPE_DELAY_BUILD" \
         -o /app/data/channels.json \
-        --logo-dir /app/seed/logo; \
+        --logo-dir /app/logo; \
       cp -f /app/data/channels.json /app/seed/channels.json; \
     else \
       echo "SCRAPE_AT_BUILD=0: skipping scrape at build (set --build-arg SCRAPE_AT_BUILD=1 to enable)"; \
