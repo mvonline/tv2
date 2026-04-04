@@ -18,6 +18,7 @@ import {
   readSidebarCollapsed,
   writeSidebarCollapsed,
 } from "@/components/WatchSidebar"
+import { RelatedChannels } from "@/components/RelatedChannels"
 import { StreamPlayer } from "@/components/StreamPlayer"
 import { useChannels } from "@/context/ChannelsContext"
 import { channelNumber } from "@/lib/channelNumber"
@@ -245,6 +246,8 @@ export function WatchPage() {
                 </p>
               )}
             </div>
+
+            <RelatedChannels channels={ordered} current={channel} />
 
             <ChannelNumpad
               appendDigit={appendDigit}
