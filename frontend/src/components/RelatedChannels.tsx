@@ -1,13 +1,31 @@
-import { useMemo, useRef, useCallback, useState } from "react"
+import { useMemo, useRef, useCallback } from "react"
 import { Link } from "react-router-dom"
-import { ChevronLeft, ChevronRight, X, PanelBottom } from "lucide-react"
+import { ChevronLeft, ChevronRight, X } from "lucide-react"
 import type { Channel } from "@/types/channel"
 import { watchUrlForChannel } from "@/lib/paths"
 import { publicUrl } from "@/lib/publicUrl"
 
 const TOTAL = 15
 const SCROLL_AMOUNT = 3
-const STORAGE_KEY = "tv2_related_dock_collapsed"
+
+/** localStorage: "1" = user closed dock; absent/"0" = open */
+export const RELATED_DOCK_STORAGE_KEY = "tv2_related_dock_collapsed"
+
+export function readRelatedDockOpenFromStorage(): boolean {
+  try {
+    return localStorage.getItem(RELATED_DOCK_STORAGE_KEY) !== "1"
+  } catch {
+    return true
+  }
+}
+
+export function writeRelatedDockOpenToStorage(open: boolean) {
+  try {
+    localStorage.setItem(RELATED_DOCK_STORAGE_KEY, open ? "0" : "1")
+  } catch {
+    /* ignore */
+  }
+}
 
 function tokenize(s: string): Set<string> {
   return new Set(
@@ -52,44 +70,26 @@ export function getRelatedChannels(
     .map((r) => r.ch)
 }
 
-function readCollapsed(): boolean {
-  try {
-    return localStorage.getItem(STORAGE_KEY) === "1"
-  } catch {
-    return false
-  }
-}
-
-function writeCollapsed(collapsed: boolean) {
-  try {
-    localStorage.setItem(STORAGE_KEY, collapsed ? "1" : "0")
-  } catch {
-    /* ignore */
-  }
+export function hasRelatedChannels(
+  all: Channel[],
+  current: Channel,
+): boolean {
+  return getRelatedChannels(all, current, 1).length > 0
 }
 
 interface Props {
   channels: Channel[]
   current: Channel
+  open: boolean
+  onClose: () => void
 }
 
-export function RelatedChannels({ channels, current }: Props) {
+export function RelatedChannels({ channels, current, open, onClose }: Props) {
   const related = useMemo(
     () => getRelatedChannels(channels, current, TOTAL),
     [channels, current],
   )
   const trackRef = useRef<HTMLDivElement>(null)
-  const [collapsed, setCollapsed] = useState(readCollapsed)
-
-  const openDock = useCallback(() => {
-    setCollapsed(false)
-    writeCollapsed(false)
-  }, [])
-
-  const closeDock = useCallback(() => {
-    setCollapsed(true)
-    writeCollapsed(true)
-  }, [])
 
   const scroll = useCallback((dir: 1 | -1) => {
     const el = trackRef.current
@@ -101,84 +101,72 @@ export function RelatedChannels({ channels, current }: Props) {
     el.scrollBy({ left: step * dir, behavior: "smooth" })
   }, [])
 
-  if (!related.length) return null
+  if (!related.length || !open) return null
 
   return (
-    <div className="related-dock-wrap" data-collapsed={collapsed ? "" : undefined}>
-      {collapsed ? (
-        <button
-          type="button"
-          className="related-dock__peek glass-dock"
-          onClick={openDock}
-          aria-label="Show related channels"
-        >
-          <PanelBottom size={18} strokeWidth={2} aria-hidden />
-          <span>Related channels</span>
-        </button>
-      ) : (
-        <div
-          id="related-dock-panel"
-          className="related-dock glass-dock"
-          role="region"
-          aria-label="Related channels"
-        >
-          <header className="related-dock__head">
-            <span className="related-dock__title">Related channels</span>
-            <button
-              type="button"
-              className="related-dock__close"
-              onClick={closeDock}
-              aria-label="Hide related channels"
-            >
-              <X size={18} strokeWidth={2} />
-            </button>
-          </header>
-          <div className="related-dock__row">
-            <button
-              type="button"
-              className="related-dock__arrow"
-              onClick={() => scroll(-1)}
-              aria-label="Scroll left"
-            >
-              <ChevronLeft size={20} />
-            </button>
+    <div className="related-dock-wrap">
+      <div
+        id="related-dock-panel"
+        className="related-dock glass-dock"
+        role="region"
+        aria-label="Related channels"
+      >
+        <header className="related-dock__head">
+          <span className="related-dock__title">Related channels</span>
+          <button
+            type="button"
+            className="related-dock__close"
+            onClick={onClose}
+            aria-label="Hide related channels"
+          >
+            <X size={18} strokeWidth={2} />
+          </button>
+        </header>
+        <div className="related-dock__row">
+          <button
+            type="button"
+            className="related-dock__arrow"
+            onClick={() => scroll(-1)}
+            aria-label="Scroll left"
+          >
+            <ChevronLeft size={20} />
+          </button>
 
-            <div className="related-dock__track" ref={trackRef}>
-              {related.map((ch) => {
-                const logo = ch.logo ? publicUrl(ch.logo) : null
-                return (
-                  <Link
-                    key={ch.page_url}
-                    to={watchUrlForChannel(ch)}
-                    className="related-dock__card"
-                    title={ch.name ?? ch.slug}
-                  >
-                    <span className="related-dock__thumb">
-                      {logo ? (
-                        <img src={logo} alt="" loading="lazy" decoding="async" />
-                      ) : (
-                        <span className="related-dock__ph">TV</span>
-                      )}
-                    </span>
-                    <span className="related-dock__label">
-                      {ch.name ?? ch.slug}
-                    </span>
-                  </Link>
-                )
-              })}
-            </div>
-
-            <button
-              type="button"
-              className="related-dock__arrow"
-              onClick={() => scroll(1)}
-              aria-label="Scroll right"
-            >
-              <ChevronRight size={20} />
-            </button>
+          <div className="related-dock__track" ref={trackRef}>
+            {related.map((ch) => {
+              const logo = ch.logo ? publicUrl(ch.logo) : null
+              return (
+                <Link
+                  key={ch.page_url}
+                  to={watchUrlForChannel(ch)}
+                  className="related-dock__card"
+                  title={ch.name ?? ch.slug}
+                >
+                  <span className="related-dock__thumb">
+                    {logo ? (
+                      <img src={logo} alt="" loading="lazy" decoding="async" />
+                    ) : (
+                      <span className="related-dock__ph">TV</span>
+                    )}
+                  </span>
+                  <span className="related-dock__label">
+                    {ch.name ?? ch.slug}
+                  </span>
+                </Link>
+              )
+            })}
           </div>
+
+          <button
+            type="button"
+            className="related-dock__arrow"
+            onClick={() => scroll(1)}
+            aria-label="Scroll right"
+          >
+            <ChevronRight size={20} />
+          </button>
         </div>
-      )}
+      </div>
     </div>
   )
 }

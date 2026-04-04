@@ -7,6 +7,8 @@ import {
   List,
   Maximize2,
   Minimize2,
+  PanelBottom,
+  PictureInPicture2,
   Tv,
 } from "lucide-react"
 import { ChannelNumpad } from "@/components/ChannelNumpad"
@@ -18,8 +20,16 @@ import {
   readSidebarCollapsed,
   writeSidebarCollapsed,
 } from "@/components/WatchSidebar"
-import { RelatedChannels } from "@/components/RelatedChannels"
-import { StreamPlayer } from "@/components/StreamPlayer"
+import {
+  RelatedChannels,
+  hasRelatedChannels,
+  readRelatedDockOpenFromStorage,
+  writeRelatedDockOpenToStorage,
+} from "@/components/RelatedChannels"
+import {
+  StreamPlayer,
+  channelSupportsPictureInPicture,
+} from "@/components/StreamPlayer"
 import { useChannels } from "@/context/ChannelsContext"
 import { channelNumber } from "@/lib/channelNumber"
 import { useTvRemote } from "@/hooks/useTvRemote"
@@ -32,6 +42,37 @@ export function WatchPage() {
   const { ordered, status } = useChannels()
   const [sidebarCollapsed, setSidebarCollapsed] = useState(readSidebarCollapsed)
   const [theaterMode, setTheaterMode] = useState(false)
+  const [relatedDockOpen, setRelatedDockOpen] = useState(
+    readRelatedDockOpenFromStorage,
+  )
+  const [pipVideoEl, setPipVideoEl] = useState<HTMLVideoElement | null>(null)
+  const [pipSupported, setPipSupported] = useState(false)
+
+  const setPipVideoRef = useCallback((el: HTMLVideoElement | null) => {
+    setPipVideoEl(el)
+  }, [])
+
+  useEffect(() => {
+    setPipSupported(
+      typeof document !== "undefined" &&
+        "pictureInPictureEnabled" in document &&
+        document.pictureInPictureEnabled,
+    )
+  }, [])
+
+  const togglePip = useCallback(async () => {
+    const v = pipVideoEl
+    if (!v) return
+    try {
+      if (document.pictureInPictureElement) {
+        await document.exitPictureInPicture()
+      } else {
+        await v.requestPictureInPicture()
+      }
+    } catch {
+      /* PiP unavailable */
+    }
+  }, [pipVideoEl])
 
   const channel = channelFromRouteKey(ordered, channelKey)
 
@@ -86,6 +127,13 @@ export function WatchPage() {
     setTheaterMode(false)
   }, [channel?.page_url])
 
+  useEffect(() => {
+    if (theaterMode && relatedDockOpen) {
+      setRelatedDockOpen(false)
+      writeRelatedDockOpenToStorage(false)
+    }
+  }, [theaterMode, relatedDockOpen])
+
   const toggleSidebar = useCallback(() => {
     setSidebarCollapsed((c) => {
       const next = !c
@@ -97,6 +145,19 @@ export function WatchPage() {
   const toggleTheater = () => {
     setTheaterMode((v) => !v)
   }
+
+  const toggleRelatedDock = useCallback(() => {
+    setRelatedDockOpen((v) => {
+      const next = !v
+      writeRelatedDockOpenToStorage(next)
+      return next
+    })
+  }, [])
+
+  const closeRelatedDock = useCallback(() => {
+    setRelatedDockOpen(false)
+    writeRelatedDockOpenToStorage(false)
+  }, [])
 
   if (status !== "ready" || !ordered.length) {
     return (
@@ -119,6 +180,7 @@ export function WatchPage() {
   }
 
   const logoSrc = channel.logo ? publicUrl(channel.logo) : null
+  const showRelatedUi = hasRelatedChannels(ordered, channel)
 
   return (
     <div className={`watch-page ${theaterMode ? "watch-page--theater" : ""}`}>
@@ -174,6 +236,25 @@ export function WatchPage() {
                   label="Favorite"
                   iconSize={20}
                 />
+                {showRelatedUi && !theaterMode && (
+                  <button
+                    type="button"
+                    className={
+                      relatedDockOpen
+                        ? "watch-bar__pill watch-bar__pill--related-active"
+                        : "watch-bar__pill"
+                    }
+                    onClick={toggleRelatedDock}
+                    title={
+                      relatedDockOpen
+                        ? "Hide related channels"
+                        : "Show related channels"
+                    }
+                  >
+                    <PanelBottom size={18} strokeWidth={2} aria-hidden />
+                    Related
+                  </button>
+                )}
                 {!theaterMode && (
                   <button
                     type="button"
@@ -214,6 +295,18 @@ export function WatchPage() {
                 >
                   <Tv size={20} strokeWidth={2} aria-hidden />
                 </Link>
+                {pipSupported && channelSupportsPictureInPicture(channel) && (
+                  <button
+                    type="button"
+                    className="watch-bar__pill watch-bar__pill--icon"
+                    onClick={() => void togglePip()}
+                    disabled={!pipVideoEl}
+                    aria-label="Picture in picture"
+                    title="Picture in picture"
+                  >
+                    <PictureInPicture2 size={20} strokeWidth={2} aria-hidden />
+                  </button>
+                )}
                 <button
                   type="button"
                   className="watch-bar__pill watch-bar__pill--icon"
@@ -239,7 +332,11 @@ export function WatchPage() {
 
             <div className="watch-stage">
               {channel.stream_url || channel.raw_iframe_src ? (
-                <StreamPlayer channel={channel} className="watch-player" />
+                <StreamPlayer
+                  channel={channel}
+                  className="watch-player"
+                  onVideoRef={setPipVideoRef}
+                />
               ) : (
                 <p className="watch-stage__empty muted">
                   No stream URL for this channel.
@@ -247,7 +344,12 @@ export function WatchPage() {
               )}
             </div>
 
-            <RelatedChannels channels={ordered} current={channel} />
+            <RelatedChannels
+              channels={ordered}
+              current={channel}
+              open={relatedDockOpen}
+              onClose={closeRelatedDock}
+            />
 
             <ChannelNumpad
               appendDigit={appendDigit}

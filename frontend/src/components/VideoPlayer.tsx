@@ -1,19 +1,19 @@
 import Hls from "hls.js"
-import { PictureInPicture2 } from "lucide-react"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import type { Channel } from "@/types/channel"
 import { hlsPlaybackUrl } from "@/lib/hlsProxyUrl"
 
 type Props = {
   channel: Channel
   className?: string
+  /** Wired to the native `<video>` for watch-bar PiP (null when iframe / no video). */
+  onVideoRef?: (el: HTMLVideoElement | null) => void
 }
 
-export function VideoPlayer({ channel, className }: Props) {
+export function VideoPlayer({ channel, className, onVideoRef }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const hlsRef = useRef<Hls | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [pipSupported, setPipSupported] = useState(false)
 
   const url = channel.stream_url
   const isHls =
@@ -26,13 +26,15 @@ export function VideoPlayer({ channel, className }: Props) {
     [url, channel.requires_proxy, channel.stream_type],
   )
 
-  useEffect(() => {
-    setPipSupported(
-      typeof document !== "undefined" &&
-        "pictureInPictureEnabled" in document &&
-        document.pictureInPictureEnabled,
-    )
-  }, [])
+  useLayoutEffect(() => {
+    if (!onVideoRef) return
+    if (isIframe || !url) {
+      onVideoRef(null)
+      return
+    }
+    onVideoRef(videoRef.current)
+    return () => onVideoRef(null)
+  }, [onVideoRef, isIframe, url, channel.page_url])
 
   useEffect(() => {
     setError(null)
@@ -78,20 +80,6 @@ export function VideoPlayer({ channel, className }: Props) {
     return undefined
   }, [channel, url, hlsUrl, isHls, isIframe, channel.requires_proxy])
 
-  const enterPip = async () => {
-    const v = videoRef.current
-    if (!v) return
-    try {
-      if (document.pictureInPictureElement) {
-        await document.exitPictureInPicture()
-      } else {
-        await v.requestPictureInPicture()
-      }
-    } catch {
-      setError("Picture-in-picture is not available.")
-    }
-  }
-
   if (isIframe && url) {
     return (
       <div className={`video-shell ${className ?? ""}`}>
@@ -117,17 +105,6 @@ export function VideoPlayer({ channel, className }: Props) {
         crossOrigin="anonymous"
       />
       {error && <p className="video-error">{error}</p>}
-      {pipSupported && !isIframe && (
-        <button
-          type="button"
-          className="btn-pip icon-btn icon-btn--pip"
-          onClick={() => void enterPip()}
-          aria-label="Picture in picture"
-          title="Picture in picture"
-        >
-          <PictureInPicture2 size={20} strokeWidth={2} aria-hidden />
-        </button>
-      )}
     </div>
   )
 }
