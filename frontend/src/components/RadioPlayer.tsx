@@ -8,9 +8,11 @@ import { hlsPlaybackUrl } from "@/lib/hlsProxyUrl"
 type Props = {
   channel: Channel
   className?: string
+  /** Multi-view: only one pane unmuted. */
+  muted?: boolean
 }
 
-export function RadioPlayer({ channel, className }: Props) {
+export function RadioPlayer({ channel, className, muted = false }: Props) {
   const [audioEl, setAudioEl] = useState<HTMLAudioElement | null>(null)
   const hlsRef = useRef<Hls | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -113,6 +115,7 @@ export function RadioPlayer({ channel, className }: Props) {
           className="radio-audio-el"
           controls
           autoPlay
+          muted={muted}
           crossOrigin="anonymous"
         />
       </div>

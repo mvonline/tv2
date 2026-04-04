@@ -1618,3 +1618,459 @@ body::before {
     transition: none;
   }
 }
+
+/* ── Multi-view (2 / 4 / 9 panes, single audio focus) ── */
+.multiview-page {
+  height: 100dvh;
+  max-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: #07090f;
+  overflow: hidden;
+}
+
+.multiview-toolbar {
+  flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(8, 10, 18, 0.96);
+}
+
+.multiview-toolbar__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.multiview-toolbar__left {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.multiview-toolbar__single {
+  font-size: 0.88rem;
+}
+
+.multiview-toolbar__layouts {
+  display: flex;
+  gap: 6px;
+}
+
+.multiview-toolbar__hint {
+  flex: 1 1 200px;
+  margin: 0;
+  font-size: 0.78rem;
+}
+
+.multiview-layout-btn {
+  min-width: 40px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.multiview-layout-btn--active {
+  border-color: rgba(120, 190, 255, 0.5);
+  background: rgba(40, 80, 120, 0.4);
+  color: #e8f4ff;
+}
+
+.multiview-stage {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.multiview-grid {
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.multiview-grid--2 {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+}
+
+.multiview-grid--4 {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.multiview-grid--9 {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.multiview-pane {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #000;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.multiview-pane--audio {
+  border-color: rgba(110, 200, 255, 0.55);
+  box-shadow: 0 0 0 1px rgba(110, 200, 255, 0.2);
+}
+
+.multiview-pane--maximized {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  max-height: none;
+  cursor: default;
+  /* Fill stage; flex column so the player region gets a real height budget */
+  height: 100%;
+  min-height: 0;
+}
+
+.multiview-pane--maximized .multiview-pane__chrome {
+  /* Title/tools duplicate the max bar — hide to give the video the full height */
+  display: none;
+}
+
+.multiview-pane__maxbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  background: rgba(0, 0, 0, 0.88);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.multiview-pane__maxbar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.multiview-pane__maxbar-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.multiview-pane__maxbar-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.multiview-pane__maxbar-tools {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.multiview-pane__chrome {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.75);
+  font-size: 0.72rem;
+}
+
+.multiview-pane__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.multiview-pane__tools {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.multiview-pane__badge {
+  display: flex;
+  color: #6ee7b7;
+}
+
+.multiview-pane__badge--muted {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.multiview-pane__badge-btn {
+  border: none;
+  padding: 2px;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+}
+
+.multiview-pane__badge-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.multiview-pane__icon-btn {
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 0.65rem;
+  cursor: pointer;
+}
+
+.multiview-pane__icon-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.multiview-pane__player {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Same flex contract as .watch-main .video-shell — without this, .video-el flex
+   is ignored (block parent) and the global .video-el max-height clips the bottom. */
+.multiview-player.video-shell,
+.multiview-player.radio-shell {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0;
+  border: none;
+}
+
+.multiview-player .video-el {
+  width: 100%;
+  max-height: none !important;
+  flex: 1 1 0;
+  min-height: 0;
+  object-fit: contain;
+}
+
+.multiview-player .video-iframe,
+.multiview-player .radio-iframe {
+  flex: 1 1 0;
+  min-height: 0;
+  max-height: none;
+  width: 100%;
+  aspect-ratio: unset;
+}
+
+.multiview-player .radio-shell__viz {
+  flex-shrink: 0;
+  min-height: 80px;
+  padding: 8px 8px 0;
+}
+
+.multiview-pane__empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  margin: 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.multiview-pane__embed {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  gap: 8px;
+  text-align: center;
+}
+
+.multiview-pane__embed-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.multiview-pane__embed-title {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.multiview-pane__embed-note {
+  margin: 0;
+  font-size: 0.75rem;
+}
+
+.multiview-pane__embed-link {
+  font-size: 0.8rem;
+  padding: 6px 12px;
+}
+
+.multiview-pane__clear {
+  font-size: 0.75rem;
+}
+
+.multiview-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.multiview-modal {
+  width: min(440px, 100%);
+  max-height: min(80dvh, 640px);
+  display: flex;
+  flex-direction: column;
+  background: #121620;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.multiview-modal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.multiview-modal__head h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.multiview-modal__close {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.multiview-modal__close:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.multiview-modal__search {
+  margin: 10px 14px 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.multiview-modal__list {
+  list-style: none;
+  margin: 0;
+  padding: 8px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.multiview-modal__row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.multiview-modal__row:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.multiview-modal__logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.multiview-modal__logo-ph {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  color: var(--muted);
+}
+
+.multiview-modal__name {
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.multiview-modal__empty {
+  padding: 12px 16px 16px;
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.home-multiview-link {
+  white-space: nowrap;
+}

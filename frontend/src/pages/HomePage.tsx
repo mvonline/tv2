@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { ChannelCard } from "@/components/ChannelCard"
 import { ChannelDetailsRow } from "@/components/ChannelDetailsRow"
 import { ChannelListRow } from "@/components/ChannelListRow"
@@ -203,6 +203,9 @@ export function HomePage() {
             )}
           </div>
           <StyleToolbar />
+          <Link to="/multiview" className="btn-ghost home-multiview-link">
+            Multi-view
+          </Link>
         </div>
       </header>
 

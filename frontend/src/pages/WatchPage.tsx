@@ -4,6 +4,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Home,
+  LayoutGrid,
   List,
   Maximize2,
   Minimize2,
@@ -229,6 +230,14 @@ export function WatchPage() {
                 >
                   <Home size={18} strokeWidth={2} aria-hidden />
                   Home
+                </Link>
+                <Link
+                  to="/multiview"
+                  className="watch-bar__pill"
+                  title="Multi-view (grid)"
+                >
+                  <LayoutGrid size={18} strokeWidth={2} aria-hidden />
+                  Multi-view
                 </Link>
                 <FavoriteButton
                   channel={channel}

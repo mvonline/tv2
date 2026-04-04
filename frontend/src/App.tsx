@@ -4,6 +4,7 @@ import { ChannelsProvider } from "@/context/ChannelsContext"
 import { FavoritesProvider } from "@/context/FavoritesContext"
 import { UiStyleProvider } from "@/context/UiStyleContext"
 import { HomePage } from "@/pages/HomePage"
+import { MultiViewPage } from "@/pages/MultiViewPage"
 import { WatchPage } from "@/pages/WatchPage"
 
 function routerBasename(): string | undefined {
@@ -23,6 +24,7 @@ export default function App() {
                 <Routes>
                   <Route path="/" element={<HomePage />} />
                   <Route path="/watch/:channelKey" element={<WatchPage />} />
+                  <Route path="/multiview" element={<MultiViewPage />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </div>

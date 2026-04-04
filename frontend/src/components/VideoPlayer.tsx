@@ -8,9 +8,16 @@ type Props = {
   className?: string
   /** Wired to the native `<video>` for watch-bar PiP (null when iframe / no video). */
   onVideoRef?: (el: HTMLVideoElement | null) => void
+  /** Multi-view: only one pane should be unmuted. */
+  muted?: boolean
 }
 
-export function VideoPlayer({ channel, className, onVideoRef }: Props) {
+export function VideoPlayer({
+  channel,
+  className,
+  onVideoRef,
+  muted = false,
+}: Props) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const hlsRef = useRef<Hls | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -102,6 +109,7 @@ export function VideoPlayer({ channel, className, onVideoRef }: Props) {
         controls
         playsInline
         autoPlay
+        muted={muted}
         crossOrigin="anonymous"
       />
       {error && <p className="video-error">{error}</p>}
