@@ -55,6 +55,7 @@ Open **http://localhost:8080** — the UI, **`/api`**, **`/proxy/hls`**, and **`
 | `ADMIN_SESSION_SECRET` | Optional; cookie signing for admin session |
 | `CORS_ORIGINS` | Optional; passed to API |
 | `CHANNELS_JSON_URL` | Optional; HTTP(S) URL — **`main.py` downloads `channels.json` at startup** (Docker or local). Disables background scrape when set (Compose `.env` or **`backend/.env`**). |
+| `LOGOS_BASE_URL` | Optional — **`GET /api/config`** tells the SPA where to load **`logo/…`** assets (CDN or absolute origin). Omit to keep same-origin **`/logo/`** from nginx. |
 | `SKIP_CHANNELS_FETCH` | Set to **`1`** to skip URL fetch, scraper, and seeding (volume must already contain **`channels.json`**). |
 | `LOGO_DIR` | On the **api** container defaults to **`/data/logos`** (persisted **`logo-data`** volume, mounted read-only under **`/logo/`** on **web**). |
 | `SCRAPE_ON_START` | **`once`** (default): run **`scrape.py`** on first boot only (until **`channels-data/.tv2_scraped`** exists). **`always`**: run on every **api** start. **`never`**: never scrape; use **`CHANNELS_JSON_URL`** or seed only. |
@@ -94,7 +95,7 @@ Copy-Item -Path backend\.env.example -Destination backend\.env
 Copy-Item -Path frontend\.env.example -Destination frontend\.env.local
 ```
 
-Set at least **`ADMIN_PASSWORD`** in **`backend/.env`** if you use **`/admin`**. Optional **`CHANNELS_JSON_URL`** (same file or shell env) makes **`uvicorn`** download **`channels.json` once at startup into **`CHANNELS_JSON_PATH`** (default **`backend/data/channels.json`**). Adjust **`VITE_DEV_API_PROXY`** or **`VITE_HLS_PROXY_BASE`** in **`frontend/.env.local`** only if the API runs somewhere other than **`http://127.0.0.1:8787`** or you serve a static build without Vite’s built-in HLS middleware (see [HLS proxy](#hls-proxy-gg)).
+Set at least **`ADMIN_PASSWORD`** in **`backend/.env`** if you use **`/admin`**. Optional **`CHANNELS_JSON_URL`** (same file or shell env) makes **`uvicorn`** download **`channels.json` once at startup into **`CHANNELS_JSON_PATH`** (default **`backend/data/channels.json`**). Optional **`LOGOS_BASE_URL`** is exposed as **`GET /api/config`** so the SPA can load logos from a CDN or another host. Adjust **`VITE_DEV_API_PROXY`** or **`VITE_HLS_PROXY_BASE`** in **`frontend/.env.local`** only if the API runs somewhere other than **`http://127.0.0.1:8787`** or you serve a static build without Vite’s built-in HLS middleware (see [HLS proxy](#hls-proxy-gg)).
 
 ### 2. Backend
 
@@ -106,7 +107,7 @@ pip install -r requirements.txt
 uvicorn main:app --host 127.0.0.1 --port 8787
 ```
 
-Endpoints: **`GET /api/categories`**, **`GET /proxy/hls?url=…`**, **`GET /admin`** (with admin credentials). You can still override any variable with **`$env:VAR = "value"`** in the shell before **`uvicorn`**; the process environment wins over **`backend/.env`**.
+Endpoints: **`GET /api/categories`**, **`GET /api/config`**, **`GET /proxy/hls?url=…`**, **`GET /admin`** (with admin credentials). You can still override any variable with **`$env:VAR = "value"`** in the shell before **`uvicorn`**; the process environment wins over **`backend/.env`**.
 
 ### 3. Frontend (development)
 
@@ -148,6 +149,7 @@ Admin credentials are read from **`backend/.env`** (see **`ADMIN_USER`** / **`AD
 | Endpoint | Auth | Purpose |
 |----------|------|---------|
 | `GET /api/categories` | None | Active categories for the SPA (order + labels) |
+| `GET /api/config` | None | `{ logos_base_url }` from **`LOGOS_BASE_URL`** (channel **`logo/…`** URLs) |
 | `GET/POST/PATCH/DELETE /api/admin/categories` | HTTP Basic or `admin_session` cookie | CRUD categories |
 | `POST /api/admin/session` | HTTP Basic | Sets `admin_session` cookie for the admin UI |
 | `GET /admin`, `GET /api/admin` | HTTP Basic or cookie | Static HTML admin |
@@ -163,6 +165,7 @@ Admin credentials are read from **`backend/.env`** (see **`ADMIN_USER`** / **`AD
 | `CHANNELS_JSON_URL` | Optional; downloaded into **`CHANNELS_JSON_PATH`** before routes respond |
 | `CHANNELS_JSON_PATH` | Target path for that download (default `backend/data/channels.json`) |
 | `SKIP_CHANNELS_FETCH` | Set **`1`** to skip **`CHANNELS_JSON_URL`** |
+| `LOGOS_BASE_URL` | Optional absolute origin for **`logo/…`** assets — SPA reads **`GET /api/config`** |
 
 ---
 
@@ -198,7 +201,7 @@ npm install
 npm run dev
 ```
 
-Default **http://localhost:5173**. Vite serves `backend/data/channels.json` and `logo/` from the parent repo. **`/api`** is proxied to **`http://127.0.0.1:8787`** (override with **`VITE_DEV_API_PROXY`**).
+Default **http://localhost:5173**. Vite serves `backend/data/channels.json` and `logo/` from the parent repo. **`/api`** is proxied to **`http://127.0.0.1:8787`** (override with **`VITE_DEV_API_PROXY`**). On load, the app requests **`GET /api/config`** for **`LOGOS_BASE_URL`** unless **`VITE_LOGOS_BASE_URL`** is set.
 
 ### Production build
 
@@ -219,6 +222,7 @@ npm run preview
 | `VITE_API_BASE` | API on another origin | Full origin for `/api/categories` (no trailing slash). Omit if same origin (Docker or local combined stack). |
 | `VITE_HLS_PROXY_BASE` | Static host **without** `/proxy` | Full URL to the **proxy base** ending with `/proxy/hls` (see [HLS](#hls-proxy-gg)) |
 | `VITE_DEV_API_PROXY` | Local dev only | Where to proxy `/api` (default `http://127.0.0.1:8787`) |
+| `VITE_LOGOS_BASE_URL` | Optional | Absolute origin for **`logo/…`** (overrides **`GET /api/config`**); use when the SPA has no API or you want a fixed CDN at build time |
 
 ### GitHub Pages
 

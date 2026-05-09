@@ -21,6 +21,7 @@ services:
       # Scraper on container start: once (default, first boot only), always, or never
       SCRAPE_ON_START: ${SCRAPE_ON_START:-once}
       SCRAPE_DELAY: ${SCRAPE_DELAY:-1}
+      LOGOS_BASE_URL: ${LOGOS_BASE_URL:-}
     volumes:
       - category-db:/data
       - channels-data:/data/channel-data

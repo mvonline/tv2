@@ -97,6 +97,13 @@ class CategoryPatch(BaseModel):
     active: bool | None = None
 
 
+@router.get("/config")
+def get_public_config() -> dict[str, str]:
+    """Public SPA hints (same env file as CHANNELS_JSON_URL for normal deployments)."""
+    raw = os.environ.get("LOGOS_BASE_URL", "").strip().rstrip("/")
+    return {"logos_base_url": raw}
+
+
 @router.get("/categories")
 def get_categories_public() -> list[dict]:
     init_db()
