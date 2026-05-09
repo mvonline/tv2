@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
 import type { Channel } from "@/types/channel"
 import { watchUrlForChannel } from "@/lib/paths"
-import { publicUrl } from "@/lib/publicUrl"
+import { channelLogoUrl } from "@/lib/publicUrl"
 
 const TOTAL = 15
 const SCROLL_AMOUNT = 3
@@ -134,7 +134,7 @@ export function RelatedChannels({ channels, current, open, onClose }: Props) {
 
           <div className="related-dock__track" ref={trackRef}>
             {related.map((ch) => {
-              const logo = ch.logo ? publicUrl(ch.logo) : null
+              const logo = channelLogoUrl(ch.logo)
               return (
                 <Link
                   key={ch.page_url}

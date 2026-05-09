@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { FavoriteButton } from "@/components/FavoriteButton"
-import { publicUrl } from "@/lib/publicUrl"
+import { channelLogoUrl } from "@/lib/publicUrl"
 import { formatCategoryTitle } from "@/lib/groupByCategory"
 import type { Channel } from "@/types/channel"
 import { watchUrlForChannel } from "@/lib/paths"
@@ -12,7 +12,7 @@ type Props = {
 }
 
 export function ChannelDetailsRow({ channel, channelNo, linkless }: Props) {
-  const logoSrc = channel.logo ? publicUrl(channel.logo) : null
+  const logoSrc = channelLogoUrl(channel.logo)
   const to = watchUrlForChannel(channel)
 
   const body = (

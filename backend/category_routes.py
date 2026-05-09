@@ -99,7 +99,7 @@ class CategoryPatch(BaseModel):
 
 @router.get("/config")
 def get_public_config() -> dict[str, str]:
-    """Public SPA hints (same env file as CHANNELS_JSON_URL for normal deployments)."""
+    """Public SPA hints: logos_base_url prefixes relative ``channel.logo`` paths from channels.json."""
     raw = os.environ.get("LOGOS_BASE_URL", "").strip().rstrip("/")
     return {"logos_base_url": raw}
 

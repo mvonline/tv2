@@ -35,7 +35,7 @@ import { useChannels } from "@/context/ChannelsContext"
 import { channelNumber } from "@/lib/channelNumber"
 import { useTvRemote } from "@/hooks/useTvRemote"
 import { channelFromRouteKey, watchUrlForChannel } from "@/lib/paths"
-import { publicUrl } from "@/lib/publicUrl"
+import { channelLogoUrl } from "@/lib/publicUrl"
 
 export function WatchPage() {
   const { channelKey } = useParams<{ channelKey: string }>()
@@ -180,7 +180,7 @@ export function WatchPage() {
     )
   }
 
-  const logoSrc = channel.logo ? publicUrl(channel.logo) : null
+  const logoSrc = channelLogoUrl(channel.logo)
   const showRelatedUi = hasRelatedChannels(ordered, channel)
 
   return (

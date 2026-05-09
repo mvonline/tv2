@@ -12,7 +12,7 @@ import { channelNumber } from "@/lib/channelNumber"
 import { useFavorites } from "@/context/FavoritesContext"
 import type { Channel } from "@/types/channel"
 import { watchUrlForChannel } from "@/lib/paths"
-import { publicUrl } from "@/lib/publicUrl"
+import { channelLogoUrl } from "@/lib/publicUrl"
 
 export const WATCH_SIDEBAR_COLLAPSED_KEY = "tv2-watch-sidebar-collapsed"
 
@@ -31,7 +31,7 @@ function SidebarChannelLink({
 }) {
   const no = channelNumber(ordered, ch)
   const active = ch.page_url === currentPageUrl
-  const logo = ch.logo ? publicUrl(ch.logo) : null
+  const logo = channelLogoUrl(ch.logo)
   const to = watchUrlForChannel(ch)
   return (
     <Link

@@ -10,7 +10,7 @@ Env:
   CHANNELS_JSON_URL — optional; HTTP(S) URL to download channels.json at startup
   CHANNELS_JSON_PATH — optional; destination for URL fetch (default: backend/data/channels.json)
   SKIP_CHANNELS_FETCH — set to 1 to skip CHANNELS_JSON_URL download
-  LOGOS_BASE_URL — optional origin for channel logos (see GET /api/config); paths stay logo/… in JSON
+  LOGOS_BASE_URL — optional prefix URL for relative channel.logo paths (see GET /api/config)
 """
 
 from __future__ import annotations

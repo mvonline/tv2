@@ -8,7 +8,7 @@ import {
 import { useChannels } from "@/context/ChannelsContext"
 import type { Channel } from "@/types/channel"
 import { watchUrlForChannel } from "@/lib/paths"
-import { publicUrl } from "@/lib/publicUrl"
+import { channelLogoUrl } from "@/lib/publicUrl"
 
 const STORAGE_KEY = "tv2_multiview_v1"
 const SLOT_COUNT = 9
@@ -274,7 +274,7 @@ export function MultiViewPage() {
                   <div className="multiview-pane__embed">
                     {ch.logo ? (
                       <img
-                        src={publicUrl(ch.logo)}
+                        src={channelLogoUrl(ch.logo) ?? ""}
                         alt=""
                         className="multiview-pane__embed-logo"
                       />
@@ -480,7 +480,7 @@ export function MultiViewPage() {
                     onClick={() => pickChannel(c)}
                   >
                     {c.logo ? (
-                      <img src={publicUrl(c.logo)} alt="" className="multiview-modal__logo" />
+                      <img src={channelLogoUrl(c.logo) ?? ""} alt="" className="multiview-modal__logo" />
                     ) : (
                       <span className="multiview-modal__logo-ph">TV</span>
                     )}

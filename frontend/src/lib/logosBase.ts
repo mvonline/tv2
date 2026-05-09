@@ -1,5 +1,5 @@
 /**
- * Optional absolute origin for `logo/…` paths in channels.json.
+ * Optional URL prefix for every relative `channel.logo` path from channels.json (`channelLogoUrl`).
  *
  * Priority:
  * 1. `VITE_LOGOS_BASE_URL` (build-time / local `.env`)

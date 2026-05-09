@@ -2,7 +2,7 @@ import type { CSSProperties } from "react"
 import { Link } from "react-router-dom"
 import { FavoriteButton } from "@/components/FavoriteButton"
 import { thumbHueForChannel } from "@/lib/topicAccent"
-import { publicUrl } from "@/lib/publicUrl"
+import { channelLogoUrl } from "@/lib/publicUrl"
 import type { Channel } from "@/types/channel"
 import { watchUrlForChannel } from "@/lib/paths"
 
@@ -14,7 +14,7 @@ type Props = {
 }
 
 export function ChannelCard({ channel, channelNo, linkless }: Props) {
-  const logoSrc = channel.logo ? publicUrl(channel.logo) : null
+  const logoSrc = channelLogoUrl(channel.logo)
   const to = watchUrlForChannel(channel)
   const hue = thumbHueForChannel(channel.ai_category)
 
