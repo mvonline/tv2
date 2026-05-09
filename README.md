@@ -222,7 +222,7 @@ npm run preview
 | `VITE_API_BASE` | API on another origin | Full origin for `/api/categories` (no trailing slash). Omit if same origin (Docker or local combined stack). |
 | `VITE_HLS_PROXY_BASE` | Static host **without** `/proxy` | Full URL to the **proxy base** ending with `/proxy/hls` (see [HLS](#hls-proxy-gg)) |
 | `VITE_DEV_API_PROXY` | Local dev only | Where to proxy `/api` (default `http://127.0.0.1:8787`) |
-| `VITE_LOGOS_BASE_URL` | Optional | Absolute URL prefix for relative **`channel.logo`** paths (overrides **`GET /api/config`**); use when the SPA has no API or you want a fixed CDN at build time |
+| `VITE_LOGOS_BASE_URL` | Optional | Absolute URL prefix for relative **`channel.logo`** paths (overrides **`GET /api/config`**). Alternatively **`LOGOS_BASE_URL`** in **`frontend/.env`** (same name as backend; see **`vite.config`** **`envPrefix`**). |
 
 ### GitHub Pages
 

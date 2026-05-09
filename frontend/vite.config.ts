@@ -58,6 +58,8 @@ export default defineConfig(({ mode }) => {
 
   return {
     base,
+    // Allow `LOGOS_BASE_URL` in frontend `.env` (same name as backend) alongside `VITE_*`.
+    envPrefix: ["VITE_", "LOGOS_"],
     server: {
       proxy: {
         "/api": {
