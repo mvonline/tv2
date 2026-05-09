@@ -33,6 +33,8 @@ async function fetchCategories(): Promise<CategoryConfig[] | null> {
   try {
     const res = await fetch(url, { cache: "no-store" })
     if (!res.ok) return null
+    const ct = (res.headers.get("content-type") ?? "").toLowerCase()
+    if (!ct.includes("json")) return null
     const data = (await res.json()) as unknown
     if (!Array.isArray(data)) return null
     return data.filter(

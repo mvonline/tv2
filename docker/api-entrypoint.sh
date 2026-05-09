@@ -29,16 +29,15 @@ if [ ! -f "$CHANNELS_JSON_PATH" ] && [ -f /app/seed/channels.json ]; then
   cp /app/seed/channels.json "$CHANNELS_JSON_PATH"
 fi
 
-# Handle CHANNELS_JSON_URL (quick download, stays blocking).
-if [ "${SKIP_CHANNELS_FETCH:-0}" != "1" ] && [ -n "${CHANNELS_JSON_URL:-}" ]; then
-  echo "Fetching channels.json from CHANNELS_JSON_URL -> $CHANNELS_JSON_PATH"
-  curl -fsSL "$CHANNELS_JSON_URL" -o "${CHANNELS_JSON_PATH}.tmp"
-  mv "${CHANNELS_JSON_PATH}.tmp" "$CHANNELS_JSON_PATH"
-fi
+# CHANNELS_JSON_URL is handled in Python (main.py lifespan) for Docker and local runs.
 
 if [ ! -f "$CHANNELS_JSON_PATH" ]; then
-  echo "ERROR: $CHANNELS_JSON_PATH is missing and no seed available" >&2
-  exit 1
+  if [ "${SKIP_CHANNELS_FETCH:-0}" != "1" ] && [ -n "${CHANNELS_JSON_URL:-}" ]; then
+    echo "channels.json missing; API startup will fetch CHANNELS_JSON_URL -> $CHANNELS_JSON_PATH"
+  else
+    echo "ERROR: $CHANNELS_JSON_PATH is missing and no seed available" >&2
+    exit 1
+  fi
 fi
 
 # --- Background scraper ---

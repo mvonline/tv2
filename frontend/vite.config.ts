@@ -3,7 +3,7 @@ import path from "path"
 import { fileURLToPath } from "url"
 import react from "@vitejs/plugin-react"
 import type { ViteDevServer } from "vite"
-import { defineConfig } from "vite"
+import { defineConfig, loadEnv } from "vite"
 import { viteStaticCopy } from "vite-plugin-static-copy"
 import { hlsProxyPlugin } from "./vite-plugin-hls-proxy"
 
@@ -50,33 +50,42 @@ function devAssetsMiddleware() {
   }
 }
 
-// Set VITE_BASE=/your-repo-name/ when deploying to GitHub project pages (see deploy workflow).
-const base = process.env.VITE_BASE ?? "/"
+// `.env` / `.env.local` are not merged into `process.env` while this file runs — use `loadEnv`.
+// See https://vite.dev/config/#using-environment-variables-in-config
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, __dirname, "")
+  const base = env.VITE_BASE ?? "/"
 
-export default defineConfig({
-  base,
-  server: {
-    proxy: {
-      "/api": {
-        target: process.env.VITE_DEV_API_PROXY ?? "http://127.0.0.1:8787",
-        changeOrigin: true,
+  return {
+    base,
+    server: {
+      proxy: {
+        "/api": {
+          target: env.VITE_DEV_API_PROXY ?? "http://127.0.0.1:8787",
+          changeOrigin: true,
+        },
       },
     },
-  },
-  plugins: [
-    react(),
-    hlsProxyPlugin(base),
-    devAssetsMiddleware(),
-    viteStaticCopy({
-      targets: [
-        { src: "../backend/data/channels.json", dest: "data" },
-        { src: "../logo", dest: "logo" },
-      ],
-    }),
-  ],
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
+    plugins: [
+      react(),
+      hlsProxyPlugin(base),
+      devAssetsMiddleware(),
+      viteStaticCopy({
+        targets: [
+          // Flatten backend/data/... under dest "data" → dist/data/channels.json (stripBase: see plugin source).
+          {
+            src: "../backend/data/channels.json",
+            dest: "data",
+            rename: { stripBase: 2 },
+          },
+          { src: "../logo", dest: "logo" },
+        ],
+      }),
+    ],
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      },
     },
-  },
+  }
 })

@@ -36,6 +36,12 @@ const ChannelsContext = createContext<ChannelsContextValue | null>(null)
 async function loadChannels(): Promise<Channel[]> {
   const res = await fetch(publicUrl("data/channels.json"), { cache: "no-store" })
   if (!res.ok) throw new Error(`Failed to load channels (${res.status})`)
+  const ct = (res.headers.get("content-type") ?? "").toLowerCase()
+  if (!ct.includes("json")) {
+    throw new Error(
+      `Expected JSON from channels list but got ${ct || "unknown type"} (rebuild the frontend so dist/data/channels.json exists, or fix the host path)`,
+    )
+  }
   const data = (await res.json()) as ChannelsPayload
   return data.channels ?? []
 }

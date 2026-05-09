@@ -14,6 +14,8 @@ services:
       CATEGORY_DB_PATH: /data/categories.db
       CHANNELS_JSON_PATH: /data/channel-data/channels.json
       LOGO_DIR: /data/logos
+      # Passed into the container; `main.py` downloads at startup (same as local uvicorn).
+      # Host `.env` beside this file sets `${CHANNELS_JSON_URL}` for Compose interpolation.
       CHANNELS_JSON_URL: ${CHANNELS_JSON_URL:-}
       SKIP_CHANNELS_FETCH: ${SKIP_CHANNELS_FETCH:-0}
       # Scraper on container start: once (default, first boot only), always, or never

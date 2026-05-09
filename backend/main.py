@@ -7,19 +7,36 @@ Env:
   ADMIN_USER / ADMIN_PASSWORD — required for admin API & /admin UI
   CATEGORY_DB_PATH — optional sqlite path (default: backend/data/categories.db)
   ADMIN_SESSION_SECRET — optional HMAC secret for admin_session cookie
+  CHANNELS_JSON_URL — optional; HTTP(S) URL to download channels.json at startup
+  CHANNELS_JSON_PATH — optional; destination for URL fetch (default: backend/data/channels.json)
+  SKIP_CHANNELS_FETCH — set to 1 to skip CHANNELS_JSON_URL download
 """
 
 from __future__ import annotations
 
 import os
+from contextlib import asynccontextmanager
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv(Path(__file__).parent / ".env")
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from category_routes import admin_router, router as category_public_router, serve_admin_page
+from channels_fetch import maybe_fetch_channels_json
 from hls_proxy import router as hls_router
 
-app = FastAPI(title="TV2", description="HLS proxy + categories")
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    maybe_fetch_channels_json()
+    yield
+
+
+app = FastAPI(title="TV2", description="HLS proxy + categories", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,

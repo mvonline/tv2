@@ -8,6 +8,7 @@ Python tooling pulls live TV metadata from [aparatchi.com](https://www.aparatchi
 
 - [Repository layout](#repository-layout)
 - [Quick start: Docker](#quick-start-docker)
+- [Quick start without Docker](#quick-start-without-docker)
 - [Backend API (`main:app`)](#backend-api-mainapp)
 - [Category admin & SQLite](#category-admin--sqlite)
 - [Frontend](#frontend)
@@ -53,7 +54,7 @@ Open **http://localhost:8080** — the UI, **`/api`**, **`/proxy/hls`**, and **`
 | `ADMIN_USER` / `ADMIN_PASSWORD` | Admin HTTP Basic (default password **`changeme`** — change it) |
 | `ADMIN_SESSION_SECRET` | Optional; cookie signing for admin session |
 | `CORS_ORIGINS` | Optional; passed to API |
-| `CHANNELS_JSON_URL` | Optional; HTTP(S) URL to download `channels.json` on **api** startup (takes priority over the scraper). |
+| `CHANNELS_JSON_URL` | Optional; HTTP(S) URL — **`main.py` downloads `channels.json` at startup** (Docker or local). Disables background scrape when set (Compose `.env` or **`backend/.env`**). |
 | `SKIP_CHANNELS_FETCH` | Set to **`1`** to skip URL fetch, scraper, and seeding (volume must already contain **`channels.json`**). |
 | `LOGO_DIR` | On the **api** container defaults to **`/data/logos`** (persisted **`logo-data`** volume, mounted read-only under **`/logo/`** on **web**). |
 | `SCRAPE_ON_START` | **`once`** (default): run **`scrape.py`** on first boot only (until **`channels-data/.tv2_scraped`** exists). **`always`**: run on every **api** start. **`never`**: never scrape; use **`CHANNELS_JSON_URL`** or seed only. |
@@ -74,16 +75,75 @@ Stop: `docker compose down`. The **`category-db`** volume keeps **`categories.db
 
 ---
 
+## Quick start without Docker
+
+You run the **FastAPI** backend and the **Vite** frontend as two processes. The UI is at **http://localhost:5173**; the API (and HLS proxy for production-style testing) listens on **http://127.0.0.1:8787** by default.
+
+**Prerequisites:** Python 3.11+ (or the version your team uses), **Node.js 20+**, and **`backend/data/channels.json`** (from the repo, **`CHANNELS_JSON_URL`** at startup, or **`python scrape.py`**). **`logo/`** supplies channel art. To refresh data, see [Scrape, categorize & sync](#scrape-categorize--sync).
+
+### 1. Environment files
+
+| File | Purpose |
+|------|---------|
+| **`backend/.env`** | Backend settings. Copy from **`backend/.env.example`** and edit. **`main.py`** loads this automatically via **`python-dotenv`**. |
+| **`frontend/.env.local`** | Frontend-only `VITE_*` variables (optional for the default local setup). Copy from **`frontend/.env.example`**. Vite reads **`frontend/.env`** and **`frontend/.env.local`**; prefer **`.env.local`** for secrets (ignored by git when using the repo root **`.gitignore`**). |
+
+```powershell
+# From the repository root (PowerShell)
+Copy-Item -Path backend\.env.example -Destination backend\.env
+Copy-Item -Path frontend\.env.example -Destination frontend\.env.local
+```
+
+Set at least **`ADMIN_PASSWORD`** in **`backend/.env`** if you use **`/admin`**. Optional **`CHANNELS_JSON_URL`** (same file or shell env) makes **`uvicorn`** download **`channels.json` once at startup into **`CHANNELS_JSON_PATH`** (default **`backend/data/channels.json`**). Adjust **`VITE_DEV_API_PROXY`** or **`VITE_HLS_PROXY_BASE`** in **`frontend/.env.local`** only if the API runs somewhere other than **`http://127.0.0.1:8787`** or you serve a static build without Vite’s built-in HLS middleware (see [HLS proxy](#hls-proxy-gg)).
+
+### 2. Backend
+
+```powershell
+cd backend
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+uvicorn main:app --host 127.0.0.1 --port 8787
+```
+
+Endpoints: **`GET /api/categories`**, **`GET /proxy/hls?url=…`**, **`GET /admin`** (with admin credentials). You can still override any variable with **`$env:VAR = "value"`** in the shell before **`uvicorn`**; the process environment wins over **`backend/.env`**.
+
+### 3. Frontend (development)
+
+In a **second** terminal:
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+Open **http://localhost:5173**. Vite proxies **`/api`** to **`http://127.0.0.1:8787`** by default (or **`VITE_DEV_API_PROXY`**). HLS proxy routes for **`gg.*`** are handled in dev/preview by **`vite-plugin-hls-proxy.ts`**, so you do not need **`VITE_HLS_PROXY_BASE`** for **`npm run dev`** or **`npm run preview`**.
+
+### 4. Frontend production build (optional)
+
+```powershell
+cd frontend
+npm ci
+npm run build
+npm run preview
+```
+
+Keep **`uvicorn main:app`** running if you need the category API and admin; **`npm run preview`** still uses Vite’s dev-style HLS proxy plugin for **`/proxy/hls`**.
+
+---
+
 ## Backend API (`main:app`)
 
-Run locally (after [Python setup](#python-setup)):
+Run locally (after [Quick start without Docker](#quick-start-without-docker) or the [Python setup](#python-setup) under [Frontend](#frontend)):
 
 ```powershell
 cd backend
 .\.venv\Scripts\Activate.ps1
-$env:ADMIN_PASSWORD="your-secret"
 uvicorn main:app --host 127.0.0.1 --port 8787
 ```
+
+Admin credentials are read from **`backend/.env`** (see **`ADMIN_USER`** / **`ADMIN_PASSWORD`**) or from the process environment if set there.
 
 | Endpoint | Auth | Purpose |
 |----------|------|---------|
@@ -100,6 +160,9 @@ uvicorn main:app --host 127.0.0.1 --port 8787
 | `ADMIN_SESSION_SECRET` | HMAC for session cookie |
 | `CATEGORY_DB_PATH` | SQLite path (default `backend/data/categories.db`) |
 | `CORS_ORIGINS` | Comma-separated origins (default `*`) |
+| `CHANNELS_JSON_URL` | Optional; downloaded into **`CHANNELS_JSON_PATH`** before routes respond |
+| `CHANNELS_JSON_PATH` | Target path for that download (default `backend/data/channels.json`) |
+| `SKIP_CHANNELS_FETCH` | Set **`1`** to skip **`CHANNELS_JSON_URL`** |
 
 ---
 
