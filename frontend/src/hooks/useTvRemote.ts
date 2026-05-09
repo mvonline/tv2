@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 
-const DIGIT_TIMEOUT_MS = 2000
+/** After this many ms without a new digit, buffer is submitted like pressing Enter. */
+export const DIGIT_AUTO_SUBMIT_AFTER_MS = 2000
 
 export type TvRemoteHandlers = {
   onDigitBuffer?: (buffer: string) => void
@@ -11,6 +12,7 @@ export type TvRemoteHandlers = {
 }
 
 export function useTvRemote(handlers: TvRemoteHandlers) {
+  const digitsDisabled = handlers.digitsDisabled ?? false
   const [digitBuffer, setDigitBuffer] = useState("")
   const bufferRef = useRef("")
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -24,6 +26,18 @@ export function useTvRemote(handlers: TvRemoteHandlers) {
     }
   }, [])
 
+  const flushDigitsAsChannel = useCallback(() => {
+    if (handlersRef.current.digitsDisabled) return
+    if (bufferRef.current.length === 0) return
+    const n = parseInt(bufferRef.current, 10)
+    bufferRef.current = ""
+    setDigitBuffer("")
+    handlersRef.current.onDigitBuffer?.("")
+    if (!Number.isNaN(n) && n >= 1) {
+      handlersRef.current.onGoToChannelNumber?.(n)
+    }
+  }, [])
+
   const clearBuffer = useCallback(() => {
     clearTimer()
     bufferRef.current = ""
@@ -31,14 +45,17 @@ export function useTvRemote(handlers: TvRemoteHandlers) {
     handlersRef.current.onDigitBuffer?.("")
   }, [clearTimer])
 
-  const scheduleClear = useCallback(() => {
+  const scheduleAutoSubmit = useCallback(() => {
     clearTimer()
     timerRef.current = setTimeout(() => {
-      bufferRef.current = ""
-      setDigitBuffer("")
-      handlersRef.current.onDigitBuffer?.("")
-    }, DIGIT_TIMEOUT_MS)
-  }, [clearTimer])
+      timerRef.current = null
+      flushDigitsAsChannel()
+    }, DIGIT_AUTO_SUBMIT_AFTER_MS)
+  }, [clearTimer, flushDigitsAsChannel])
+
+  useEffect(() => {
+    if (digitsDisabled) clearTimer()
+  }, [digitsDisabled, clearTimer])
 
   const appendDigit = useCallback(
     (d: string) => {
@@ -49,23 +66,15 @@ export function useTvRemote(handlers: TvRemoteHandlers) {
       bufferRef.current = next
       setDigitBuffer(next)
       handlersRef.current.onDigitBuffer?.(next)
-      scheduleClear()
+      scheduleAutoSubmit()
     },
-    [scheduleClear],
+    [scheduleAutoSubmit],
   )
 
   const submitDigits = useCallback(() => {
-    if (handlersRef.current.digitsDisabled) return
-    if (bufferRef.current.length === 0) return
-    const n = parseInt(bufferRef.current, 10)
     clearTimer()
-    bufferRef.current = ""
-    setDigitBuffer("")
-    handlersRef.current.onDigitBuffer?.("")
-    if (!Number.isNaN(n) && n >= 1) {
-      handlersRef.current.onGoToChannelNumber?.(n)
-    }
-  }, [clearTimer])
+    flushDigitsAsChannel()
+  }, [clearTimer, flushDigitsAsChannel])
 
   const backspaceDigit = useCallback(() => {
     if (handlersRef.current.digitsDisabled) return
@@ -74,8 +83,9 @@ export function useTvRemote(handlers: TvRemoteHandlers) {
     bufferRef.current = next
     setDigitBuffer(next)
     handlersRef.current.onDigitBuffer?.(next)
-    scheduleClear()
-  }, [scheduleClear])
+    if (next.length === 0) clearTimer()
+    else scheduleAutoSubmit()
+  }, [scheduleAutoSubmit, clearTimer])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -111,20 +121,14 @@ export function useTvRemote(handlers: TvRemoteHandlers) {
         bufferRef.current = next
         setDigitBuffer(next)
         h.onDigitBuffer?.(next)
-        scheduleClear()
+        scheduleAutoSubmit()
         return
       }
 
       if (e.key === "Enter" && bufferRef.current.length > 0) {
         e.preventDefault()
-        const n = parseInt(bufferRef.current, 10)
         clearTimer()
-        bufferRef.current = ""
-        setDigitBuffer("")
-        h.onDigitBuffer?.("")
-        if (!Number.isNaN(n) && n >= 1) {
-          h.onGoToChannelNumber?.(n)
-        }
+        flushDigitsAsChannel()
         return
       }
 
@@ -134,13 +138,19 @@ export function useTvRemote(handlers: TvRemoteHandlers) {
         bufferRef.current = next
         setDigitBuffer(next)
         h.onDigitBuffer?.(next)
-        scheduleClear()
+        if (next.length === 0) clearTimer()
+        else scheduleAutoSubmit()
       }
     }
 
     window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
-  }, [clearBuffer, scheduleClear, clearTimer])
+  }, [
+    clearBuffer,
+    scheduleAutoSubmit,
+    clearTimer,
+    flushDigitsAsChannel,
+  ])
 
   return {
     digitBuffer,

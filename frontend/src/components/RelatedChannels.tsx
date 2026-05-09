@@ -9,7 +9,7 @@ import { channelLogoUrl } from "@/lib/publicUrl"
 const TOTAL = 15
 const SCROLL_AMOUNT = 3
 
-/** localStorage: "1" = user closed dock; absent/"0" = open */
+/** localStorage: "1" = closed; "0" = explicitly opened (desktop default-open uses absent≠1). */
 export const RELATED_DOCK_STORAGE_KEY = "tv2_related_dock_collapsed"
 
 export function readRelatedDockOpenFromStorage(): boolean {

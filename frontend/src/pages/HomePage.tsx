@@ -14,7 +14,7 @@ import { useFavorites } from "@/context/FavoritesContext"
 import { useUiStyle } from "@/context/UiStyleContext"
 import { channelNumber } from "@/lib/channelNumber"
 import { groupChannelsByAiCategory, formatAiCategoryTitle } from "@/lib/groupByCategory"
-import { useTvRemote } from "@/hooks/useTvRemote"
+import { useTvRemote, DIGIT_AUTO_SUBMIT_AFTER_MS } from "@/hooks/useTvRemote"
 import { useMobileViewport } from "@/hooks/useMobileViewport"
 import { isMobileViewport } from "@/lib/mobileLayout"
 import { watchUrlForChannel } from "@/lib/paths"
@@ -215,7 +215,6 @@ export function HomePage() {
             <button
               type="button"
               className={`btn-ghost home-style-tools-toggle ${styleToolsOpen ? "is-active" : ""}`}
-              aria-expanded={styleToolsOpen}
               onClick={() => setStyleToolsOpen((v) => !v)}
             >
               {styleToolsOpen ? "Hide display options" : "Display options"}
@@ -238,7 +237,11 @@ export function HomePage() {
 
       <DigitOverlay
         buffer={digitBuffer}
-        hint={ordered.length ? `CH 1–${ordered.length} · Enter` : undefined}
+        hint={
+          ordered.length
+            ? `CH 1–${ordered.length} · Enter · idle ${DIGIT_AUTO_SUBMIT_AFTER_MS / 1000}s = go`
+            : undefined
+        }
       />
 
       <main className="home-main">

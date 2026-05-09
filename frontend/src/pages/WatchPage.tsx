@@ -33,7 +33,7 @@ import {
 } from "@/components/StreamPlayer"
 import { useChannels } from "@/context/ChannelsContext"
 import { channelNumber } from "@/lib/channelNumber"
-import { useTvRemote } from "@/hooks/useTvRemote"
+import { useTvRemote, DIGIT_AUTO_SUBMIT_AFTER_MS } from "@/hooks/useTvRemote"
 import { channelFromRouteKey, watchUrlForChannel } from "@/lib/paths"
 import { channelLogoUrl } from "@/lib/publicUrl"
 
@@ -191,7 +191,7 @@ export function WatchPage() {
         buffer={digitBuffer}
         hint={
           ordered.length
-            ? `CH ${chNo} / ${ordered.length} · ↑↓ · Esc ${theaterMode ? "exit expanded view" : "back"}`
+            ? `CH ${chNo} / ${ordered.length} · ↑↓ · Esc ${theaterMode ? "exit expanded view" : "back"} · idle ${DIGIT_AUTO_SUBMIT_AFTER_MS / 1000}s = go`
             : undefined
         }
       />
