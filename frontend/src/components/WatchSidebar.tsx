@@ -5,6 +5,7 @@ import {
   useState,
   type RefObject,
 } from "react"
+import { isMobileViewport } from "@/lib/mobileLayout"
 import { Link } from "react-router-dom"
 import { ChevronLeft, ChevronRight, Star } from "lucide-react"
 import { SearchBar } from "@/components/SearchBar"
@@ -192,6 +193,18 @@ export function readSidebarCollapsed(): boolean {
     return localStorage.getItem(WATCH_SIDEBAR_COLLAPSED_KEY) === "1"
   } catch {
     return false
+  }
+}
+
+/** Desktop: stored preference. Mobile: collapsed unless user explicitly expanded (`"0"`). */
+export function readSidebarCollapsedForViewport(): boolean {
+  if (!isMobileViewport()) return readSidebarCollapsed()
+  try {
+    const v = localStorage.getItem(WATCH_SIDEBAR_COLLAPSED_KEY)
+    if (v === "0") return false
+    return true
+  } catch {
+    return true
   }
 }
 

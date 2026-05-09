@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { ChannelCard } from "@/components/ChannelCard"
 import { ChannelDetailsRow } from "@/components/ChannelDetailsRow"
@@ -15,6 +15,8 @@ import { useUiStyle } from "@/context/UiStyleContext"
 import { channelNumber } from "@/lib/channelNumber"
 import { groupChannelsByAiCategory, formatAiCategoryTitle } from "@/lib/groupByCategory"
 import { useTvRemote } from "@/hooks/useTvRemote"
+import { useMobileViewport } from "@/hooks/useMobileViewport"
+import { isMobileViewport } from "@/lib/mobileLayout"
 import { watchUrlForChannel } from "@/lib/paths"
 import type { Channel } from "@/types/channel"
 
@@ -28,6 +30,13 @@ function filterChannels(channels: Channel[], q: string): Channel[] {
 }
 
 export function HomePage() {
+  const mobile = useMobileViewport()
+  const [styleToolsOpen, setStyleToolsOpen] = useState(() => !isMobileViewport())
+
+  useEffect(() => {
+    setStyleToolsOpen(!mobile)
+  }, [mobile])
+
   const {
     ordered,
     status,
@@ -202,7 +211,25 @@ export function HomePage() {
               </button>
             )}
           </div>
-          <StyleToolbar />
+          {mobile && (
+            <button
+              type="button"
+              className={`btn-ghost home-style-tools-toggle ${styleToolsOpen ? "is-active" : ""}`}
+              aria-expanded={styleToolsOpen}
+              onClick={() => setStyleToolsOpen((v) => !v)}
+            >
+              {styleToolsOpen ? "Hide display options" : "Display options"}
+            </button>
+          )}
+          <div
+            className={
+              mobile && !styleToolsOpen
+                ? "home-header__style-toolbar is-collapsed-mobile"
+                : "home-header__style-toolbar"
+            }
+          >
+            <StyleToolbar />
+          </div>
           <Link to="/multiview" className="btn-ghost home-multiview-link">
             Multi-view
           </Link>

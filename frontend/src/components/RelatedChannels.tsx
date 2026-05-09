@@ -1,4 +1,5 @@
 import { useMemo, useRef, useCallback } from "react"
+import { isMobileViewport } from "@/lib/mobileLayout"
 import { Link } from "react-router-dom"
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
 import type { Channel } from "@/types/channel"
@@ -16,6 +17,16 @@ export function readRelatedDockOpenFromStorage(): boolean {
     return localStorage.getItem(RELATED_DOCK_STORAGE_KEY) !== "1"
   } catch {
     return true
+  }
+}
+
+/** Desktop: stored preference. Mobile: closed unless user explicitly opened (`"0"`). */
+export function readRelatedDockOpenForViewport(): boolean {
+  if (!isMobileViewport()) return readRelatedDockOpenFromStorage()
+  try {
+    return localStorage.getItem(RELATED_DOCK_STORAGE_KEY) === "0"
+  } catch {
+    return false
   }
 }
 

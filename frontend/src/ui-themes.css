@@ -28,6 +28,10 @@
   align-items: center;
 }
 
+.home-header__style-toolbar.is-collapsed-mobile {
+  display: none;
+}
+
 .style-toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -71,8 +75,10 @@
   transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
 }
 
-.style-toolbar__btn:hover {
-  background: var(--surface2);
+@media (hover: hover) {
+  .style-toolbar__btn:hover {
+    background: var(--surface2);
+  }
 }
 
 .style-toolbar__btn:focus-visible {
@@ -107,12 +113,20 @@
   transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
 }
 
-.channel-list-row:hover,
 .channel-list-row:focus-visible {
   border-color: rgba(61, 139, 253, 0.45);
   background: var(--surface2);
   outline: none;
   box-shadow: var(--focus);
+}
+
+@media (hover: hover) {
+  .channel-list-row:hover {
+    border-color: rgba(61, 139, 253, 0.45);
+    background: var(--surface2);
+    outline: none;
+    box-shadow: var(--focus);
+  }
 }
 
 .channel-list-row__thumb {
@@ -178,12 +192,20 @@
   }
 }
 
-.channel-details-row:hover,
 .channel-details-row:focus-visible {
   border-color: rgba(61, 139, 253, 0.45);
   background: var(--surface2);
   outline: none;
   box-shadow: var(--focus);
+}
+
+@media (hover: hover) {
+  .channel-details-row:hover {
+    border-color: rgba(61, 139, 253, 0.45);
+    background: var(--surface2);
+    outline: none;
+    box-shadow: var(--focus);
+  }
 }
 
 .channel-details-row__thumb {
@@ -372,10 +394,12 @@ html[data-visual="neon"] .style-toolbar {
   box-shadow: 0 0 0 1px rgba(0, 240, 255, 0.12), 0 8px 32px rgba(0, 0, 0, 0.45);
 }
 
-html[data-visual="neon"] .channel-card:hover,
-html[data-visual="neon"] .channel-list-row:hover,
-html[data-visual="neon"] .channel-details-row:hover {
-  box-shadow: 0 0 0 1px rgba(255, 46, 196, 0.45), 0 0 28px rgba(255, 46, 196, 0.2);
+@media (hover: hover) {
+  html[data-visual="neon"] .channel-card:hover,
+  html[data-visual="neon"] .channel-list-row:hover,
+  html[data-visual="neon"] .channel-details-row:hover {
+    box-shadow: 0 0 0 1px rgba(255, 46, 196, 0.45), 0 0 28px rgba(255, 46, 196, 0.2);
+  }
 }
 
 html[data-visual="neon"] .style-toolbar__btn.is-active {
@@ -440,10 +464,12 @@ html[data-visual="glass"] .style-toolbar {
   border-color: rgba(255, 255, 255, 0.12);
 }
 
-html[data-visual="glass"] .channel-card:hover,
-html[data-visual="glass"] .channel-list-row:hover,
-html[data-visual="glass"] .channel-details-row:hover {
-  background: rgba(255, 255, 255, 0.1);
+@media (hover: hover) {
+  html[data-visual="glass"] .channel-card:hover,
+  html[data-visual="glass"] .channel-list-row:hover,
+  html[data-visual="glass"] .channel-details-row:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
 }
 
 html[data-visual="glass"] .watch-bar {

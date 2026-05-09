@@ -362,9 +362,11 @@ body::before {
   transition: transform 0.12s, background 0.12s;
 }
 
-.favorite-btn:hover {
-  background: rgba(0, 0, 0, 0.65);
-  transform: scale(1.06);
+@media (hover: hover) {
+  .favorite-btn:hover {
+    background: rgba(0, 0, 0, 0.65);
+    transform: scale(1.06);
+  }
 }
 
 .favorite-btn:focus-visible {
@@ -460,7 +462,6 @@ body::before {
   min-height: 120px;
 }
 
-.channel-card:hover,
 .channel-card:focus-visible {
   transform: translateY(-3px);
   border-color: hsla(var(--thumb-hue), 55%, 58%, 0.42);
@@ -469,7 +470,20 @@ body::before {
   box-shadow: 0 14px 36px hsla(var(--thumb-hue), 45%, 40%, 0.14), var(--focus);
 }
 
-.channel-card-wrap:hover .channel-card__thumb-shell,
+@media (hover: hover) {
+  .channel-card:hover {
+    transform: translateY(-3px);
+    border-color: hsla(var(--thumb-hue), 55%, 58%, 0.42);
+    background: var(--surface2);
+    outline: none;
+    box-shadow: 0 14px 36px hsla(var(--thumb-hue), 45%, 40%, 0.14), var(--focus);
+  }
+
+  .channel-card-wrap:hover .channel-card__thumb-shell {
+    box-shadow: 0 6px 28px hsla(var(--thumb-hue), 50%, 38%, 0.22);
+  }
+}
+
 .channel-card-wrap:focus-within .channel-card__thumb-shell {
   box-shadow: 0 6px 28px hsla(var(--thumb-hue), 50%, 38%, 0.22);
 }
@@ -661,8 +675,10 @@ body::before {
     transition: background 0.1s, border-color 0.1s;
   }
 
-  .channel-numpad__key:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.08);
+  @media (hover: hover) {
+    .channel-numpad__key:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.08);
+    }
   }
 
   .channel-numpad__key:active:not(:disabled) {
@@ -717,11 +733,18 @@ body::before {
   color: var(--text);
 }
 
-.btn-ghost:hover,
 .btn-ghost:focus-visible {
   border-color: rgba(61, 139, 253, 0.5);
   outline: none;
   box-shadow: var(--focus);
+}
+
+@media (hover: hover) {
+  .btn-ghost:hover {
+    border-color: rgba(61, 139, 253, 0.5);
+    outline: none;
+    box-shadow: var(--focus);
+  }
 }
 
 .btn-ghost:disabled {
@@ -753,8 +776,10 @@ body::before {
   color: var(--text);
 }
 
-.icon-btn--ghost:hover {
-  background: var(--surface2);
+@media (hover: hover) {
+  .icon-btn--ghost:hover {
+    background: var(--surface2);
+  }
 }
 
 .icon-btn:focus-visible {
@@ -960,9 +985,14 @@ body::before {
   background: rgba(232, 200, 64, 0.06);
 }
 
-.watch-sidebar__item--favorite:hover,
 .watch-sidebar__item--favorite:focus-visible {
   background: rgba(232, 200, 64, 0.12);
+}
+
+@media (hover: hover) {
+  .watch-sidebar__item--favorite:hover {
+    background: rgba(232, 200, 64, 0.12);
+  }
 }
 
 .watch-sidebar__empty {
@@ -985,11 +1015,18 @@ body::before {
   transition: background 0.12s, border-color 0.12s;
 }
 
-.watch-sidebar__item:hover,
 .watch-sidebar__item:focus-visible {
   background: var(--surface);
   outline: none;
   box-shadow: var(--focus);
+}
+
+@media (hover: hover) {
+  .watch-sidebar__item:hover {
+    background: var(--surface);
+    outline: none;
+    box-shadow: var(--focus);
+  }
 }
 
 .watch-sidebar__item.is-active {
@@ -1172,13 +1209,15 @@ body::before {
   transition: background 0.12s, border-color 0.12s;
 }
 
-.watch-bar__pill:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
 .watch-bar__pill:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+
+@media (hover: hover) {
+  .watch-bar__pill:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
 }
 
 .watch-bar__pill--home {
@@ -1187,8 +1226,10 @@ body::before {
   background: rgba(0, 0, 0, 0.4);
 }
 
-.watch-bar__pill--home:hover {
-  background: rgba(232, 208, 80, 0.12);
+@media (hover: hover) {
+  .watch-bar__pill--home:hover {
+    background: rgba(232, 208, 80, 0.12);
+  }
 }
 
 .watch-bar__pill--related-active {
@@ -1197,8 +1238,10 @@ body::before {
   color: #e8f4ff;
 }
 
-.watch-bar__pill--related-active:hover {
-  background: rgba(100, 170, 255, 0.22);
+@media (hover: hover) {
+  .watch-bar__pill--related-active:hover {
+    background: rgba(100, 170, 255, 0.22);
+  }
 }
 
 .watch-bar__pill--icon {
@@ -1479,9 +1522,11 @@ body::before {
   transition: background 0.15s, color 0.15s;
 }
 
-.related-dock__close:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
+@media (hover: hover) {
+  .related-dock__close:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+  }
 }
 
 .related-dock__row {
@@ -1522,10 +1567,12 @@ body::before {
   transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
 }
 
-.related-dock__card:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+@media (hover: hover) {
+  .related-dock__card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
 }
 
 .related-dock__thumb {
@@ -1585,9 +1632,11 @@ body::before {
   transition: background 0.15s, color 0.15s;
 }
 
-.related-dock__arrow:hover {
-  background: rgba(255, 255, 255, 0.16);
-  color: #fff;
+@media (hover: hover) {
+  .related-dock__arrow:hover {
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+  }
 }
 
 @media (max-width: 768px) {
@@ -1772,8 +1821,10 @@ body::before {
   cursor: pointer;
 }
 
-.multiview-pane__maxbar-btn:hover {
-  background: rgba(255, 255, 255, 0.16);
+@media (hover: hover) {
+  .multiview-pane__maxbar-btn:hover {
+    background: rgba(255, 255, 255, 0.16);
+  }
 }
 
 .multiview-pane__maxbar-title {
@@ -1838,8 +1889,10 @@ body::before {
   color: inherit;
 }
 
-.multiview-pane__badge-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
+@media (hover: hover) {
+  .multiview-pane__badge-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
 }
 
 .multiview-pane__icon-btn {
@@ -1852,8 +1905,10 @@ body::before {
   cursor: pointer;
 }
 
-.multiview-pane__icon-btn:hover {
-  background: rgba(255, 255, 255, 0.14);
+@media (hover: hover) {
+  .multiview-pane__icon-btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+  }
 }
 
 .multiview-pane__player {
@@ -1997,9 +2052,11 @@ body::before {
   border-radius: 8px;
 }
 
-.multiview-modal__close:hover {
-  color: var(--text);
-  background: rgba(255, 255, 255, 0.06);
+@media (hover: hover) {
+  .multiview-modal__close:hover {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.06);
+  }
 }
 
 .multiview-modal__search {
@@ -2035,8 +2092,10 @@ body::before {
   text-align: left;
 }
 
-.multiview-modal__row:hover {
-  background: rgba(255, 255, 255, 0.06);
+@media (hover: hover) {
+  .multiview-modal__row:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
 }
 
 .multiview-modal__logo {

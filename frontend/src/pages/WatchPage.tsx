@@ -18,13 +18,13 @@ import { FavoriteButton } from "@/components/FavoriteButton"
 import { LiveClock } from "@/components/LiveClock"
 import {
   WatchSidebar,
-  readSidebarCollapsed,
+  readSidebarCollapsedForViewport,
   writeSidebarCollapsed,
 } from "@/components/WatchSidebar"
 import {
   RelatedChannels,
   hasRelatedChannels,
-  readRelatedDockOpenFromStorage,
+  readRelatedDockOpenForViewport,
   writeRelatedDockOpenToStorage,
 } from "@/components/RelatedChannels"
 import {
@@ -41,10 +41,12 @@ export function WatchPage() {
   const { channelKey } = useParams<{ channelKey: string }>()
   const navigate = useNavigate()
   const { ordered, status } = useChannels()
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(readSidebarCollapsed)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(
+    readSidebarCollapsedForViewport,
+  )
   const [theaterMode, setTheaterMode] = useState(false)
   const [relatedDockOpen, setRelatedDockOpen] = useState(
-    readRelatedDockOpenFromStorage,
+    readRelatedDockOpenForViewport,
   )
   const [pipVideoEl, setPipVideoEl] = useState<HTMLVideoElement | null>(null)
   const [pipSupported, setPipSupported] = useState(false)
