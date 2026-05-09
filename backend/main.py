@@ -11,6 +11,7 @@ Env:
   CHANNELS_JSON_PATH — optional; destination for URL fetch (default: backend/data/channels.json)
   SKIP_CHANNELS_FETCH — set to 1 to skip CHANNELS_JSON_URL download
   LOGOS_BASE_URL — optional prefix URL for relative channel.logo paths (see GET /api/config)
+  CORS_ORIGINS — comma-separated allowed browser origins, or * (default). Empty env falls back to *.
 """
 
 from __future__ import annotations
@@ -31,6 +32,13 @@ from channels_fetch import maybe_fetch_channels_json
 from hls_proxy import router as hls_router
 
 
+def _cors_allow_origins() -> list[str]:
+    raw = os.environ.get("CORS_ORIGINS", "*").strip()
+    if not raw or raw == "*":
+        return ["*"]
+    return [o.strip() for o in raw.split(",") if o.strip()]
+
+
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     maybe_fetch_channels_json()
@@ -41,7 +49,7 @@ app = FastAPI(title="TV2", description="HLS proxy + categories", lifespan=lifesp
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.environ.get("CORS_ORIGINS", "*").split(","),
+    allow_origins=_cors_allow_origins(),
     allow_methods=["*"],
     allow_headers=["*"],
 )
