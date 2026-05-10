@@ -11,6 +11,35 @@ export type TvRemoteHandlers = {
   digitsDisabled?: boolean
 }
 
+/** TV browsers sometimes omit `key` for digits and only set legacy key codes. */
+function digitFromKeyboardEvent(e: KeyboardEvent): string | null {
+  if (e.key >= "0" && e.key <= "9") return e.key
+  const c = e.keyCode ?? (e as KeyboardEvent & { which?: number }).which
+  if (typeof c === "number") {
+    if (c >= 48 && c <= 57) return String(c - 48)
+    if (c >= 96 && c <= 105) return String(c - 96)
+  }
+  return null
+}
+
+function isChannelUpKey(e: KeyboardEvent): boolean {
+  return (
+    e.key === "ArrowUp" ||
+    e.key === "PageUp" ||
+    e.key === "ChannelUp" ||
+    e.code === "ChannelUp"
+  )
+}
+
+function isChannelDownKey(e: KeyboardEvent): boolean {
+  return (
+    e.key === "ArrowDown" ||
+    e.key === "PageDown" ||
+    e.key === "ChannelDown" ||
+    e.code === "ChannelDown"
+  )
+}
+
 export function useTvRemote(handlers: TvRemoteHandlers) {
   const digitsDisabled = handlers.digitsDisabled ?? false
   const [digitBuffer, setDigitBuffer] = useState("")
@@ -99,13 +128,13 @@ export function useTvRemote(handlers: TvRemoteHandlers) {
 
       const h = handlersRef.current
 
-      if (e.key === "ArrowUp" || e.key === "PageUp") {
+      if (isChannelUpKey(e)) {
         e.preventDefault()
         h.onChannelUp?.()
         clearBuffer()
         return
       }
-      if (e.key === "ArrowDown" || e.key === "PageDown") {
+      if (isChannelDownKey(e)) {
         e.preventDefault()
         h.onChannelDown?.()
         clearBuffer()
@@ -114,10 +143,11 @@ export function useTvRemote(handlers: TvRemoteHandlers) {
 
       if (h.digitsDisabled) return
 
-      if (e.key >= "0" && e.key <= "9") {
+      const digit = digitFromKeyboardEvent(e)
+      if (digit) {
         e.preventDefault()
         const next =
-          bufferRef.current.length >= 4 ? e.key : bufferRef.current + e.key
+          bufferRef.current.length >= 4 ? digit : bufferRef.current + digit
         bufferRef.current = next
         setDigitBuffer(next)
         h.onDigitBuffer?.(next)

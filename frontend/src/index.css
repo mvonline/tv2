@@ -608,100 +608,14 @@ body::before {
 
 @media (max-width: 768px) {
   .digit-overlay {
-    bottom: max(200px, calc(env(safe-area-inset-bottom) + 188px));
+    bottom: max(24px, env(safe-area-inset-bottom));
     right: max(12px, env(safe-area-inset-right));
   }
 }
 
-/* Mobile channel numpad (touch) */
+/* Touch numpad disabled on small screens — use search / tap channels instead. */
 .channel-numpad {
   display: none;
-}
-
-@media (max-width: 768px) {
-  .channel-numpad {
-    display: grid;
-    gap: 6px;
-    padding: 8px;
-    border-radius: 14px;
-    background: rgba(8, 10, 18, 0.9);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
-    z-index: 40;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .channel-numpad--fixed {
-    position: fixed;
-    right: max(10px, env(safe-area-inset-right));
-    bottom: max(10px, env(safe-area-inset-bottom));
-  }
-
-  .channel-numpad:not(.channel-numpad--fixed) {
-    position: absolute;
-    right: max(8px, env(safe-area-inset-right));
-    bottom: max(8px, env(safe-area-inset-bottom));
-  }
-
-  .channel-numpad--disabled {
-    opacity: 0.42;
-    pointer-events: none;
-  }
-
-  .channel-numpad__row {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(44px, 1fr));
-    gap: 6px;
-  }
-
-  .channel-numpad__key {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 44px;
-    min-height: 44px;
-    padding: 0;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: rgba(0, 0, 0, 0.35);
-    color: var(--text);
-    font-size: 1.1rem;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    cursor: pointer;
-    transition: background 0.1s, border-color 0.1s;
-  }
-
-  @media (hover: hover) {
-    .channel-numpad__key:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.08);
-    }
-  }
-
-  .channel-numpad__key:active:not(:disabled) {
-    background: rgba(61, 139, 253, 0.25);
-  }
-
-  .channel-numpad__key:disabled {
-    cursor: not-allowed;
-  }
-
-  .channel-numpad__key--icon {
-    color: var(--muted);
-  }
-
-  .channel-numpad__key--go {
-    color: #6ee7b7;
-    border-color: rgba(110, 231, 183, 0.35);
-    background: rgba(16, 80, 60, 0.35);
-  }
-
-  .channel-numpad__key--go:active:not(:disabled) {
-    background: rgba(110, 231, 183, 0.2);
-  }
 }
 
 /* Buttons */

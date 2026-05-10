@@ -12,6 +12,24 @@ type Props = {
   muted?: boolean
 }
 
+/** Embedded TV browsers (webOS, Tizen, …) often expose native HLS and choke on MSE workers. */
+function nativeHlsLikely(video: HTMLVideoElement): boolean {
+  return (
+    Boolean(video.canPlayType("application/vnd.apple.mpegurl")) ||
+    Boolean(video.canPlayType("application/x-mpegURL"))
+  )
+}
+
+function crossOriginForPlaybackUrl(src: string): "anonymous" | undefined {
+  if (typeof window === "undefined") return undefined
+  try {
+    const u = new URL(src, window.location.href)
+    return u.origin !== window.location.origin ? "anonymous" : undefined
+  } catch {
+    return undefined
+  }
+}
+
 export function VideoPlayer({
   channel,
   className,
@@ -33,6 +51,15 @@ export function VideoPlayer({
     [url, channel.requires_proxy, channel.stream_type],
   )
 
+  const source = isHls ? (hlsUrl ?? url) : url
+  const crossOrigin = useMemo(
+    () =>
+      source && typeof source === "string"
+        ? crossOriginForPlaybackUrl(source)
+        : undefined,
+    [source],
+  )
+
   useLayoutEffect(() => {
     if (!onVideoRef) return
     if (isIframe || !url) {
@@ -48,15 +75,25 @@ export function VideoPlayer({
     const video = videoRef.current
     if (!video || !url || isIframe) return
 
-    const source = isHls ? (hlsUrl ?? url) : url
+    const playbackSrc = isHls ? (hlsUrl ?? url) : url
+
+    // Prefer native HLS when the stack advertises support (common on LG/Samsung/AppleTV Safari).
+    if (isHls && nativeHlsLikely(video)) {
+      video.src = playbackSrc
+      return () => {
+        video.removeAttribute("src")
+        video.load()
+      }
+    }
 
     if (isHls && Hls.isSupported()) {
+      // Workers are unreliable on many smart-TV Chromium builds; LL-HLS stresses weak demuxers.
       const hls = new Hls({
-        enableWorker: true,
-        lowLatencyMode: true,
+        enableWorker: false,
+        lowLatencyMode: false,
       })
       hlsRef.current = hls
-      hls.loadSource(source)
+      hls.loadSource(playbackSrc)
       hls.attachMedia(video)
       hls.on(Hls.Events.ERROR, (_, data) => {
         if (data.fatal) {
@@ -73,14 +110,12 @@ export function VideoPlayer({
       }
     }
 
-    if (isHls && video.canPlayType("application/vnd.apple.mpegurl")) {
-      video.src = source
-      return
-    }
-
     if (!isHls) {
       video.src = url
-      return
+      return () => {
+        video.removeAttribute("src")
+        video.load()
+      }
     }
 
     setError("HLS is not supported in this browser.")
@@ -110,7 +145,7 @@ export function VideoPlayer({
         playsInline
         autoPlay
         muted={muted}
-        crossOrigin="anonymous"
+        crossOrigin={crossOrigin}
       />
       {error && <p className="video-error">{error}</p>}
     </div>
