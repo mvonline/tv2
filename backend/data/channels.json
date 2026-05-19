@@ -1,6 +1,6 @@
 {
   "source": "https://www.aparatchi.com",
-  "count": 307,
+  "count": 304,
   "channels": [
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-education-tv/noor-tv",
@@ -15,7 +15,7 @@
       "slug": "noor-tv",
       "media_type": "tv",
       "ai_category": "religious",
-      "ai_labeled_at": "2026-05-19T14:58:49.126767Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.046764Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-live-tv-entertainment/afghan-theatre",
@@ -30,7 +30,7 @@
       "slug": "afghan-theatre",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.126814Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.046802Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-live-tv-entertainment/amu-tv",
@@ -45,7 +45,7 @@
       "slug": "amu-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.126837Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.046824Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-live-tv-entertainment/ariana-television",
@@ -60,22 +60,7 @@
       "slug": "ariana-television",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.126860Z"
-    },
-    {
-      "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-live-tv-entertainment/bahar-tv",
-      "name": "Bahar TV",
-      "stream_url": "https://gg.hls2.xyz/live/Bahar%20TV/playlist.m3u8",
-      "stream_type": "hls",
-      "stream_host": "gg.hls2.xyz",
-      "requires_proxy": true,
-      "raw_iframe_src": null,
-      "logo": "logo/afghan-live-tv_afghan-live-tv-entertainment_bahar-tv.svg",
-      "category_path": "/afghan-live-tv",
-      "slug": "bahar-tv",
-      "media_type": "tv",
-      "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.126878Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.046846Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-live-tv-entertainment/dunya-naw-tv",
@@ -90,7 +75,7 @@
       "slug": "dunya-naw-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.126897Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.046864Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-live-tv-entertainment/eslah-tv",
@@ -105,7 +90,7 @@
       "slug": "eslah-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.126934Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.046882Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-live-tv-entertainment/iman-tv",
@@ -120,7 +105,7 @@
       "slug": "iman-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.126957Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.046898Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-live-tv-entertainment/lemar-tv",
@@ -135,7 +120,7 @@
       "slug": "lemar-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.126973Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.046913Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-live-tv-entertainment/maawj-tv",
@@ -150,7 +135,7 @@
       "slug": "maawj-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.126990Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.046928Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-live-tv-entertainment/payame-afghan-tv",
@@ -165,7 +150,7 @@
       "slug": "payame-afghan-tv",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.127003Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.046945Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-live-tv-entertainment/shamshad-tv",
@@ -180,7 +165,7 @@
       "slug": "shamshad-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127021Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.046963Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-live-tv-entertainment/tolo-tv",
@@ -195,7 +180,7 @@
       "slug": "tolo-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127037Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.046980Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-music-live-tv/asia-music-channel",
@@ -210,7 +195,7 @@
       "slug": "asia-music-channel",
       "media_type": "tv",
       "ai_category": "music",
-      "ai_labeled_at": "2026-05-19T14:58:49.127050Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.046994Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-music-live-tv/kayhan-tv",
@@ -225,7 +210,7 @@
       "slug": "kayhan-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127067Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047010Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-music-live-tv/pamir-tv",
@@ -240,7 +225,7 @@
       "slug": "pamir-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127083Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047027Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-news-tv/1-tv-news",
@@ -255,7 +240,7 @@
       "slug": "1-tv-news",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.127094Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047039Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-news-tv/afghanistan-international-live-tv",
@@ -270,7 +255,7 @@
       "slug": "afghanistan-international-live-tv",
       "media_type": "tv",
       "ai_category": "international",
-      "ai_labeled_at": "2026-05-19T14:58:49.127125Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047068Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-news-tv/afghanistan-national-television",
@@ -285,7 +270,7 @@
       "slug": "afghanistan-national-television",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127146Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047089Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-news-tv/ariana-news",
@@ -300,7 +285,7 @@
       "slug": "ariana-news",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.127157Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047100Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-news-tv/tolo-news",
@@ -315,7 +300,7 @@
       "slug": "tolo-news",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.127167Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047111Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-news-tv/voa-dari",
@@ -330,7 +315,7 @@
       "slug": "voa-dari",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127183Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047126Z"
     },
     {
       "page_url": "https://www.aparatchi.com/afghan-live-tv/afghan-religion-tv/tamadon-tv",
@@ -345,7 +330,7 @@
       "slug": "tamadon-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127199Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047143Z"
     },
     {
       "page_url": "https://www.aparatchi.com/arabic-live-tv/arabic-film-tv/ifilm-arabic",
@@ -360,7 +345,7 @@
       "slug": "ifilm-arabic",
       "media_type": "tv",
       "ai_category": "movie",
-      "ai_labeled_at": "2026-05-19T14:58:49.127213Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047155Z"
     },
     {
       "page_url": "https://www.aparatchi.com/arabic-live-tv/arabic-news-tv/al-alam-news-network",
@@ -375,7 +360,7 @@
       "slug": "al-alam-news-network",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.127224Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047165Z"
     },
     {
       "page_url": "https://www.aparatchi.com/arabic-live-tv/arabic-news-tv/al-kawthar-tv",
@@ -390,7 +375,7 @@
       "slug": "al-kawthar-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127240Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047181Z"
     },
     {
       "page_url": "https://www.aparatchi.com/arabic-live-tv/arabic-news-tv/al-manar",
@@ -405,7 +390,7 @@
       "slug": "al-manar",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127256Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047199Z"
     },
     {
       "page_url": "https://www.aparatchi.com/arabic-live-tv/arabic-news-tv/arabi-now",
@@ -420,7 +405,7 @@
       "slug": "arabi-now",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127277Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047220Z"
     },
     {
       "page_url": "https://www.aparatchi.com/azerbaijan-live-tv/azerbaijan-music-tv/ayaz-tv",
@@ -435,7 +420,7 @@
       "slug": "ayaz-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127294Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047236Z"
     },
     {
       "page_url": "https://www.aparatchi.com/azerbaijan-live-tv/azerbaijan-music-tv/az-star-tv",
@@ -450,7 +435,7 @@
       "slug": "az-star-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127310Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047251Z"
     },
     {
       "page_url": "https://www.aparatchi.com/azerbaijan-live-tv/azerbaijan-news-tv/araz-news",
@@ -465,7 +450,7 @@
       "slug": "araz-news",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.127324Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047263Z"
     },
     {
       "page_url": "https://www.aparatchi.com/azerbaijan-live-tv/azerbaijan-news-tv/itb-tv",
@@ -480,7 +465,7 @@
       "slug": "itb-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127339Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047277Z"
     },
     {
       "page_url": "https://www.aparatchi.com/english-live-tv/english-entertainment-tv/go2-travel",
@@ -495,7 +480,7 @@
       "slug": "go2-travel",
       "media_type": "tv",
       "ai_category": "lifestyle",
-      "ai_labeled_at": "2026-05-19T14:58:49.127354Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047292Z"
     },
     {
       "page_url": "https://www.aparatchi.com/english-live-tv/english-entertainment-tv/superyacht-tv",
@@ -510,7 +495,7 @@
       "slug": "superyacht-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127370Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047309Z"
     },
     {
       "page_url": "https://www.aparatchi.com/english-live-tv/english-film-tv/ifilm-english",
@@ -525,7 +510,7 @@
       "slug": "ifilm-english",
       "media_type": "tv",
       "ai_category": "movie",
-      "ai_labeled_at": "2026-05-19T14:58:49.127381Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047320Z"
     },
     {
       "page_url": "https://www.aparatchi.com/english-live-tv/english-news-tv/anewz-tv",
@@ -540,7 +525,7 @@
       "slug": "anewz-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127396Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047334Z"
     },
     {
       "page_url": "https://www.aparatchi.com/english-live-tv/english-news-tv/bbc-news",
@@ -555,7 +540,7 @@
       "slug": "bbc-news",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.127406Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047346Z"
     },
     {
       "page_url": "https://www.aparatchi.com/english-live-tv/english-news-tv/euronews-english",
@@ -570,7 +555,7 @@
       "slug": "euronews-english",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.127418Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047357Z"
     },
     {
       "page_url": "https://www.aparatchi.com/english-live-tv/english-news-tv/fox-news",
@@ -585,7 +570,7 @@
       "slug": "fox-news",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.127429Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047366Z"
     },
     {
       "page_url": "https://www.aparatchi.com/english-live-tv/english-news-tv/news-of-the-world",
@@ -600,7 +585,7 @@
       "slug": "news-of-the-world",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.127440Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047379Z"
     },
     {
       "page_url": "https://www.aparatchi.com/english-live-tv/english-news-tv/now-usa",
@@ -615,7 +600,7 @@
       "slug": "now-usa",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127455Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047396Z"
     },
     {
       "page_url": "https://www.aparatchi.com/english-live-tv/english-news-tv/press-tv",
@@ -630,7 +615,7 @@
       "slug": "press-tv",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.127465Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047407Z"
     },
     {
       "page_url": "https://www.aparatchi.com/english-live-tv/english-news-tv/russia-today-new",
@@ -645,7 +630,7 @@
       "slug": "russia-today-new",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.127476Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047418Z"
     },
     {
       "page_url": "https://www.aparatchi.com/english-live-tv/english-news-tv/trt-world-hd",
@@ -660,7 +645,7 @@
       "slug": "trt-world-hd",
       "media_type": "tv",
       "ai_category": "international",
-      "ai_labeled_at": "2026-05-19T14:58:49.127492Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047434Z"
     },
     {
       "page_url": "https://www.aparatchi.com/english-live-tv/religion-english-tv/marjaeyat-tv-eng",
@@ -675,7 +660,7 @@
       "slug": "marjaeyat-tv-eng",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127509Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047451Z"
     },
     {
       "page_url": "https://www.aparatchi.com/french-live-tv/french-news-tv/press-tv-fr",
@@ -690,7 +675,7 @@
       "slug": "press-tv-fr",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.127520Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047462Z"
     },
     {
       "page_url": "https://www.aparatchi.com/indian-live-tv/indian-music-tv/7x-music",
@@ -705,7 +690,7 @@
       "slug": "7x-music",
       "media_type": "tv",
       "ai_category": "music",
-      "ai_labeled_at": "2026-05-19T14:58:49.127531Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047473Z"
     },
     {
       "page_url": "https://www.aparatchi.com/indian-live-tv/indian-music-tv/shree-shyam-tv",
@@ -720,7 +705,7 @@
       "slug": "shree-shyam-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127547Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047541Z"
     },
     {
       "page_url": "https://www.aparatchi.com/indian-live-tv/indian-music-tv/vidhata-darshan-tv",
@@ -735,7 +720,7 @@
       "slug": "vidhata-darshan-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127565Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047572Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/4-u",
@@ -750,7 +735,7 @@
       "slug": "4-u",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127580Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047589Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/4u-family-farsi-tv",
@@ -765,22 +750,7 @@
       "slug": "4u-family-farsi-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127596Z"
-    },
-    {
-      "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/asre-emrooz",
-      "name": "Asre Emrooz",
-      "stream_url": "https://gg.hls2.xyz/live/Asre%20Emrooz/playlist.m3u8",
-      "stream_type": "hls",
-      "stream_host": "gg.hls2.xyz",
-      "requires_proxy": true,
-      "raw_iframe_src": null,
-      "logo": "logo/iran-live-tv_farsi-entertainment-tv_asre-emrooz.svg",
-      "category_path": "/iran-live-tv",
-      "slug": "asre-emrooz",
-      "media_type": "tv",
-      "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127615Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047608Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/didaniha",
@@ -795,7 +765,7 @@
       "slug": "didaniha",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127632Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047623Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/gem-entertainment",
@@ -810,7 +780,7 @@
       "slug": "gem-entertainment",
       "media_type": "tv",
       "ai_category": "entertainment",
-      "ai_labeled_at": "2026-05-19T14:58:49.127649Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047640Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/gem-fit",
@@ -825,7 +795,7 @@
       "slug": "gem-fit",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127664Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047656Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/gem-food",
@@ -840,7 +810,7 @@
       "slug": "gem-food",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127679Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047675Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/gem-life",
@@ -855,7 +825,7 @@
       "slug": "gem-life",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127693Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047690Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/gem-sport-live",
@@ -870,7 +840,7 @@
       "slug": "gem-sport-live",
       "media_type": "tv",
       "ai_category": "sport",
-      "ai_labeled_at": "2026-05-19T14:58:49.127703Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047699Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/iran-independent",
@@ -885,7 +855,7 @@
       "slug": "iran-independent",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127721Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047716Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/itc-tv",
@@ -900,7 +870,7 @@
       "slug": "itc-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127735Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047734Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/itn-tv",
@@ -915,7 +885,7 @@
       "slug": "itn-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127749Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047748Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/manoto-live",
@@ -930,7 +900,7 @@
       "slug": "manoto-live",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127769Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047769Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/omid-e-iran",
@@ -945,7 +915,7 @@
       "slug": "omid-e-iran",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127789Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047788Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/payam-javan",
@@ -960,7 +930,7 @@
       "slug": "payam-javan",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.127801Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047799Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/persiana-fight",
@@ -975,7 +945,7 @@
       "slug": "persiana-fight",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127818Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047817Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/persiana-reality",
@@ -990,7 +960,7 @@
       "slug": "persiana-reality",
       "media_type": "tv",
       "ai_category": "entertainment",
-      "ai_labeled_at": "2026-05-19T14:58:49.127835Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047834Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/persiana-sports",
@@ -1005,7 +975,7 @@
       "slug": "persiana-sports",
       "media_type": "tv",
       "ai_category": "sport",
-      "ai_labeled_at": "2026-05-19T14:58:49.127848Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047843Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/persiana-sports-3",
@@ -1020,7 +990,7 @@
       "slug": "persiana-sports-3",
       "media_type": "tv",
       "ai_category": "sport",
-      "ai_labeled_at": "2026-05-19T14:58:49.127857Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047851Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/persiana-sports-4",
@@ -1035,7 +1005,7 @@
       "slug": "persiana-sports-4",
       "media_type": "tv",
       "ai_category": "sport",
-      "ai_labeled_at": "2026-05-19T14:58:49.127865Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047860Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/persiana-sports2",
@@ -1050,7 +1020,7 @@
       "slug": "persiana-sports2",
       "media_type": "tv",
       "ai_category": "sport",
-      "ai_labeled_at": "2026-05-19T14:58:49.127873Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047870Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/persiana-travel",
@@ -1065,7 +1035,7 @@
       "slug": "persiana-travel",
       "media_type": "tv",
       "ai_category": "lifestyle",
-      "ai_labeled_at": "2026-05-19T14:58:49.127888Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047885Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/setareh-tv",
@@ -1080,7 +1050,7 @@
       "slug": "setareh-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127904Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047902Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/tapesh-tv",
@@ -1095,7 +1065,7 @@
       "slug": "tapesh-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127939Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047917Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/tasvir-e-iran",
@@ -1110,7 +1080,7 @@
       "slug": "tasvir-e-iran",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.127963Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047936Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/telewebion-sport-1",
@@ -1125,7 +1095,7 @@
       "slug": "telewebion-sport-1",
       "media_type": "tv",
       "ai_category": "sport",
-      "ai_labeled_at": "2026-05-19T14:58:49.127974Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047946Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/telewebion-sport-2",
@@ -1140,7 +1110,7 @@
       "slug": "telewebion-sport-2",
       "media_type": "tv",
       "ai_category": "sport",
-      "ai_labeled_at": "2026-05-19T14:58:49.127983Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047957Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/telewebion-sport-3",
@@ -1155,7 +1125,7 @@
       "slug": "telewebion-sport-3",
       "media_type": "tv",
       "ai_category": "sport",
-      "ai_labeled_at": "2026-05-19T14:58:49.127992Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047966Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-entertainment-tv/your-time-tv",
@@ -1170,7 +1140,7 @@
       "slug": "your-time-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128008Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047982Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/247-box-tv",
@@ -1185,7 +1155,7 @@
       "slug": "247-box-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128023Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.047996Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/afra-film",
@@ -1200,7 +1170,7 @@
       "slug": "afra-film",
       "media_type": "tv",
       "ai_category": "movie",
-      "ai_labeled_at": "2026-05-19T14:58:49.128034Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048007Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/arko-tv",
@@ -1215,7 +1185,7 @@
       "slug": "arko-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128049Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048023Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/arvan-tv",
@@ -1230,7 +1200,7 @@
       "slug": "arvan-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128063Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048038Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/ava-family",
@@ -1245,7 +1215,7 @@
       "slug": "ava-family",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128081Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048054Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/cafe-film",
@@ -1260,7 +1230,7 @@
       "slug": "cafe-film",
       "media_type": "tv",
       "ai_category": "movie",
-      "ai_labeled_at": "2026-05-19T14:58:49.128094Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048064Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/cinex-tv",
@@ -1275,7 +1245,7 @@
       "slug": "cinex-tv",
       "media_type": "tv",
       "ai_category": "movie",
-      "ai_labeled_at": "2026-05-19T14:58:49.128105Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048077Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/classic-tv",
@@ -1290,7 +1260,7 @@
       "slug": "classic-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128122Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048092Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/datis-tv",
@@ -1305,7 +1275,7 @@
       "slug": "datis-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128136Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048107Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/farsi-tv",
@@ -1320,7 +1290,7 @@
       "slug": "farsi-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128150Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048124Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/fx-movies",
@@ -1335,7 +1305,7 @@
       "slug": "fx-movies",
       "media_type": "tv",
       "ai_category": "movie",
-      "ai_labeled_at": "2026-05-19T14:58:49.128161Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048135Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/gem-bollywood",
@@ -1350,7 +1320,7 @@
       "slug": "gem-bollywood",
       "media_type": "tv",
       "ai_category": "movie",
-      "ai_labeled_at": "2026-05-19T14:58:49.128172Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048146Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/gem-classic",
@@ -1365,7 +1335,7 @@
       "slug": "gem-classic",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128188Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048162Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/gem-comedy",
@@ -1380,7 +1350,7 @@
       "slug": "gem-comedy",
       "media_type": "tv",
       "ai_category": "entertainment",
-      "ai_labeled_at": "2026-05-19T14:58:49.128202Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048177Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/gem-drama",
@@ -1395,7 +1365,7 @@
       "slug": "gem-drama",
       "media_type": "tv",
       "ai_category": "series",
-      "ai_labeled_at": "2026-05-19T14:58:49.128215Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048190Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/gem-drama-plus",
@@ -1410,7 +1380,7 @@
       "slug": "gem-drama-plus",
       "media_type": "tv",
       "ai_category": "series",
-      "ai_labeled_at": "2026-05-19T14:58:49.128230Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048205Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/gem-film",
@@ -1425,7 +1395,7 @@
       "slug": "gem-film",
       "media_type": "tv",
       "ai_category": "movie",
-      "ai_labeled_at": "2026-05-19T14:58:49.128240Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048215Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/gem-pixel",
@@ -1440,7 +1410,7 @@
       "slug": "gem-pixel",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128254Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048229Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/gem-tv",
@@ -1455,22 +1425,7 @@
       "slug": "gem-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128271Z"
-    },
-    {
-      "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/grand-cinema",
-      "name": "Grand Cinema",
-      "stream_url": "https://gg.hls2.xyz/live/Grand Cinema/playlist.m3u8",
-      "stream_type": "hls",
-      "stream_host": "gg.hls2.xyz",
-      "requires_proxy": true,
-      "raw_iframe_src": null,
-      "logo": "logo/iran-live-tv_farsi-film-tv_grand-cinema.svg",
-      "category_path": "/iran-live-tv",
-      "slug": "grand-cinema",
-      "media_type": "tv",
-      "ai_category": "movie",
-      "ai_labeled_at": "2026-05-19T14:58:49.128283Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048243Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/home",
@@ -1485,7 +1440,7 @@
       "slug": "home",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128297Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048257Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/icc",
@@ -1500,7 +1455,7 @@
       "slug": "icc",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128312Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048271Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/ifilm-persian",
@@ -1515,7 +1470,7 @@
       "slug": "ifilm-persian",
       "media_type": "tv",
       "ai_category": "movie",
-      "ai_labeled_at": "2026-05-19T14:58:49.128324Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048283Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/khalij-tv",
@@ -1530,7 +1485,7 @@
       "slug": "khalij-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128341Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048303Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/maah-tv",
@@ -1545,7 +1500,7 @@
       "slug": "maah-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128355Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048318Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/mbc-persia",
@@ -1560,7 +1515,7 @@
       "slug": "mbc-persia",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128371Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048334Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/meta-film",
@@ -1575,7 +1530,7 @@
       "slug": "meta-film",
       "media_type": "tv",
       "ai_category": "movie",
-      "ai_labeled_at": "2026-05-19T14:58:49.128381Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048344Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/net-tv",
@@ -1590,7 +1545,7 @@
       "slug": "net-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128395Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048360Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/onyx",
@@ -1605,7 +1560,7 @@
       "slug": "onyx",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128409Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048374Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/orange-tv",
@@ -1620,7 +1575,7 @@
       "slug": "orange-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128424Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048389Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/oxir-tv",
@@ -1635,7 +1590,7 @@
       "slug": "oxir-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128438Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048405Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/persiana-cinema",
@@ -1650,7 +1605,7 @@
       "slug": "persiana-cinema",
       "media_type": "tv",
       "ai_category": "movie",
-      "ai_labeled_at": "2026-05-19T14:58:49.128450Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048417Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/persiana-comedy",
@@ -1665,7 +1620,7 @@
       "slug": "persiana-comedy",
       "media_type": "tv",
       "ai_category": "entertainment",
-      "ai_labeled_at": "2026-05-19T14:58:49.128465Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048433Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/persiana-family",
@@ -1680,7 +1635,7 @@
       "slug": "persiana-family",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128481Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048449Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/persiana-iranian",
@@ -1695,7 +1650,7 @@
       "slug": "persiana-iranian",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128499Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048466Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/persiana-plus",
@@ -1710,7 +1665,7 @@
       "slug": "persiana-plus",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128518Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048482Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/royal-tv",
@@ -1725,7 +1680,7 @@
       "slug": "royal-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128533Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048526Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/sl-1",
@@ -1740,7 +1695,7 @@
       "slug": "sl-1",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128547Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048546Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/sl-2",
@@ -1755,7 +1710,7 @@
       "slug": "sl-2",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128560Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048560Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-film-tv/today-tv",
@@ -1770,7 +1725,7 @@
       "slug": "today-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.128576Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048574Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-abadan-live-tv",
@@ -1785,7 +1740,7 @@
       "slug": "irib-abadan-live-tv",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128589Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048588Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-aflak-live-tv",
@@ -1800,7 +1755,7 @@
       "slug": "irib-aflak-live-tv",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128608Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048600Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-aftab-live-tv",
@@ -1815,7 +1770,7 @@
       "slug": "irib-aftab-live-tv",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128621Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048612Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-alborz",
@@ -1830,7 +1785,7 @@
       "slug": "irib-alborz",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128633Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048623Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-ardabil",
@@ -1845,7 +1800,7 @@
       "slug": "irib-ardabil",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128645Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048635Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-baran-live-tv",
@@ -1860,7 +1815,7 @@
       "slug": "irib-baran-live-tv",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128657Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048650Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-bushehr",
@@ -1875,7 +1830,7 @@
       "slug": "irib-bushehr",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128668Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048662Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-chaharmahal-and-bakhtiari",
@@ -1890,7 +1845,7 @@
       "slug": "irib-chaharmahal-and-bakhtiari",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128681Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048675Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-esfahan-live-tv",
@@ -1905,7 +1860,7 @@
       "slug": "irib-esfahan-live-tv",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128693Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048689Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-fars-live-tv",
@@ -1920,7 +1875,7 @@
       "slug": "irib-fars-live-tv",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128705Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048701Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-golestan",
@@ -1935,7 +1890,7 @@
       "slug": "irib-golestan",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128717Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048712Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-hamedan",
@@ -1950,7 +1905,7 @@
       "slug": "irib-hamedan",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128730Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048723Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-ilam",
@@ -1965,7 +1920,7 @@
       "slug": "irib-ilam",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128741Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048734Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-kerman-live-tv",
@@ -1980,7 +1935,7 @@
       "slug": "irib-kerman-live-tv",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128753Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048747Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-kermanshah",
@@ -1995,7 +1950,7 @@
       "slug": "irib-kermanshah",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128765Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048759Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-khalij-e-fars",
@@ -2010,7 +1965,7 @@
       "slug": "irib-khalij-e-fars",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128777Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048772Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-khoozestan-live-tv",
@@ -2025,7 +1980,7 @@
       "slug": "irib-khoozestan-live-tv",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128790Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048785Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-khorasan-jonoobi",
@@ -2040,7 +1995,7 @@
       "slug": "irib-khorasan-jonoobi",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128802Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048797Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-khorasan-razavi-live-tv",
@@ -2055,7 +2010,7 @@
       "slug": "irib-khorasan-razavi-live-tv",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128815Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048810Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-khorasan-shomali",
@@ -2070,7 +2025,7 @@
       "slug": "irib-khorasan-shomali",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128828Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048822Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-kish",
@@ -2085,7 +2040,7 @@
       "slug": "irib-kish",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128839Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048834Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-kurdistan",
@@ -2100,7 +2055,7 @@
       "slug": "irib-kurdistan",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128851Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048846Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-mahabad",
@@ -2115,7 +2070,7 @@
       "slug": "irib-mahabad",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128863Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048857Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-qazvin-live-tv",
@@ -2130,7 +2085,7 @@
       "slug": "irib-qazvin-live-tv",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128875Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048869Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-qom",
@@ -2145,7 +2100,7 @@
       "slug": "irib-qom",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128887Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048880Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-sahand-live-tv",
@@ -2160,7 +2115,7 @@
       "slug": "irib-sahand-live-tv",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128899Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048892Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-semnan",
@@ -2175,7 +2130,7 @@
       "slug": "irib-semnan",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128928Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048903Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-tabarestan-live",
@@ -2190,7 +2145,7 @@
       "slug": "irib-tabarestan-live",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128943Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048915Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-tehran-live-tv",
@@ -2205,7 +2160,7 @@
       "slug": "irib-tehran-live-tv",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128955Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048927Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-urmia",
@@ -2220,7 +2175,7 @@
       "slug": "irib-urmia",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128967Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048938Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-yasouj",
@@ -2235,7 +2190,7 @@
       "slug": "irib-yasouj",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128979Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048949Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-yazd",
@@ -2250,7 +2205,7 @@
       "slug": "irib-yazd",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.128991Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048961Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-zahedan",
@@ -2265,7 +2220,7 @@
       "slug": "irib-zahedan",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.129003Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048972Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-ostani-tv/irib-zanjan",
@@ -2280,7 +2235,7 @@
       "slug": "irib-zanjan",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.129014Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048983Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-tv/ifilm-persian-2",
@@ -2295,7 +2250,7 @@
       "slug": "ifilm-persian-2",
       "media_type": "tv",
       "ai_category": "movie",
-      "ai_labeled_at": "2026-05-19T14:58:49.129026Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.048994Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-tv/irib-amoozesh",
@@ -2310,7 +2265,7 @@
       "slug": "irib-amoozesh",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.129038Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049006Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-tv/irib-mosbat-1-live",
@@ -2325,7 +2280,7 @@
       "slug": "irib-mosbat-1-live",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.129050Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049018Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-tv/irib-mostanad",
@@ -2340,7 +2295,7 @@
       "slug": "irib-mostanad",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.129062Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049029Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-tv/irib-namayesh",
@@ -2355,7 +2310,7 @@
       "slug": "irib-namayesh",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.129074Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049040Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-tv/irib-nasim-live",
@@ -2370,7 +2325,7 @@
       "slug": "irib-nasim-live",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.129086Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049051Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-tv/irib-ofogh",
@@ -2385,7 +2340,7 @@
       "slug": "irib-ofogh",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.129098Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049062Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-tv/irib-omid",
@@ -2400,7 +2355,7 @@
       "slug": "irib-omid",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.129112Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049074Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-tv/irib-pooya",
@@ -2415,7 +2370,7 @@
       "slug": "irib-pooya",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.129126Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049085Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-tv/irib-quran",
@@ -2430,7 +2385,7 @@
       "slug": "irib-quran",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.129138Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049098Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-tv/irib-salamat",
@@ -2445,7 +2400,7 @@
       "slug": "irib-salamat",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.129150Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049110Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-tv/irib-tamasha",
@@ -2460,7 +2415,7 @@
       "slug": "irib-tamasha",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.129161Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049121Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-tv/irib-tv4",
@@ -2475,7 +2430,7 @@
       "slug": "irib-tv4",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.129172Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049132Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-tv/irib-varzesh-live-tv",
@@ -2490,7 +2445,7 @@
       "slug": "irib-varzesh-live-tv",
       "media_type": "tv",
       "ai_category": "sport",
-      "ai_labeled_at": "2026-05-19T14:58:49.129182Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049142Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-tv/irib1-live",
@@ -2505,7 +2460,7 @@
       "slug": "irib1-live",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.129193Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049153Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-tv/irib2-live",
@@ -2520,7 +2475,7 @@
       "slug": "irib2-live",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.129205Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049164Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-tv/irib3-live",
@@ -2535,7 +2490,7 @@
       "slug": "irib3-live",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.129215Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049174Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-tv/irinn-2-shabakeh-khabar-2",
@@ -2550,7 +2505,7 @@
       "slug": "irinn-2-shabakeh-khabar-2",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129237Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049197Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-irib-tv/shabakeh-khabar-live",
@@ -2565,7 +2520,7 @@
       "slug": "shabakeh-khabar-live",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129262Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049218Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-kids-tv/fx-cartoon-live-tv",
@@ -2580,7 +2535,7 @@
       "slug": "fx-cartoon-live-tv",
       "media_type": "tv",
       "ai_category": "kids",
-      "ai_labeled_at": "2026-05-19T14:58:49.129271Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049227Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-kids-tv/gem-junior",
@@ -2595,7 +2550,7 @@
       "slug": "gem-junior",
       "media_type": "tv",
       "ai_category": "kids",
-      "ai_labeled_at": "2026-05-19T14:58:49.129280Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049235Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-kids-tv/gem-kids",
@@ -2610,7 +2565,7 @@
       "slug": "gem-kids",
       "media_type": "tv",
       "ai_category": "kids",
-      "ai_labeled_at": "2026-05-19T14:58:49.129289Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049247Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-kids-tv/hod-hod-live",
@@ -2625,7 +2580,7 @@
       "slug": "hod-hod-live",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129308Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049267Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-kids-tv/persiana-junior",
@@ -2640,7 +2595,7 @@
       "slug": "persiana-junior",
       "media_type": "tv",
       "ai_category": "kids",
-      "ai_labeled_at": "2026-05-19T14:58:49.129317Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049275Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-kids-tv/persiana-teen",
@@ -2655,7 +2610,7 @@
       "slug": "persiana-teen",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129334Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049292Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-music-tv/afn-music",
@@ -2670,7 +2625,7 @@
       "slug": "afn-music",
       "media_type": "tv",
       "ai_category": "music",
-      "ai_labeled_at": "2026-05-19T14:58:49.129346Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049304Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-music-tv/avang-music-live",
@@ -2685,7 +2640,7 @@
       "slug": "avang-music-live",
       "media_type": "tv",
       "ai_category": "music",
-      "ai_labeled_at": "2026-05-19T14:58:49.129359Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049317Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-music-tv/gem-mifa-music",
@@ -2700,7 +2655,7 @@
       "slug": "gem-mifa-music",
       "media_type": "tv",
       "ai_category": "music",
-      "ai_labeled_at": "2026-05-19T14:58:49.129370Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049328Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-music-tv/gem-mifa-plus-music",
@@ -2715,7 +2670,7 @@
       "slug": "gem-mifa-plus-music",
       "media_type": "tv",
       "ai_category": "music",
-      "ai_labeled_at": "2026-05-19T14:58:49.129382Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049340Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-music-tv/khatereh-tv",
@@ -2730,7 +2685,7 @@
       "slug": "khatereh-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129398Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049355Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-music-tv/mtc",
@@ -2745,7 +2700,7 @@
       "slug": "mtc",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129415Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049372Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-music-tv/navahang-live-tv",
@@ -2760,7 +2715,7 @@
       "slug": "navahang-live-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129435Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049392Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-music-tv/persiana-kpop",
@@ -2775,7 +2730,7 @@
       "slug": "persiana-kpop",
       "media_type": "tv",
       "ai_category": "music",
-      "ai_labeled_at": "2026-05-19T14:58:49.129447Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049404Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-music-tv/persiana-music",
@@ -2790,7 +2745,7 @@
       "slug": "persiana-music",
       "media_type": "tv",
       "ai_category": "music",
-      "ai_labeled_at": "2026-05-19T14:58:49.129459Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049415Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-music-tv/persiana-nostalgia",
@@ -2805,7 +2760,7 @@
       "slug": "persiana-nostalgia",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129477Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049439Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-music-tv/persiana-sonnati",
@@ -2820,7 +2775,7 @@
       "slug": "persiana-sonnati",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129494Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049457Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-music-tv/pmc",
@@ -2835,7 +2790,7 @@
       "slug": "pmc",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129509Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049471Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-music-tv/pmc-royal",
@@ -2850,7 +2805,7 @@
       "slug": "pmc-royal",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129526Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049510Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-music-tv/radio-dej",
@@ -2865,7 +2820,7 @@
       "slug": "radio-dej",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.129545Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049540Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-music-tv/radio-javan-live",
@@ -2880,7 +2835,7 @@
       "slug": "radio-javan-live",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.129567Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049562Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-music-tv/radio-khatereh",
@@ -2895,7 +2850,7 @@
       "slug": "radio-khatereh",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.129586Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049582Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-music-tv/radio-shadi",
@@ -2910,7 +2865,7 @@
       "slug": "radio-shadi",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.129605Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049601Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-music-tv/romantico-tv",
@@ -2925,7 +2880,7 @@
       "slug": "romantico-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129621Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049617Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-music-tv/sun-music-tv",
@@ -2940,7 +2895,7 @@
       "slug": "sun-music-tv",
       "media_type": "tv",
       "ai_category": "music",
-      "ai_labeled_at": "2026-05-19T14:58:49.129633Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049629Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-music-tv/t2-tapesh",
@@ -2955,7 +2910,7 @@
       "slug": "t2-tapesh",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129651Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049644Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-news-tv/bbc-farsi-live-tv",
@@ -2970,7 +2925,7 @@
       "slug": "bbc-farsi-live-tv",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.129663Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049656Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-news-tv/euronews-farsi",
@@ -2985,7 +2940,7 @@
       "slug": "euronews-farsi",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.129675Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049667Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-news-tv/iran-international-live",
@@ -3000,7 +2955,7 @@
       "slug": "iran-international-live",
       "media_type": "tv",
       "ai_category": "international",
-      "ai_labeled_at": "2026-05-19T14:58:49.129696Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049687Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-news-tv/iran-international-radio",
@@ -3015,7 +2970,7 @@
       "slug": "iran-international-radio",
       "media_type": "tv",
       "ai_category": "international",
-      "ai_labeled_at": "2026-05-19T14:58:49.129718Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049712Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-news-tv/khabarbin",
@@ -3030,7 +2985,7 @@
       "slug": "khabarbin",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129737Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049731Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-news-tv/radio-farda",
@@ -3045,7 +3000,7 @@
       "slug": "radio-farda",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.129756Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049749Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-news-tv/shabake-khabar-danshjo1",
@@ -3060,7 +3015,7 @@
       "slug": "shabake-khabar-danshjo1",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129778Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049770Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-news-tv/shabake-khabar-danshjo2",
@@ -3075,7 +3030,7 @@
       "slug": "shabake-khabar-danshjo2",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129796Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049788Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-news-tv/voa-persian",
@@ -3090,7 +3045,7 @@
       "slug": "voa-persian",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129816Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049807Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-religious-tv/derakhte-zendegi-tv",
@@ -3105,7 +3060,7 @@
       "slug": "derakhte-zendegi-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129835Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049825Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-religious-tv/erfan-e-halgheh",
@@ -3120,7 +3075,7 @@
       "slug": "erfan-e-halgheh",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129852Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049842Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-religious-tv/ganj-e-hozour",
@@ -3135,7 +3090,7 @@
       "slug": "ganj-e-hozour",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129868Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049858Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-religious-tv/icnet-2",
@@ -3150,7 +3105,7 @@
       "slug": "icnet-2",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129884Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049873Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-religious-tv/icnet-3",
@@ -3165,7 +3120,7 @@
       "slug": "icnet-3",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129897Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049886Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-religious-tv/icnet1",
@@ -3180,7 +3135,7 @@
       "slug": "icnet1",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129935Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049900Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-religious-tv/marjaeyat-tv",
@@ -3195,7 +3150,7 @@
       "slug": "marjaeyat-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129958Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049917Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-religious-tv/mohabat-tv",
@@ -3210,7 +3165,7 @@
       "slug": "mohabat-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129976Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049933Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-religious-tv/nejat-tv",
@@ -3225,7 +3180,7 @@
       "slug": "nejat-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.129991Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049947Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-religious-tv/nour-tv",
@@ -3240,7 +3195,7 @@
       "slug": "nour-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130011Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049966Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-religious-tv/payam-aramesh",
@@ -3255,7 +3210,7 @@
       "slug": "payam-aramesh",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.130023Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049976Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-religious-tv/payvand-tv",
@@ -3270,7 +3225,7 @@
       "slug": "payvand-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130038Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.049991Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-religious-tv/rahe-nejat",
@@ -3285,7 +3240,7 @@
       "slug": "rahe-nejat",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130054Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050006Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-religious-tv/salaam-tv",
@@ -3300,7 +3255,7 @@
       "slug": "salaam-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130069Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050021Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-religious-tv/sat7-pars",
@@ -3315,7 +3270,7 @@
       "slug": "sat7-pars",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130085Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050035Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-religious-tv/shabakeh-7",
@@ -3330,7 +3285,7 @@
       "slug": "shabakeh-7",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130100Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050050Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-scientific-tv/ayeneh-tv",
@@ -3345,7 +3300,7 @@
       "slug": "ayeneh-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130115Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050064Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-scientific-tv/cafetrade-tv",
@@ -3360,7 +3315,7 @@
       "slug": "cafetrade-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130131Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050080Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-scientific-tv/eplanet-tv",
@@ -3375,7 +3330,7 @@
       "slug": "eplanet-tv",
       "media_type": "tv",
       "ai_category": "documentary",
-      "ai_labeled_at": "2026-05-19T14:58:49.130143Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050092Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-scientific-tv/gem-documentary",
@@ -3390,7 +3345,7 @@
       "slug": "gem-documentary",
       "media_type": "tv",
       "ai_category": "documentary",
-      "ai_labeled_at": "2026-05-19T14:58:49.130156Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050104Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-scientific-tv/gem-nature",
@@ -3405,7 +3360,7 @@
       "slug": "gem-nature",
       "media_type": "tv",
       "ai_category": "documentary",
-      "ai_labeled_at": "2026-05-19T14:58:49.130168Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050116Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-scientific-tv/persiana-documentary",
@@ -3420,7 +3375,7 @@
       "slug": "persiana-documentary",
       "media_type": "tv",
       "ai_category": "documentary",
-      "ai_labeled_at": "2026-05-19T14:58:49.130183Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050129Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-scientific-tv/persiana-medical",
@@ -3435,7 +3390,7 @@
       "slug": "persiana-medical",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130202Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050147Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-scientific-tv/tm-tv",
@@ -3450,7 +3405,7 @@
       "slug": "tm-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130217Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050161Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-serial-tv/afra-series",
@@ -3465,7 +3420,7 @@
       "slug": "afra-series",
       "media_type": "tv",
       "ai_category": "series",
-      "ai_labeled_at": "2026-05-19T14:58:49.130231Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050175Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-serial-tv/arax-tv",
@@ -3480,7 +3435,7 @@
       "slug": "arax-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130247Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050189Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-serial-tv/ava-series",
@@ -3495,7 +3450,7 @@
       "slug": "ava-series",
       "media_type": "tv",
       "ai_category": "series",
-      "ai_labeled_at": "2026-05-19T14:58:49.130261Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050203Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-serial-tv/ekran-movies",
@@ -3510,7 +3465,7 @@
       "slug": "ekran-movies",
       "media_type": "tv",
       "ai_category": "movie",
-      "ai_labeled_at": "2026-05-19T14:58:49.130272Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050213Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-serial-tv/gem-river",
@@ -3525,7 +3480,7 @@
       "slug": "gem-river",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130287Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050228Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-serial-tv/gem-river-plus",
@@ -3540,7 +3495,7 @@
       "slug": "gem-river-plus",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130307Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050245Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-serial-tv/gem-rubix",
@@ -3555,7 +3510,7 @@
       "slug": "gem-rubix",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130322Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050259Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-serial-tv/gem-rubix-plus",
@@ -3570,7 +3525,7 @@
       "slug": "gem-rubix-plus",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130338Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050274Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-serial-tv/gem-series",
@@ -3585,7 +3540,7 @@
       "slug": "gem-series",
       "media_type": "tv",
       "ai_category": "series",
-      "ai_labeled_at": "2026-05-19T14:58:49.130352Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050287Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-serial-tv/gem-series-plus",
@@ -3600,7 +3555,7 @@
       "slug": "gem-series-plus",
       "media_type": "tv",
       "ai_category": "series",
-      "ai_labeled_at": "2026-05-19T14:58:49.130366Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050301Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-serial-tv/gem-tv-plus",
@@ -3615,7 +3570,7 @@
       "slug": "gem-tv-plus",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130382Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050316Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-serial-tv/gold-star-tv",
@@ -3630,7 +3585,7 @@
       "slug": "gold-star-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130398Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050330Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-serial-tv/persiana-series",
@@ -3645,7 +3600,7 @@
       "slug": "persiana-series",
       "media_type": "tv",
       "ai_category": "series",
-      "ai_labeled_at": "2026-05-19T14:58:49.130413Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050345Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-serial-tv/persiana-turkiye",
@@ -3660,7 +3615,7 @@
       "slug": "persiana-turkiye",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130430Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050362Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-serial-tv/ravi-tv",
@@ -3675,7 +3630,7 @@
       "slug": "ravi-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130446Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050377Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-serial-tv/ronix-tv",
@@ -3690,7 +3645,7 @@
       "slug": "ronix-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130461Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050392Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/farsi-serial-tv/royal-time-tv",
@@ -3705,7 +3660,7 @@
       "slug": "royal-time-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130477Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050409Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radio-arina",
@@ -3720,7 +3675,7 @@
       "slug": "radio-arina",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.130497Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050428Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radio-donya",
@@ -3735,7 +3690,7 @@
       "slug": "radio-donya",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.130513Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050443Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radio-goftegoo",
@@ -3750,7 +3705,7 @@
       "slug": "radio-goftegoo",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.130534Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050463Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radio-hamrah",
@@ -3765,7 +3720,7 @@
       "slug": "radio-hamrah",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.130550Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050479Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radio-yar",
@@ -3780,7 +3735,7 @@
       "slug": "radio-yar",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.130569Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050526Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radionama-ava",
@@ -3795,7 +3750,7 @@
       "slug": "radionama-ava",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.130588Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050549Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radionama-eghtesad",
@@ -3810,7 +3765,7 @@
       "slug": "radionama-eghtesad",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.130609Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050570Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radionama-farhang",
@@ -3825,7 +3780,7 @@
       "slug": "radionama-farhang",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.130628Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050589Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radionama-iran",
@@ -3840,7 +3795,7 @@
       "slug": "radionama-iran",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.130647Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050607Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radionama-javan",
@@ -3855,7 +3810,7 @@
       "slug": "radionama-javan",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.130666Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050626Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radionama-maaref",
@@ -3870,7 +3825,7 @@
       "slug": "radionama-maaref",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.130685Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050644Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radionama-namayesh",
@@ -3885,7 +3840,7 @@
       "slug": "radionama-namayesh",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.130705Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050662Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radionama-payam",
@@ -3900,7 +3855,7 @@
       "slug": "radionama-payam",
       "media_type": "tv",
       "ai_category": "news",
-      "ai_labeled_at": "2026-05-19T14:58:49.130717Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050674Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radionama-quran",
@@ -3915,7 +3870,7 @@
       "slug": "radionama-quran",
       "media_type": "tv",
       "ai_category": "religious",
-      "ai_labeled_at": "2026-05-19T14:58:49.130732Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050688Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radionama-saba",
@@ -3930,7 +3885,7 @@
       "slug": "radionama-saba",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.130751Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050707Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radionama-salamat",
@@ -3945,7 +3900,7 @@
       "slug": "radionama-salamat",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.130770Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050727Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radionama-talavat",
@@ -3960,7 +3915,7 @@
       "slug": "radionama-talavat",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.130788Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050744Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radionama-tartil",
@@ -3975,7 +3930,7 @@
       "slug": "radionama-tartil",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.130807Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050762Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radionama-tehran",
@@ -3990,7 +3945,7 @@
       "slug": "radionama-tehran",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.130827Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050780Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radionama-varzesh",
@@ -4005,7 +3960,7 @@
       "slug": "radionama-varzesh",
       "media_type": "tv",
       "ai_category": "sport",
-      "ai_labeled_at": "2026-05-19T14:58:49.130837Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050789Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/iranian-radio/radionama-ziarat",
@@ -4020,7 +3975,7 @@
       "slug": "radionama-ziarat",
       "media_type": "tv",
       "ai_category": "radio",
-      "ai_labeled_at": "2026-05-19T14:58:49.130855Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050806Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/politics-live-tv/channel-one",
@@ -4035,7 +3990,7 @@
       "slug": "channel-one",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130872Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050826Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/politics-live-tv/didgah-tv",
@@ -4050,7 +4005,7 @@
       "slug": "didgah-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130888Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050843Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/politics-live-tv/gord-afarid-tv",
@@ -4065,7 +4020,7 @@
       "slug": "gord-afarid-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130920Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050860Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/politics-live-tv/hambastegi-tv",
@@ -4080,7 +4035,7 @@
       "slug": "hambastegi-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130939Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050875Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/politics-live-tv/iran-aryaee",
@@ -4095,7 +4050,7 @@
       "slug": "iran-aryaee",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130956Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050891Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/politics-live-tv/iran-e-farda",
@@ -4110,7 +4065,7 @@
       "slug": "iran-e-farda",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130976Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050910Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/politics-live-tv/iran-national-revolution-tv",
@@ -4125,7 +4080,7 @@
       "slug": "iran-national-revolution-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.130999Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050932Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/politics-live-tv/kalemeh-tv",
@@ -4140,7 +4095,7 @@
       "slug": "kalemeh-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131015Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050947Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/politics-live-tv/kanal-e-jadid",
@@ -4155,7 +4110,7 @@
       "slug": "kanal-e-jadid",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131035Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050967Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/politics-live-tv/melli-gara-party",
@@ -4170,7 +4125,7 @@
       "slug": "melli-gara-party",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131057Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.050987Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/politics-live-tv/mihan-tv",
@@ -4185,7 +4140,7 @@
       "slug": "mihan-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131072Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051002Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/politics-live-tv/nahade-azadi",
@@ -4200,7 +4155,7 @@
       "slug": "nahade-azadi",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131089Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051017Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/politics-live-tv/pars-tv",
@@ -4215,7 +4170,7 @@
       "slug": "pars-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131108Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051036Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/politics-live-tv/project-leon",
@@ -4230,7 +4185,7 @@
       "slug": "project-leon",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131127Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051055Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/politics-live-tv/pulse-media",
@@ -4245,7 +4200,7 @@
       "slug": "pulse-media",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131146Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051073Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/politics-live-tv/zan-zendegi-azadi-tv",
@@ -4260,7 +4215,7 @@
       "slug": "zan-zendegi-azadi-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131165Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051092Z"
     },
     {
       "page_url": "https://www.aparatchi.com/iran-live-tv/politics-live-tv/zed-tv",
@@ -4275,7 +4230,7 @@
       "slug": "zed-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131180Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051106Z"
     },
     {
       "page_url": "https://www.aparatchi.com/korean-live-tv/korean-kids-tv/ebs-kids",
@@ -4290,7 +4245,7 @@
       "slug": "ebs-kids",
       "media_type": "tv",
       "ai_category": "kids",
-      "ai_labeled_at": "2026-05-19T14:58:49.131189Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051114Z"
     },
     {
       "page_url": "https://www.aparatchi.com/korean-live-tv/korean-series/persiana-korea",
@@ -4305,7 +4260,7 @@
       "slug": "persiana-korea",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131207Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051131Z"
     },
     {
       "page_url": "https://www.aparatchi.com/kurdish-live-tv/kurdish-entertainment-tv/kurd-max-show",
@@ -4320,7 +4275,7 @@
       "slug": "kurd-max-show",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131224Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051147Z"
     },
     {
       "page_url": "https://www.aparatchi.com/kurdish-live-tv/kurdish-entertainment-tv/kurd-max-tv",
@@ -4335,7 +4290,7 @@
       "slug": "kurd-max-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131239Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051162Z"
     },
     {
       "page_url": "https://www.aparatchi.com/kurdish-live-tv/kurdish-entertainment-tv/kurdistan-tv",
@@ -4350,7 +4305,7 @@
       "slug": "kurdistan-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131256Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051177Z"
     },
     {
       "page_url": "https://www.aparatchi.com/kurdish-live-tv/kurdish-entertainment-tv/kurdsat-tv",
@@ -4365,7 +4320,7 @@
       "slug": "kurdsat-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131271Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051193Z"
     },
     {
       "page_url": "https://www.aparatchi.com/kurdish-live-tv/kurdish-kids-tv/afarin-kids-tv",
@@ -4380,7 +4335,7 @@
       "slug": "afarin-kids-tv",
       "media_type": "tv",
       "ai_category": "kids",
-      "ai_labeled_at": "2026-05-19T14:58:49.131280Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051201Z"
     },
     {
       "page_url": "https://www.aparatchi.com/kurdish-live-tv/kurdish-kids-tv/baxchai-afarin",
@@ -4395,7 +4350,7 @@
       "slug": "baxchai-afarin",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131297Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051217Z"
     },
     {
       "page_url": "https://www.aparatchi.com/kurdish-live-tv/kurdish-kids-tv/zarok-tv",
@@ -4410,7 +4365,7 @@
       "slug": "zarok-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131312Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051232Z"
     },
     {
       "page_url": "https://www.aparatchi.com/kurdish-live-tv/kurdish-music-tv/4-kurd-hd",
@@ -4425,7 +4380,7 @@
       "slug": "4-kurd-hd",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131327Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051246Z"
     },
     {
       "page_url": "https://www.aparatchi.com/kurdish-live-tv/kurdish-music-tv/kmc-tv",
@@ -4440,7 +4395,7 @@
       "slug": "kmc-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131342Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051260Z"
     },
     {
       "page_url": "https://www.aparatchi.com/kurdish-live-tv/kurdish-music-tv/kurd-max-music",
@@ -4455,7 +4410,7 @@
       "slug": "kurd-max-music",
       "media_type": "tv",
       "ai_category": "music",
-      "ai_labeled_at": "2026-05-19T14:58:49.131353Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051271Z"
     },
     {
       "page_url": "https://www.aparatchi.com/kurdish-live-tv/kurdish-music-tv/waar",
@@ -4470,7 +4425,7 @@
       "slug": "waar",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131368Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051285Z"
     },
     {
       "page_url": "https://www.aparatchi.com/kurdish-live-tv/kurdish-news-tv/aryen-tv",
@@ -4485,7 +4440,7 @@
       "slug": "aryen-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131383Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051300Z"
     },
     {
       "page_url": "https://www.aparatchi.com/kurdish-live-tv/kurdish-news-tv/kurd-channel",
@@ -4500,7 +4455,7 @@
       "slug": "kurd-channel",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131403Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051316Z"
     },
     {
       "page_url": "https://www.aparatchi.com/kurdish-live-tv/kurdish-news-tv/kurdistan-24",
@@ -4515,7 +4470,7 @@
       "slug": "kurdistan-24",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131419Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051331Z"
     },
     {
       "page_url": "https://www.aparatchi.com/kurdish-live-tv/kurdish-news-tv/rudaw",
@@ -4530,7 +4485,7 @@
       "slug": "rudaw",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131434Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051345Z"
     },
     {
       "page_url": "https://www.aparatchi.com/kurdish-live-tv/kurdish-news-tv/zagros-tv",
@@ -4545,7 +4500,7 @@
       "slug": "zagros-tv",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131450Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051359Z"
     },
     {
       "page_url": "https://www.aparatchi.com/spanish-live-tv/spanish-entertainment-tv/activa-tv-honduras",
@@ -4560,7 +4515,7 @@
       "slug": "activa-tv-honduras",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131467Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051375Z"
     },
     {
       "page_url": "https://www.aparatchi.com/turkish-live-tv/turkish-entertainment-tv/tvnet",
@@ -4575,7 +4530,7 @@
       "slug": "tvnet",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131482Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051389Z"
     },
     {
       "page_url": "https://www.aparatchi.com/turkish-live-tv/turkish-kids-tv/trt-cocuk",
@@ -4590,7 +4545,7 @@
       "slug": "trt-cocuk",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131498Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051404Z"
     },
     {
       "page_url": "https://www.aparatchi.com/turkish-live-tv/turkish-religious-tv/sat7-turk",
@@ -4605,7 +4560,7 @@
       "slug": "sat7-turk",
       "media_type": "tv",
       "ai_category": "other",
-      "ai_labeled_at": "2026-05-19T14:58:49.131513Z"
+      "ai_labeled_at": "2026-05-19T19:57:35.051418Z"
     }
   ],
   "ai_taxonomy": [
