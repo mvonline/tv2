@@ -172,7 +172,9 @@ export function HomePage() {
             <span className="home-subtitle__sep" aria-hidden>
               ·
             </span>
-            Grouped by topic · global CH numbers · digits + Enter · favorites
+            <span className="home-subtitle__desc">
+              Grouped by topic · global CH numbers · digits + Enter · favorites
+            </span>
           </p>
         </div>
         <div className="home-header__controls">

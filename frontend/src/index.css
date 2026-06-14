@@ -239,6 +239,23 @@ body::before {
   z-index: 1;
 }
 
+.home-header__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.home-header__reorder {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.home-header__style-toolbar.is-collapsed-mobile {
+  display: none;
+}
+
 .reorder-hint {
   margin: 0 0 1rem;
   font-size: 0.88rem;
@@ -2115,5 +2132,30 @@ body::before {
 
   .channel-list-row-wrap {
     min-height: 52px;
+  }
+
+  /* Full-width action buttons in home header — easier to tap */
+  .home-reorder-toggle,
+  .home-reorder-reset,
+  .home-style-tools-toggle,
+  .home-multiview-link {
+    display: block;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .home-header__reorder {
+    flex-direction: column;
+  }
+
+  /* Hide verbose subtitle description — badge + title is enough on phones */
+  .home-subtitle__desc {
+    display: none;
+  }
+
+  /* Tighten header top spacing on mobile */
+  .home-header__top {
+    margin-bottom: 0.85rem;
   }
 }
