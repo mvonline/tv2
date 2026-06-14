@@ -407,6 +407,11 @@ body::before {
   color: #ffd87a;
 }
 
+.cat-section--recent .cat-section__title--recent {
+  color: #7dd3fc;
+  border-bottom-color: rgba(125, 211, 252, 0.22);
+}
+
 .cat-section--favorites .cat-section__title--favorites {
   color: #ffd87a;
   border-bottom-color: rgba(255, 200, 80, 0.25);

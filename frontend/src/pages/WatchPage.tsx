@@ -32,6 +32,7 @@ import {
   channelSupportsPictureInPicture,
 } from "@/components/StreamPlayer"
 import { useChannels } from "@/context/ChannelsContext"
+import { useRecentlyWatched } from "@/context/RecentlyWatchedContext"
 import { channelNumber } from "@/lib/channelNumber"
 import { useTvRemote, DIGIT_AUTO_SUBMIT_AFTER_MS } from "@/hooks/useTvRemote"
 import { channelFromRouteKey, watchUrlForChannel } from "@/lib/paths"
@@ -76,6 +77,8 @@ export function WatchPage() {
       /* PiP unavailable */
     }
   }, [pipVideoEl])
+
+  const { recordVisit } = useRecentlyWatched()
 
   const channel = channelFromRouteKey(ordered, channelKey)
 
@@ -129,6 +132,10 @@ export function WatchPage() {
   useEffect(() => {
     setTheaterMode(false)
   }, [channel?.page_url])
+
+  useEffect(() => {
+    if (channel) recordVisit(channel)
+  }, [channel, recordVisit])
 
   useEffect(() => {
     if (theaterMode && relatedDockOpen) {

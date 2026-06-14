@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 import { CategoriesProvider } from "@/context/CategoriesContext"
 import { ChannelsProvider } from "@/context/ChannelsContext"
 import { FavoritesProvider } from "@/context/FavoritesContext"
+import { RecentlyWatchedProvider } from "@/context/RecentlyWatchedContext"
 import { UiStyleProvider } from "@/context/UiStyleContext"
 import { HomePage } from "@/pages/HomePage"
 import { MultiViewPage } from "@/pages/MultiViewPage"
@@ -18,6 +19,7 @@ export default function App() {
     <CategoriesProvider>
       <ChannelsProvider>
         <FavoritesProvider>
+          <RecentlyWatchedProvider>
           <UiStyleProvider>
             <BrowserRouter basename={routerBasename()}>
               <div className="app-root">
@@ -30,6 +32,7 @@ export default function App() {
               </div>
             </BrowserRouter>
           </UiStyleProvider>
+          </RecentlyWatchedProvider>
         </FavoritesProvider>
       </ChannelsProvider>
     </CategoriesProvider>

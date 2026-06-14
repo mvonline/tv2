@@ -11,6 +11,7 @@ import { StyleToolbar } from "@/components/StyleToolbar"
 import { useCategoriesConfig } from "@/context/CategoriesContext"
 import { useChannels } from "@/context/ChannelsContext"
 import { useFavorites } from "@/context/FavoritesContext"
+import { useRecentlyWatched } from "@/context/RecentlyWatchedContext"
 import { useUiStyle } from "@/context/UiStyleContext"
 import { channelNumber } from "@/lib/channelNumber"
 import { groupChannelsByAiCategory, formatAiCategoryTitle } from "@/lib/groupByCategory"
@@ -48,6 +49,7 @@ export function HomePage() {
   } = useChannels()
   const { categories: dbCategories, useDbCategories } = useCategoriesConfig()
   const { isFavorite, favoriteChannelsInOrder } = useFavorites()
+  const { recentChannels } = useRecentlyWatched()
   const { layout } = useUiStyle()
   const [query, setQuery] = useState("")
   const [reorderMode, setReorderMode] = useState(false)
@@ -66,6 +68,11 @@ export function HomePage() {
   const favoritesFiltered = useMemo(
     () => favoriteChannelsInOrder(ordered).filter((c) => filtered.some((x) => x.page_url === c.page_url)),
     [ordered, filtered, favoriteChannelsInOrder],
+  )
+
+  const recentFiltered = useMemo(
+    () => recentChannels(ordered).filter((c) => filtered.some((x) => x.page_url === c.page_url)),
+    [ordered, filtered, recentChannels],
   )
 
   const forCategories = useMemo(
@@ -267,6 +274,23 @@ export function HomePage() {
           </section>
         ) : (
           <>
+            {recentFiltered.length > 0 && (
+              <section
+                className="cat-section cat-section--recent"
+                aria-labelledby="cat-recent"
+              >
+                <h2
+                  id="cat-recent"
+                  className="cat-section__title cat-section__title--recent"
+                >
+                  Recently watched
+                </h2>
+                <div className={layoutClass}>
+                  {recentFiltered.map((ch) => renderChannel(ch))}
+                </div>
+              </section>
+            )}
+
             {favoritesFiltered.length > 0 && (
               <section
                 className="cat-section cat-section--favorites"
