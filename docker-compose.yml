@@ -13,6 +13,7 @@ services:
       CORS_ORIGINS: ${CORS_ORIGINS:-*}
       CATEGORY_DB_PATH: /data/categories.db
       ANALYTICS_DB_PATH: /data/analytics.db
+      ANALYTICS_RETENTION_DAYS: ${ANALYTICS_RETENTION_DAYS:-90}
       CHANNELS_JSON_PATH: /data/channel-data/channels.json
       LOGO_DIR: /data/logos
       # Passed into the container; `main.py` downloads at startup (same as local uvicorn).

@@ -63,6 +63,17 @@ def record_view(
         conn.close()
 
 
+def purge_old_views(before_ts: int) -> int:
+    """Delete rows with viewed_at < before_ts. Returns the number of rows deleted."""
+    conn = connect()
+    try:
+        cur = conn.execute("DELETE FROM channel_views WHERE viewed_at < ?", (before_ts,))
+        conn.commit()
+        return cur.rowcount
+    finally:
+        conn.close()
+
+
 def _row(r: sqlite3.Row) -> dict[str, Any]:
     return dict(r)
 
