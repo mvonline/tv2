@@ -92,9 +92,15 @@ export function VideoPlayer({
       const hls = new Hls({
         enableWorker: false,
         lowLatencyMode: false,
-        maxBufferLength: 20,
-        maxMaxBufferLength: 30,
-        maxBufferSize: 20 * 1024 * 1024,
+        // Pre-buffer 30 s ahead; allow up to 45 s when bandwidth allows.
+        maxBufferLength: 30,
+        maxMaxBufferLength: 45,
+        maxBufferSize: 30 * 1024 * 1024,
+        // Start ABR estimate at 1 Mbps so the first segment isn't always lowest quality.
+        abrEwmaDefaultEstimate: 1_000_000,
+        // Give the proxy extra time to relay the first segment on slow uplinks.
+        fragLoadingTimeOut: 20_000,
+        manifestLoadingTimeOut: 15_000,
       })
       hlsRef.current = hls
       hls.loadSource(playbackSrc)

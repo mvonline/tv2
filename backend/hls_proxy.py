@@ -14,6 +14,7 @@ from urllib.parse import urlparse, urljoin, urlencode
 import requests
 from fastapi import APIRouter, FastAPI, Query, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 
 SESSION = requests.Session()
 # Ignore HTTP(S)_PROXY from the environment — a corporate proxy often returns 403 for gg.*.
@@ -21,6 +22,14 @@ try:
     SESSION.trust_env = False
 except AttributeError:
     pass
+# Increase pool size to handle concurrent segment fetches (multi-view, preload).
+adapter = requests.adapters.HTTPAdapter(pool_connections=8, pool_maxsize=32)
+SESSION.mount("http://", adapter)
+SESSION.mount("https://", adapter)
+
+# Segments are streamed in 64 KB chunks — large enough to reduce syscall overhead,
+# small enough that the browser starts receiving data well before the full segment arrives.
+SEGMENT_CHUNK = 64 * 1024
 
 UPSTREAM_HEADERS = {
     # Nimble/CDN expects the embedder site (same as a browser on aparatchi.com).
@@ -111,16 +120,19 @@ def proxy_hls(request: Request, url: str = Query(..., description="Upstream HLS 
 
     proxy_self = proxy_base_url(request)
     # Do not merge with client request headers — only embedder headers to upstream.
+    # stream=True prevents requests from buffering the full response body in memory.
     r = SESSION.get(
         url,
         headers=dict(UPSTREAM_HEADERS),
         timeout=60,
         allow_redirects=True,
+        stream=True,
     )
     ct = r.headers.get("content-type") or ""
 
     if not r.ok:
-        return Response(content=r.content, status_code=r.status_code, media_type=ct or "text/plain")
+        content = r.content  # error bodies are small — buffering is fine
+        return Response(content=content, status_code=r.status_code, media_type=ct or "text/plain")
 
     lower = url.lower()
     is_m3u8 = (
@@ -130,7 +142,9 @@ def proxy_hls(request: Request, url: str = Query(..., description="Upstream HLS 
     )
 
     if is_m3u8:
+        # Manifests are tiny (<10 KB) — buffer so we can rewrite URLs, then close.
         text = r.text
+        r.close()
         out = rewrite_playlist(text, url, proxy_self)
         return Response(
             content=out,
@@ -141,8 +155,16 @@ def proxy_hls(request: Request, url: str = Query(..., description="Upstream HLS 
             },
         )
 
-    return Response(
-        content=r.content,
+    # Segments (.ts, AAC, etc.): stream in fixed-size chunks so the browser starts
+    # receiving data before the full segment has been fetched from upstream.
+    def _stream():
+        try:
+            yield from r.iter_content(chunk_size=SEGMENT_CHUNK)
+        finally:
+            r.close()
+
+    return StreamingResponse(
+        _stream(),
         media_type=ct or "application/octet-stream",
         headers={
             "Access-Control-Allow-Origin": "*",
