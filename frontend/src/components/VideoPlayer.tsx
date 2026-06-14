@@ -1,5 +1,6 @@
 import Hls from "hls.js"
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
+import { Maximize2, Minimize2 } from "lucide-react"
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import type { Channel } from "@/types/channel"
 import { hlsPlaybackUrl } from "@/lib/hlsProxyUrl"
 
@@ -37,8 +38,47 @@ export function VideoPlayer({
   muted = false,
 }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const shellRef = useRef<HTMLDivElement>(null)
   const hlsRef = useRef<Hls | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
+  const enterFullscreen = useCallback(() => {
+    const shell = shellRef.current
+    const video = videoRef.current
+    if (shell?.requestFullscreen) {
+      shell.requestFullscreen().catch(() => {
+        // iOS Safari: requestFullscreen on a div isn't supported — use webkitEnterFullscreen on the video
+        if (video && "webkitEnterFullscreen" in video) {
+          (video as HTMLVideoElement & { webkitEnterFullscreen(): void }).webkitEnterFullscreen()
+        }
+      })
+    } else if (video && "webkitEnterFullscreen" in video) {
+      (video as HTMLVideoElement & { webkitEnterFullscreen(): void }).webkitEnterFullscreen()
+    }
+  }, [])
+
+  const exitFullscreen = useCallback(() => {
+    if (document.exitFullscreen) {
+      document.exitFullscreen().catch(() => {})
+    } else if ("webkitExitFullscreen" in document) {
+      (document as Document & { webkitExitFullscreen(): void }).webkitExitFullscreen()
+    }
+  }, [])
+
+  useEffect(() => {
+    const sync = () =>
+      setIsFullscreen(
+        !!document.fullscreenElement ||
+          !!(document as Document & { webkitFullscreenElement?: Element }).webkitFullscreenElement,
+      )
+    document.addEventListener("fullscreenchange", sync)
+    document.addEventListener("webkitfullscreenchange", sync)
+    return () => {
+      document.removeEventListener("fullscreenchange", sync)
+      document.removeEventListener("webkitfullscreenchange", sync)
+    }
+  }, [])
 
   const url = channel.stream_url
   const isHls =
@@ -147,7 +187,7 @@ export function VideoPlayer({
   }
 
   return (
-    <div className={`video-shell ${className ?? ""}`}>
+    <div className={`video-shell ${className ?? ""}`} ref={shellRef}>
       <video
         ref={videoRef}
         className="video-el"
@@ -157,6 +197,16 @@ export function VideoPlayer({
         muted={muted}
         crossOrigin={crossOrigin}
       />
+      <button
+        type="button"
+        className="video-fullscreen-btn"
+        onClick={isFullscreen ? exitFullscreen : enterFullscreen}
+        aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+      >
+        {isFullscreen
+          ? <Minimize2 size={20} strokeWidth={2} aria-hidden />
+          : <Maximize2 size={20} strokeWidth={2} aria-hidden />}
+      </button>
       {error && <p className="video-error">{error}</p>}
     </div>
   )

@@ -1369,6 +1369,41 @@ body::before {
   min-height: 200px;
 }
 
+.video-fullscreen-btn {
+  position: absolute;
+  bottom: 54px; /* above the native video controls bar */
+  right: 10px;
+  z-index: 5;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.18s;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+/* Always visible on touch devices (iPad, iPhone, Android) */
+@media (hover: none) {
+  .video-fullscreen-btn {
+    opacity: 1;
+  }
+}
+
+/* Visible on desktop hover */
+@media (hover: hover) {
+  .video-shell:hover .video-fullscreen-btn {
+    opacity: 1;
+  }
+}
+
 .video-error {
   position: absolute;
   bottom: 12px;
