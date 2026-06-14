@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import {
   ChevronLeft,
@@ -162,6 +162,43 @@ export function WatchPage() {
     writeRelatedDockOpenToStorage(false)
   }, [])
 
+  const swipeStartX = useRef<number | null>(null)
+  const swipeStartY = useRef<number | null>(null)
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    swipeStartX.current = e.touches[0].clientX
+    swipeStartY.current = e.touches[0].clientY
+  }, [])
+
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      if (swipeStartX.current === null || swipeStartY.current === null) return
+      const startX = swipeStartX.current
+      const startY = swipeStartY.current
+      swipeStartX.current = null
+      swipeStartY.current = null
+
+      const dx = e.changedTouches[0].clientX - startX
+      const dy = e.changedTouches[0].clientY - startY
+
+      if (Math.abs(dy) > Math.abs(dx)) return // primarily vertical — ignore
+      if (Math.abs(dx) < 50) return // too short
+
+      if (theaterMode) return
+
+      if (dx < 0 && !sidebarCollapsed) {
+        // swipe left → close sidebar
+        setSidebarCollapsed(true)
+        writeSidebarCollapsed(true)
+      } else if (dx > 0 && sidebarCollapsed && startX < window.innerWidth * 0.25) {
+        // swipe right from left edge → open sidebar
+        setSidebarCollapsed(false)
+        writeSidebarCollapsed(false)
+      }
+    },
+    [theaterMode, sidebarCollapsed],
+  )
+
   if (status !== "ready" || !ordered.length) {
     return (
       <div className="page page--center">
@@ -197,7 +234,11 @@ export function WatchPage() {
       />
 
       <div className="watch-shell">
-        <div className="watch-body">
+        <div
+          className="watch-body"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           <div className="watch-main">
             <header className="watch-bar watch-bar--overlay">
               <div className="watch-bar__brand">

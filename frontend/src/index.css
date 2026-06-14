@@ -2047,3 +2047,73 @@ body::before {
 .home-multiview-link {
   white-space: nowrap;
 }
+
+/* ── Mobile improvements ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Touch targets: 44×44px minimum (Apple HIG / Material guidelines) */
+  .favorite-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .icon-btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 12px;
+  }
+
+  .btn-primary,
+  .btn-ghost {
+    min-height: 44px;
+  }
+
+  /* Readable font floor: nothing below 0.72rem (~11.5px) on phones */
+  .home-eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+  }
+
+  .channel-id-badge {
+    font-size: 0.7rem;
+    padding: 3px 7px;
+  }
+
+  .channel-id-badge--details {
+    font-size: 0.68rem;
+  }
+
+  .related-dock__label {
+    font-size: 0.7rem;
+  }
+
+  .watch-sidebar__title {
+    font-size: 0.78rem;
+  }
+
+  .watch-sidebar__subhead {
+    font-size: 0.72rem;
+  }
+
+  /* Safe-area insets for notched phones (home page) */
+  .home-header {
+    padding-left: max(24px, env(safe-area-inset-left));
+    padding-right: max(24px, env(safe-area-inset-right));
+    padding-top: max(24px, env(safe-area-inset-top));
+  }
+
+  /* Safe-area insets for the watch overlay bar */
+  .watch-bar--overlay {
+    padding-top: max(10px, env(safe-area-inset-top));
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+
+  /* Give tappable rows more vertical breathing room */
+  .watch-sidebar__item {
+    min-height: 52px;
+  }
+
+  .channel-list-row-wrap {
+    min-height: 52px;
+  }
+}
