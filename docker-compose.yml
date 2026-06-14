@@ -12,6 +12,7 @@ services:
       ADMIN_SESSION_SECRET: ${ADMIN_SESSION_SECRET:-}
       CORS_ORIGINS: ${CORS_ORIGINS:-*}
       CATEGORY_DB_PATH: /data/categories.db
+      ANALYTICS_DB_PATH: /data/analytics.db
       CHANNELS_JSON_PATH: /data/channel-data/channels.json
       LOGO_DIR: /data/logos
       # Passed into the container; `main.py` downloads at startup (same as local uvicorn).

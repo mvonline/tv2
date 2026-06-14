@@ -138,6 +138,16 @@ export function WatchPage() {
   }, [channel, recordVisit])
 
   useEffect(() => {
+    if (!channel) return
+    const base = (import.meta.env.VITE_API_BASE ?? "").replace(/\/$/, "")
+    fetch(`${base}/api/analytics/view`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ channel_slug: channel.slug, channel_name: channel.name ?? null }),
+    }).catch(() => {})
+  }, [channel?.page_url])
+
+  useEffect(() => {
     if (theaterMode && relatedDockOpen) {
       setRelatedDockOpen(false)
       writeRelatedDockOpenToStorage(false)
