@@ -1,6 +1,7 @@
 import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
+import legacy from "@vitejs/plugin-legacy"
 import react from "@vitejs/plugin-react"
 import type { ViteDevServer } from "vite"
 import { defineConfig, loadEnv } from "vite"
@@ -70,6 +71,11 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       react(),
+      // Generates a <script nomodule> fallback bundle for Chrome 56–60 (Tizen 2018 early models,
+      // WebOS 4.0) which predate ES module support. Modern browsers ignore the nomodule bundle.
+      legacy({
+        targets: ["chrome >= 56", "safari >= 11"],
+      }),
       hlsProxyPlugin(base),
       devAssetsMiddleware(),
       viteStaticCopy({

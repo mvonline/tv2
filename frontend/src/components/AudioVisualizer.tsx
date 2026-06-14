@@ -27,6 +27,12 @@ export function AudioVisualizer({
     if (!canvas) return
 
     const dpr = Math.min(window.devicePixelRatio ?? 1, 2)
+    const g = canvas.getContext("2d")
+    if (!g) return
+
+    // Cached gradient — recreated on resize, reused every frame instead of 48×/frame.
+    let barGrad: CanvasGradient | null = null
+
     const resize = () => {
       const parent = canvas.parentElement
       const w = parent?.clientWidth ?? 640
@@ -35,18 +41,31 @@ export function AudioVisualizer({
       canvas.height = Math.floor(h * dpr)
       canvas.style.width = `${w}px`
       canvas.style.height = `${h}px`
+      barGrad = g.createLinearGradient(0, canvas.height, 0, 0)
+      barGrad.addColorStop(0, "rgba(61, 139, 253, 0.95)")
+      barGrad.addColorStop(1, "rgba(124, 92, 255, 0.75)")
     }
     resize()
-    const ro = new ResizeObserver(resize)
-    if (canvas.parentElement) ro.observe(canvas.parentElement)
 
-    const g = canvas.getContext("2d")
-    if (!g) return () => ro.disconnect()
+    // ResizeObserver is Chrome 64+. Older TV browsers (Tizen 3, WebOS 4) get a window fallback.
+    let roCleanup: () => void = () => {}
+    if (typeof ResizeObserver !== "undefined") {
+      const ro = new ResizeObserver(resize)
+      if (canvas.parentElement) ro.observe(canvas.parentElement)
+      roCleanup = () => ro.disconnect()
+    } else {
+      window.addEventListener("resize", resize)
+      roCleanup = () => window.removeEventListener("resize", resize)
+    }
+
+    // Pre-allocated — avoids one Float32Array heap allocation per animation frame.
+    const out = new Float32Array(BAR_COUNT)
 
     const drawBars = (levels: ArrayLike<number>) => {
       const w = canvas.width
       const h = canvas.height
       g.clearRect(0, 0, w, h)
+      if (barGrad) g.fillStyle = barGrad
       const gap = Math.max(1, Math.floor(w / 400))
       const barW = (w - gap * (BAR_COUNT + 1)) / BAR_COUNT
       let x = gap
@@ -54,12 +73,8 @@ export function AudioVisualizer({
         const v =
           typeof levels[i] === "number"
             ? (levels[i] as number)
-            : (levels[i] ?? 0)
+            : ((levels[i] as unknown as number | undefined) ?? 0)
         const bh = Math.max(4, v * h * 0.92)
-        const grad = g.createLinearGradient(0, h, 0, h - bh)
-        grad.addColorStop(0, "rgba(61, 139, 253, 0.95)")
-        grad.addColorStop(1, "rgba(124, 92, 255, 0.75)")
-        g.fillStyle = grad
         g.fillRect(x, h - bh, barW, bh)
         x += barW + gap
       }
@@ -72,16 +87,16 @@ export function AudioVisualizer({
 
     if (!decorative && audio) {
       try {
-        const ctx = new AudioContext()
-        ctxRef.current = ctx
-        const source = ctx.createMediaElementSource(audio)
-        analyser = ctx.createAnalyser()
+        const actx = new AudioContext()
+        ctxRef.current = actx
+        const source = actx.createMediaElementSource(audio)
+        analyser = actx.createAnalyser()
         analyser.fftSize = 256
         source.connect(analyser)
-        analyser.connect(ctx.destination)
+        analyser.connect(actx.destination)
         dataArray = new Uint8Array(analyser.frequencyBinCount)
         onPlay = () => {
-          void ctx.resume()
+          void actx.resume()
         }
         audio.addEventListener("play", onPlay)
       } catch {
@@ -95,33 +110,43 @@ export function AudioVisualizer({
         analyser.getByteFrequencyData(
           dataArray as Parameters<AnalyserNode["getByteFrequencyData"]>[0],
         )
-        const out = new Float32Array(BAR_COUNT)
         const step = Math.max(1, Math.floor(dataArray.length / BAR_COUNT))
         for (let i = 0; i < BAR_COUNT; i++) {
-          const slice = dataArray[i * step] ?? 0
-          out[i] = slice / 255
+          out[i] = (dataArray[i * step] ?? 0) / 255
         }
         drawBars(out)
         return
       }
       const elapsed = (t - t0) / 1000
-      const fake: number[] = []
       for (let i = 0; i < BAR_COUNT; i++) {
         const phase = elapsed * 2.2 + i * 0.15
-        fake[i] =
+        out[i] =
           0.15 +
           0.55 *
             (0.5 + 0.5 * Math.sin(phase)) *
             (0.5 + 0.5 * Math.sin(elapsed * 1.7 + i * 0.08))
       }
-      drawBars(fake)
+      drawBars(out)
     }
 
     rafRef.current = requestAnimationFrame(loop)
 
+    // Pause animation when the tab/app is hidden — TVs have very limited GPU/CPU budget.
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(rafRef.current)
+        rafRef.current = 0
+      } else if (rafRef.current === 0) {
+        t0 = performance.now()
+        rafRef.current = requestAnimationFrame(loop)
+      }
+    }
+    document.addEventListener("visibilitychange", onVisibilityChange)
+
     return () => {
       cancelAnimationFrame(rafRef.current)
-      ro.disconnect()
+      document.removeEventListener("visibilitychange", onVisibilityChange)
+      roCleanup()
       if (audio && onPlay) audio.removeEventListener("play", onPlay)
       const c = ctxRef.current
       if (c?.state !== "closed") void c?.close()

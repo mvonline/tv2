@@ -36,9 +36,13 @@ export function RadioPlayer({ channel, className, muted = false }: Props) {
     const source = isHls ? (hlsUrl ?? url) : url
 
     if (isHls && Hls.isSupported()) {
+      // Workers unreliable on TV Chromium builds; buffer limits prevent OOM.
       const hls = new Hls({
-        enableWorker: true,
+        enableWorker: false,
         lowLatencyMode: true,
+        maxBufferLength: 15,
+        maxMaxBufferLength: 20,
+        maxBufferSize: 8 * 1024 * 1024,
       })
       hlsRef.current = hls
       hls.loadSource(source)
@@ -60,7 +64,10 @@ export function RadioPlayer({ channel, className, muted = false }: Props) {
 
     if (isHls && audio.canPlayType("application/vnd.apple.mpegurl")) {
       audio.src = source
-      return
+      return () => {
+        audio.removeAttribute("src")
+        audio.load()
+      }
     }
 
     if (!isHls) {

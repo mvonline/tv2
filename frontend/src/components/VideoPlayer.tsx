@@ -87,10 +87,14 @@ export function VideoPlayer({
     }
 
     if (isHls && Hls.isSupported()) {
-      // Workers are unreliable on many smart-TV Chromium builds; LL-HLS stresses weak demuxers.
+      // Workers unreliable on TV Chromium; LL-HLS stresses weak demuxers.
+      // Buffer limits prevent OOM on TVs that have 256-512 MB available to the web app.
       const hls = new Hls({
         enableWorker: false,
         lowLatencyMode: false,
+        maxBufferLength: 20,
+        maxMaxBufferLength: 30,
+        maxBufferSize: 20 * 1024 * 1024,
       })
       hlsRef.current = hls
       hls.loadSource(playbackSrc)
