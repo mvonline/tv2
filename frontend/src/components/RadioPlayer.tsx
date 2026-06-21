@@ -10,9 +10,11 @@ type Props = {
   className?: string
   /** Multi-view: only one pane unmuted. */
   muted?: boolean
+  /** Called with a human-readable message when a fatal playback error occurs. */
+  onError?: (msg: string) => void
 }
 
-export function RadioPlayer({ channel, className, muted = false }: Props) {
+export function RadioPlayer({ channel, className, muted = false, onError }: Props) {
   const [audioEl, setAudioEl] = useState<HTMLAudioElement | null>(null)
   const hlsRef = useRef<Hls | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -49,11 +51,11 @@ export function RadioPlayer({ channel, className, muted = false }: Props) {
       hls.attachMedia(audio)
       hls.on(Hls.Events.ERROR, (_, data) => {
         if (data.fatal) {
-          setError(
-            channel.requires_proxy
-              ? "Stream blocked (proxy required). This host may not allow playback outside the original site."
-              : "Playback error. Try again later.",
-          )
+          const msg = channel.requires_proxy
+            ? "Stream blocked (proxy required). This host may not allow playback outside the original site."
+            : `Playback error: ${data.type} — ${data.details}`
+          setError(msg)
+          onError?.(msg)
         }
       })
       return () => {
@@ -75,9 +77,11 @@ export function RadioPlayer({ channel, className, muted = false }: Props) {
       return
     }
 
-    setError("HLS is not supported in this browser.")
+    const msg = "HLS is not supported in this browser."
+    setError(msg)
+    onError?.(msg)
     return undefined
-  }, [channel, url, hlsUrl, isHls, isIframe, channel.requires_proxy, audioEl])
+  }, [channel, url, hlsUrl, isHls, isIframe, channel.requires_proxy, audioEl, onError])
 
   const streamKey = `${channel.page_url}|${url ?? ""}`
 

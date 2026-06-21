@@ -23,8 +23,8 @@ if [ ! -f "$CATEGORY_DB_PATH" ]; then
   python -c "from category_db import init_db; init_db()"
 fi
 
-# Seed channels.json immediately so the UI has data while the scraper runs.
-if [ ! -f "$CHANNELS_JSON_PATH" ] && [ -f /app/seed/channels.json ]; then
+# Seed channels.json from the image every start so the volume tracks the image build.
+if [ -f /app/seed/channels.json ]; then
   echo "Seeding channels.json from image -> $CHANNELS_JSON_PATH"
   cp /app/seed/channels.json "$CHANNELS_JSON_PATH"
 fi
@@ -58,6 +58,7 @@ if should_scrape; then
   echo "Starting background scraper -> $CHANNELS_JSON_PATH , logos -> $LOGO_DIR"
   (
     python scrape.py --delay "${SCRAPE_DELAY:-1}" \
+      && python fetch_iptv.py \
       && touch "$SCRAPE_MARKER" \
       && echo "Background scrape complete" \
       || echo "WARN: background scrape failed" >&2

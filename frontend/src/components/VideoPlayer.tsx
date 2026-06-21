@@ -11,6 +11,8 @@ type Props = {
   onVideoRef?: (el: HTMLVideoElement | null) => void
   /** Multi-view: only one pane should be unmuted. */
   muted?: boolean
+  /** Called with a human-readable message when a fatal playback error occurs. */
+  onError?: (msg: string) => void
 }
 
 /** Embedded TV browsers (webOS, Tizen, …) often expose native HLS and choke on MSE workers. */
@@ -36,6 +38,7 @@ export function VideoPlayer({
   className,
   onVideoRef,
   muted = false,
+  onError,
 }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const shellRef = useRef<HTMLDivElement>(null)
@@ -117,28 +120,44 @@ export function VideoPlayer({
 
     const playbackSrc = isHls ? (hlsUrl ?? url) : url
 
+    const makeNativeErrorHandler = () => {
+      const handler = () => {
+        if (!video.error) return
+        const mediaErrors: Record<number, string> = {
+          1: "Playback aborted by the browser.",
+          2: "Network error — check your connection.",
+          3: "Stream decode error — the format may be unsupported.",
+          4: "Stream not supported — the URL may be invalid or geo-blocked.",
+        }
+        const msg = mediaErrors[video.error.code] ?? "Stream failed to load."
+        setError(msg)
+        onError?.(msg)
+      }
+      video.addEventListener("error", handler)
+      return () => video.removeEventListener("error", handler)
+    }
+
     // Prefer native HLS when the stack advertises support (common on LG/Samsung/AppleTV Safari).
     if (isHls && nativeHlsLikely(video)) {
+      const removeListener = makeNativeErrorHandler()
       video.src = playbackSrc
       return () => {
+        removeListener()
         video.removeAttribute("src")
         video.load()
       }
     }
 
     if (isHls && Hls.isSupported()) {
-      // Workers unreliable on TV Chromium; LL-HLS stresses weak demuxers.
-      // Buffer limits prevent OOM on TVs that have 256-512 MB available to the web app.
+      // HLS.js manages media internally — do NOT add a native error listener here;
+      // it would fire on internal MSE operations that HLS.js handles silently.
       const hls = new Hls({
         enableWorker: false,
         lowLatencyMode: false,
-        // Pre-buffer 30 s ahead; allow up to 45 s when bandwidth allows.
         maxBufferLength: 30,
         maxMaxBufferLength: 45,
         maxBufferSize: 30 * 1024 * 1024,
-        // Start ABR estimate at 1 Mbps so the first segment isn't always lowest quality.
         abrEwmaDefaultEstimate: 1_000_000,
-        // Give the proxy extra time to relay the first segment on slow uplinks.
         fragLoadingTimeOut: 20_000,
         manifestLoadingTimeOut: 15_000,
       })
@@ -147,11 +166,11 @@ export function VideoPlayer({
       hls.attachMedia(video)
       hls.on(Hls.Events.ERROR, (_, data) => {
         if (data.fatal) {
-          setError(
-            channel.requires_proxy
-              ? "Stream blocked (proxy required). This host may not allow playback outside the original site."
-              : "Playback error. Try again later.",
-          )
+          const msg = channel.requires_proxy
+            ? "Stream blocked (proxy required). This host may not allow playback outside the original site."
+            : `Playback error: ${data.type} — ${data.details}`
+          setError(msg)
+          onError?.(msg)
         }
       })
       return () => {
@@ -161,16 +180,20 @@ export function VideoPlayer({
     }
 
     if (!isHls) {
+      const removeListener = makeNativeErrorHandler()
       video.src = url
       return () => {
+        removeListener()
         video.removeAttribute("src")
         video.load()
       }
     }
 
-    setError("HLS is not supported in this browser.")
+    const msg = "HLS is not supported in this browser."
+    setError(msg)
+    onError?.(msg)
     return undefined
-  }, [channel, url, hlsUrl, isHls, isIframe, channel.requires_proxy])
+  }, [channel, url, hlsUrl, isHls, isIframe, channel.requires_proxy, onError])
 
   if (isIframe && url) {
     return (

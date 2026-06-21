@@ -13,6 +13,7 @@ import {
   loadChannelOrder,
   saveChannelOrder,
 } from "@/lib/channelOrderStorage"
+import { resolveIptvGate } from "@/lib/iptvGate"
 import { publicUrl } from "@/lib/publicUrl"
 import type { Channel, ChannelsPayload } from "@/types/channel"
 
@@ -47,6 +48,7 @@ async function loadChannels(): Promise<Channel[]> {
 }
 
 export function ChannelsProvider({ children }: { children: ReactNode }) {
+  const [iptvUnlocked] = useState(() => resolveIptvGate())
   const [channels, setChannels] = useState<Channel[]>([])
   const [status, setStatus] = useState<Status>("loading")
   const [error, setError] = useState<string | null>(null)
@@ -70,9 +72,14 @@ export function ChannelsProvider({ children }: { children: ReactNode }) {
     fetchData()
   }, [fetchData])
 
+  const visible = useMemo(
+    () => iptvUnlocked ? channels : channels.filter((c) => c.source !== "iptv-org"),
+    [channels, iptvUnlocked],
+  )
+
   const ordered = useMemo(
-    () => applyChannelOrder(channels, orderKeys),
-    [channels, orderKeys],
+    () => applyChannelOrder(visible, orderKeys),
+    [visible, orderKeys],
   )
 
   const setChannelOrder = useCallback((pageUrls: string[]) => {
@@ -87,7 +94,7 @@ export function ChannelsProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo(
     () => ({
-      channels,
+      channels: visible,
       ordered,
       status,
       error,

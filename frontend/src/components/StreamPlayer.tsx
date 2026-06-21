@@ -8,6 +8,7 @@ type Props = {
   className?: string
   onVideoRef?: (el: HTMLVideoElement | null) => void
   muted?: boolean
+  onError?: (msg: string) => void
 }
 
 export function isRadioChannel(channel: Channel): boolean {
@@ -34,6 +35,7 @@ export function StreamPlayer({
   className,
   onVideoRef,
   muted,
+  onError,
 }: Props) {
   useLayoutEffect(() => {
     if (isRadioChannel(channel)) {
@@ -43,7 +45,7 @@ export function StreamPlayer({
 
   if (isRadioChannel(channel)) {
     return (
-      <RadioPlayer channel={channel} className={className} muted={muted} />
+      <RadioPlayer channel={channel} className={className} muted={muted} onError={onError} />
     )
   }
   return (
@@ -52,6 +54,7 @@ export function StreamPlayer({
       className={className}
       onVideoRef={onVideoRef}
       muted={muted}
+      onError={onError}
     />
   )
 }

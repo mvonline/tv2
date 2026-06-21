@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import {
+  AlertCircle,
   ChevronLeft,
   ChevronRight,
   Home,
@@ -51,6 +52,7 @@ export function WatchPage() {
   )
   const [pipVideoEl, setPipVideoEl] = useState<HTMLVideoElement | null>(null)
   const [pipSupported, setPipSupported] = useState(false)
+  const [playerError, setPlayerError] = useState<string | null>(null)
 
   const setPipVideoRef = useCallback((el: HTMLVideoElement | null) => {
     setPipVideoEl(el)
@@ -131,6 +133,7 @@ export function WatchPage() {
 
   useEffect(() => {
     setTheaterMode(false)
+    setPlayerError(null)
   }, [channel?.page_url])
 
   useEffect(() => {
@@ -400,16 +403,41 @@ export function WatchPage() {
             </header>
 
             <div className="watch-stage">
-              {channel.stream_url || channel.raw_iframe_src ? (
+              {playerError ? (
+                <div className="watch-error">
+                  <AlertCircle size={52} className="watch-error__icon" aria-hidden />
+                  <p className="watch-error__title">Stream unavailable</p>
+                  <p className="watch-error__msg">{playerError}</p>
+                  <div className="watch-error__actions">
+                    <Link to="/" className="btn-primary">
+                      <Home size={16} aria-hidden /> Back to guide
+                    </Link>
+                    <button type="button" className="btn-ghost" onClick={goNext}>
+                      Try next channel
+                    </button>
+                  </div>
+                </div>
+              ) : channel.stream_url || channel.raw_iframe_src ? (
                 <StreamPlayer
                   channel={channel}
                   className="watch-player"
                   onVideoRef={setPipVideoRef}
+                  onError={setPlayerError}
                 />
               ) : (
-                <p className="watch-stage__empty muted">
-                  No stream URL for this channel.
-                </p>
+                <div className="watch-error">
+                  <AlertCircle size={52} className="watch-error__icon" aria-hidden />
+                  <p className="watch-error__title">No stream available</p>
+                  <p className="watch-error__msg">This channel has no stream URL configured.</p>
+                  <div className="watch-error__actions">
+                    <Link to="/" className="btn-primary">
+                      <Home size={16} aria-hidden /> Back to guide
+                    </Link>
+                    <button type="button" className="btn-ghost" onClick={goNext}>
+                      Try next channel
+                    </button>
+                  </div>
+                </div>
               )}
             </div>
 

@@ -16,6 +16,16 @@ export interface Channel {
   /** Content topic from post-scrape AI (or heuristic). See `ai_taxonomy` in JSON. */
   ai_category?: string
   ai_labeled_at?: string
+  /** "iptv-org" for channels fetched from the iptv-org M3U; absent for aparatchi channels. */
+  source?: string
+  /** M3U group-title (iptv-org channels only). */
+  group_title?: string
+  /** TVG ID from M3U (iptv-org channels only). */
+  tvg_id?: string
+  /** Language tag from M3U (iptv-org channels only). */
+  tvg_language?: string
+  /** ISO country code from M3U (iptv-org channels only). */
+  tvg_country?: string
 }
 
 export interface ChannelsPayload {

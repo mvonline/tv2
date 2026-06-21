@@ -125,7 +125,8 @@ def categorize_channel(ch: dict[str, Any]) -> str:
 
     name = (ch.get("name") or "").lower()
     slug = (ch.get("slug") or "").lower()
-    blob = f" {name} {slug} "
+    group_title = (ch.get("group_title") or "").lower()
+    blob = f" {name} {slug} {group_title} "
 
     for category, keywords in KEYWORD_RULES:
         for kw in keywords:

@@ -34,6 +34,8 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile.web
+      args:
+        VITE_IPTV_KEY: ${VITE_IPTV_KEY:-}
     ports:
       - "${WEB_PORT:-8080}:80"
     volumes:

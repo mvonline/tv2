@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
+import type { ReactNode } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { ChannelCard } from "@/components/ChannelCard"
 import { ChannelDetailsRow } from "@/components/ChannelDetailsRow"
@@ -16,10 +17,43 @@ import { useUiStyle } from "@/context/UiStyleContext"
 import { channelNumber } from "@/lib/channelNumber"
 import { groupChannelsByAiCategory, formatAiCategoryTitle } from "@/lib/groupByCategory"
 import { useTvRemote, DIGIT_AUTO_SUBMIT_AFTER_MS } from "@/hooks/useTvRemote"
+import { useLazyRender } from "@/hooks/useLazyRender"
 import { useMobileViewport } from "@/hooks/useMobileViewport"
 import { isMobileViewport } from "@/lib/mobileLayout"
 import { watchUrlForChannel } from "@/lib/paths"
 import type { Channel } from "@/types/channel"
+
+function estimatePlaceholderHeight(count: number, layoutClass: string): number {
+  if (layoutClass === "channel-list") return Math.min(count * 72, 8000)
+  if (layoutClass === "channel-details") return Math.min(count * 90, 8000)
+  return Math.min(Math.ceil(count / 6) * 170, 10000)
+}
+
+type LazyCatSectionProps = {
+  catId: string
+  title: string
+  list: Channel[]
+  layoutClass: string
+  renderChannel: (ch: Channel) => ReactNode
+}
+
+function LazyCatSection({ catId, title, list, layoutClass, renderChannel }: LazyCatSectionProps) {
+  const { ref, visible } = useLazyRender()
+  return (
+    <section className="cat-section" aria-labelledby={catId}>
+      <h2 id={catId} className="cat-section__title">
+        {title}
+      </h2>
+      <div
+        ref={ref}
+        className={visible ? layoutClass : undefined}
+        style={visible ? undefined : { minHeight: estimatePlaceholderHeight(list.length, layoutClass) }}
+      >
+        {visible && list.map((ch) => renderChannel(ch))}
+      </div>
+    </section>
+  )
+}
 
 function filterChannels(channels: Channel[], q: string): Channel[] {
   const s = q.trim().toLowerCase()
@@ -311,12 +345,14 @@ export function HomePage() {
             {[...byAiCategory.entries()].map(([aiKey, list]) => {
               const catId = `cat-ai-${aiKey.replace(/[^\w-]+/g, "-").slice(0, 48)}`
               return (
-                <section key={aiKey} className="cat-section" aria-labelledby={catId}>
-                  <h2 id={catId} className="cat-section__title">
-                    {formatAiCategoryTitle(aiKey, useDbCategories ? dbCategories : null)}
-                  </h2>
-                  <div className={layoutClass}>{list.map((ch) => renderChannel(ch))}</div>
-                </section>
+                <LazyCatSection
+                  key={aiKey}
+                  catId={catId}
+                  title={formatAiCategoryTitle(aiKey, useDbCategories ? dbCategories : null)}
+                  list={list}
+                  layoutClass={layoutClass}
+                  renderChannel={renderChannel}
+                />
               )
             })}
           </>

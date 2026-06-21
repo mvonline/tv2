@@ -1426,6 +1426,52 @@ body::before {
   text-align: center;
 }
 
+/* ── In-player error panel ── */
+.watch-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex: 1;
+  padding: 32px 24px;
+  text-align: center;
+  color: #fff;
+}
+
+.watch-error__icon {
+  color: #f87171;
+  flex-shrink: 0;
+}
+
+.watch-error__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.watch-error__msg {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 480px;
+  line-height: 1.5;
+}
+
+.watch-error__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.watch-error__actions .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
 /* ── Related channels: floating glass dock (watch-main is position: relative) ── */
 .related-dock-wrap {
   position: absolute;
