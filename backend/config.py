@@ -48,9 +48,9 @@ CATEGORY_INDEX_RE = re.compile(
     re.IGNORECASE,
 )
 
-# gg.hls2.xyz and similar block direct browser playback off-site; needs same-origin or reverse proxy.
+# hls2.xyz subdomains (gg., ggg., …) block direct browser playback off-site; needs same-origin or reverse proxy.
 def stream_requires_proxy(url: str | None) -> bool:
     if not url:
         return False
     host = urlparse(url).netloc.lower()
-    return host.startswith("gg.") or host.startswith("www.gg.")
+    return host.endswith(".hls2.xyz")

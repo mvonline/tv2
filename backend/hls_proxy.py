@@ -50,7 +50,7 @@ UPSTREAM_HEADERS = {
 
 def allowed_host(hostname: str) -> bool:
     h = hostname.lower()
-    return h.startswith("gg.") or h.startswith("www.gg.")
+    return h.endswith(".hls2.xyz")
 
 
 def proxy_base_url(request: Request) -> str:
