@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from "react"
 
-export type VisualTheme = "tv" | "neon" | "glass"
+export type VisualTheme = "tv" | "neon" | "glass" | "cinema"
 export type LayoutMode = "thumbnail" | "list" | "details"
 
 const KEY_VISUAL = "tv2-visual"

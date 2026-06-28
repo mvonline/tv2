@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { type CSSProperties, useCallback, useEffect, useMemo, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { ChannelCard } from "@/components/ChannelCard"
+import { CinemaHero } from "@/components/CinemaHero"
 import { ChannelDetailsRow } from "@/components/ChannelDetailsRow"
 import { ChannelListRow } from "@/components/ChannelListRow"
 import { ChannelNumpad } from "@/components/ChannelNumpad"
@@ -15,6 +16,7 @@ import { useRecentlyWatched } from "@/context/RecentlyWatchedContext"
 import { useUiStyle } from "@/context/UiStyleContext"
 import { channelNumber } from "@/lib/channelNumber"
 import { groupChannelsByAiCategory, formatAiCategoryTitle } from "@/lib/groupByCategory"
+import { thumbHueForChannel } from "@/lib/topicAccent"
 import { useTvRemote, DIGIT_AUTO_SUBMIT_AFTER_MS } from "@/hooks/useTvRemote"
 import { useMobileViewport } from "@/hooks/useMobileViewport"
 import { isMobileViewport } from "@/lib/mobileLayout"
@@ -47,10 +49,11 @@ export function HomePage() {
     resetChannelOrder,
     hasCustomChannelOrder,
   } = useChannels()
-  const { categories: dbCategories, useDbCategories } = useCategoriesConfig()
+  const { categories: dbCategories, channelConfig, useDbCategories } = useCategoriesConfig()
   const { isFavorite, favoriteChannelsInOrder } = useFavorites()
   const { recentChannels } = useRecentlyWatched()
-  const { layout } = useUiStyle()
+  const { visual, layout } = useUiStyle()
+  const isCinema = visual === "cinema"
   const [query, setQuery] = useState("")
   const [reorderMode, setReorderMode] = useState(false)
   const navigate = useNavigate()
@@ -85,8 +88,9 @@ export function HomePage() {
       groupChannelsByAiCategory(
         forCategories,
         useDbCategories ? dbCategories : null,
+        channelConfig,
       ),
-    [forCategories, useDbCategories, dbCategories],
+    [forCategories, useDbCategories, dbCategories, channelConfig],
   )
 
   const {
@@ -253,6 +257,10 @@ export function HomePage() {
         }
       />
 
+      {isCinema && layout === "thumbnail" && !reorderMode && query.trim() === "" && (
+        <CinemaHero channels={ordered} />
+      )}
+
       <main className="home-main">
         {reorderMode && canReorder ? (
           <section className="cat-section" aria-labelledby="cat-reorder">
@@ -285,9 +293,11 @@ export function HomePage() {
                 >
                   Recently watched
                 </h2>
-                <div className={layoutClass}>
-                  {recentFiltered.map((ch) => renderChannel(ch))}
-                </div>
+                {isCinema && layout === "thumbnail" ? (
+                  <div className="cinema-shelf"><div className={layoutClass}>{recentFiltered.map((ch) => renderChannel(ch))}</div></div>
+                ) : (
+                  <div className={layoutClass}>{recentFiltered.map((ch) => renderChannel(ch))}</div>
+                )}
               </section>
             )}
 
@@ -302,20 +312,32 @@ export function HomePage() {
                 >
                   Favorites
                 </h2>
-                <div className={layoutClass}>
-                  {favoritesFiltered.map((ch) => renderChannel(ch))}
-                </div>
+                {isCinema && layout === "thumbnail" ? (
+                  <div className="cinema-shelf"><div className={layoutClass}>{favoritesFiltered.map((ch) => renderChannel(ch))}</div></div>
+                ) : (
+                  <div className={layoutClass}>{favoritesFiltered.map((ch) => renderChannel(ch))}</div>
+                )}
               </section>
             )}
 
             {[...byAiCategory.entries()].map(([aiKey, list]) => {
               const catId = `cat-ai-${aiKey.replace(/[^\w-]+/g, "-").slice(0, 48)}`
+              const sectionHue = thumbHueForChannel(aiKey)
               return (
-                <section key={aiKey} className="cat-section" aria-labelledby={catId}>
+                <section
+                  key={aiKey}
+                  className="cat-section"
+                  aria-labelledby={catId}
+                  style={{ "--section-hue": String(sectionHue) } as CSSProperties}
+                >
                   <h2 id={catId} className="cat-section__title">
                     {formatAiCategoryTitle(aiKey, useDbCategories ? dbCategories : null)}
                   </h2>
-                  <div className={layoutClass}>{list.map((ch) => renderChannel(ch))}</div>
+                  {isCinema && layout === "thumbnail" ? (
+                    <div className="cinema-shelf"><div className={layoutClass}>{list.map((ch) => renderChannel(ch))}</div></div>
+                  ) : (
+                    <div className={layoutClass}>{list.map((ch) => renderChannel(ch))}</div>
+                  )}
                 </section>
               )
             })}

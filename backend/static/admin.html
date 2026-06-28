@@ -6,19 +6,24 @@
   <title>TV2 — Admin</title>
   <style>
     :root { font-family: system-ui, sans-serif; background: #0c0e14; color: #e8ecf5; }
-    body { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+    body { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
     h1 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem; }
     p.muted { color: #8b93a7; font-size: 0.9rem; }
     label { display: block; margin-top: 0.75rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: #8b93a7; }
-    input, button, select { font: inherit; padding: 0.5rem 0.75rem; border-radius: 8px; border: 1px solid #2a3142; background: #141824; color: inherit; }
+    input, button, select, textarea { font: inherit; padding: 0.5rem 0.75rem; border-radius: 8px; border: 1px solid #2a3142; background: #141824; color: inherit; }
+    textarea { resize: vertical; width: 100%; box-sizing: border-box; }
     button { cursor: pointer; margin-top: 1rem; margin-right: 0.5rem; background: #2d3d8f; border-color: #4a5fc1; }
     button.secondary { background: transparent; }
     button.danger { background: #7f1d1d; border-color: #ef4444; }
+    button.success { background: #14532d; border-color: #22c55e; }
+    button.sm { font-size: 0.78rem; padding: 0.22rem 0.55rem; margin: 0; }
     table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.88rem; }
-    th, td { text-align: left; padding: 0.45rem 0.4rem; border-bottom: 1px solid #1e2535; }
+    th, td { text-align: left; padding: 0.45rem 0.5rem; border-bottom: 1px solid #1e2535; }
     th { color: #8b93a7; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
-    .err { color: #f87171; margin-top: 0.5rem; }
-    .row-actions button { margin-top: 0; font-size: 0.8rem; padding: 0.25rem 0.5rem; }
+    .err { color: #f87171; margin-top: 0.5rem; font-size: 0.88rem; }
+    .ok { color: #4ade80; margin-top: 0.5rem; font-size: 0.88rem; }
+    .row-actions { display: flex; gap: 6px; align-items: center; }
+    .row-actions button { margin: 0; }
 
     /* Tabs */
     .tabs { display: flex; gap: 4px; margin: 1.5rem 0 1rem; border-bottom: 1px solid #2a3142; }
@@ -46,6 +51,47 @@
     .badge { display: inline-block; font-size: 0.72rem; padding: 2px 7px; border-radius: 999px; background: #1e2535; color: #a5b4fc; }
     .ip-cell { font-family: monospace; font-size: 0.82rem; }
     .time-cell { color: #8b93a7; white-space: nowrap; }
+
+    /* Category expand panel */
+    .cat-expand-btn { background: transparent; border: none; color: #8b93a7; padding: 0 4px; margin: 0; font-size: 0.9rem; cursor: pointer; }
+    .cat-expand-btn:hover { color: #e8ecf5; }
+    tr.cat-row { cursor: default; }
+    tr.cat-row td { vertical-align: middle; }
+    .inline-edit { display: none; gap: 6px; align-items: center; }
+    .inline-edit input { padding: 0.2rem 0.4rem; font-size: 0.85rem; width: auto; }
+    .inline-edit.visible { display: flex; }
+    .cat-label-display { cursor: pointer; }
+    .cat-label-display:hover { text-decoration: underline dotted; }
+
+    /* Channel drawer */
+    tr.ch-drawer-row td { padding: 0; border-bottom: 2px solid #4a5fc1; }
+    .ch-drawer { background: #0f1320; border-left: 3px solid #4a5fc1; padding: 12px 16px; }
+    .ch-drawer h4 { margin: 0 0 10px; font-size: 0.82rem; color: #8b93a7; text-transform: uppercase; letter-spacing: 0.05em; }
+    .ch-list { list-style: none; margin: 0; padding: 0; max-height: 360px; overflow-y: auto; }
+    .ch-row { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 6px; margin-bottom: 3px; background: #141824; border: 1px solid #1e2535; }
+    .ch-row.dragging { opacity: 0.4; }
+    .ch-row.drag-over { border-color: #4a5fc1; background: #1a2040; }
+    .ch-grip { color: #4a5566; cursor: grab; font-size: 1rem; user-select: none; flex-shrink: 0; }
+    .ch-grip:active { cursor: grabbing; }
+    .ch-name { flex: 1; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ch-move { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+    .ch-move select { padding: 0.18rem 0.4rem; font-size: 0.78rem; }
+    .ch-remove { background: transparent; border: 1px solid #3a2020; color: #f87171; flex-shrink: 0; }
+    .ch-remove:hover { background: #3a2020; }
+    .drawer-actions { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
+    .drawer-actions button { margin: 0; }
+    .ch-count { font-size: 0.78rem; color: #8b93a7; background: #1e2535; padding: 2px 8px; border-radius: 999px; }
+    .loading-text { color: #8b93a7; font-size: 0.85rem; padding: 8px 0; }
+
+    /* Scraper */
+    .scrape-result { background: #141824; border: 1px solid #2a3142; border-radius: 10px; padding: 1rem 1.25rem; margin-top: 1rem; }
+    .scrape-result h3 { margin: 0 0 0.75rem; font-size: 0.88rem; color: #8b93a7; text-transform: uppercase; letter-spacing: 0.05em; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px; }
+    .field-row label { margin-top: 0; }
+    .field-row input, .field-row select { width: 100%; box-sizing: border-box; }
+    .stream-url-full { font-family: monospace; font-size: 0.78rem; color: #a5b4fc; word-break: break-all; background: #0c0e14; padding: 6px 8px; border-radius: 6px; border: 1px solid #2a3142; margin: 6px 0; }
+    .logo-preview { width: 40px; height: 40px; object-fit: contain; border-radius: 4px; background: #1e2535; vertical-align: middle; margin-right: 6px; }
+    .active-toggle { cursor: pointer; }
   </style>
 </head>
 <body>
@@ -68,19 +114,21 @@
     <div class="tabs">
       <button class="tab-btn active" data-tab="categories">Categories</button>
       <button class="tab-btn" data-tab="analytics">Analytics</button>
+      <button class="tab-btn" data-tab="scraper">Manual Scraper</button>
     </div>
 
     <!-- ── Categories tab ── -->
     <div class="tab-panel active" id="tab-categories">
+      <p class="muted" style="margin:0 0 0.5rem">Click a category row to expand and manage its channels. Drag channels to reorder.</p>
       <table id="tbl">
         <thead>
-          <tr><th>Slug</th><th>Label</th><th>Sort</th><th>Active</th><th></th></tr>
+          <tr><th></th><th>Slug</th><th>Label</th><th>Sort</th><th>Active</th><th>Channels</th><th>Actions</th></tr>
         </thead>
         <tbody id="tbody"></tbody>
       </table>
 
       <form id="add">
-        <h2 style="font-size:1rem;margin-top:2rem;">Add category</h2>
+        <h2 style="font-size:1rem;margin-top:2rem;">Add / update category</h2>
         <label>Slug</label>
         <input name="slug" required pattern="[a-z0-9-]+" placeholder="e.g. sport" />
         <label>Label</label>
@@ -89,6 +137,7 @@
         <input name="sort_order" type="number" value="100" />
         <label><input type="checkbox" name="active" checked /> Active</label>
         <div><button type="submit">Add</button></div>
+        <p id="cat-err" class="err" hidden></p>
       </form>
     </div>
 
@@ -102,59 +151,117 @@
           <option value="90">Last 90 days</option>
         </select>
       </div>
-
       <div class="stat-grid" id="statGrid">
         <div class="stat-card"><div class="stat-card__val" id="s-total">—</div><div class="stat-card__lbl">Total views</div></div>
         <div class="stat-card"><div class="stat-card__val" id="s-today">—</div><div class="stat-card__lbl">Today</div></div>
         <div class="stat-card"><div class="stat-card__val" id="s-ips">—</div><div class="stat-card__lbl">Unique IPs</div></div>
         <div class="stat-card"><div class="stat-card__val" id="s-channels">—</div><div class="stat-card__lbl">Channels watched</div></div>
       </div>
-
       <div class="chart-section">
         <h3>Views by hour of day <span id="hourChartLabel" style="font-weight:400;color:#6b7280;"></span></h3>
         <div class="bar-chart" id="hourChart"></div>
       </div>
-
       <div class="chart-section">
         <h3>Views by day <span id="dayChartLabel" style="font-weight:400;color:#6b7280;"></span></h3>
         <div class="bar-chart" id="dayChart"></div>
       </div>
-
       <h3 style="font-size:0.88rem;color:#8b93a7;text-transform:uppercase;letter-spacing:0.05em;margin:1.5rem 0 0.5rem;">Top channels</h3>
       <table>
         <thead><tr><th>#</th><th>Channel</th><th>Views</th></tr></thead>
         <tbody id="topChannels"></tbody>
       </table>
-
       <h3 style="font-size:0.88rem;color:#8b93a7;text-transform:uppercase;letter-spacing:0.05em;margin:1.5rem 0 0.5rem;">Recent views (last 50)</h3>
       <table>
         <thead><tr><th>Time</th><th>Channel</th><th>IP</th><th>Browser</th></tr></thead>
         <tbody id="recentViews"></tbody>
       </table>
     </div>
+
+    <!-- ── Manual Scraper tab ── -->
+    <div class="tab-panel" id="tab-scraper">
+      <p class="muted" style="margin:0 0 1rem">Paste a channel page URL to extract the stream and add it to the channel list.</p>
+      <label>Channel page URL</label>
+      <div style="display:flex;gap:8px;align-items:flex-end;margin-top:6px;">
+        <input type="url" id="scrapeUrl" placeholder="https://example.com/live/channel-name" style="flex:1;" />
+        <button type="button" id="btnScrape" style="margin:0;">Scrape</button>
+      </div>
+      <p id="scrape-err" class="err" hidden></p>
+      <p id="scrape-ok" class="ok" hidden></p>
+
+      <div id="scrapeResult" hidden>
+        <div class="scrape-result">
+          <h3>Detected channel</h3>
+          <div id="scrapeLogoRow" style="margin-bottom:8px;display:none;">
+            <img id="scrapeLogo" class="logo-preview" src="" alt="" />
+            <span id="scrapeLogoUrl" style="font-size:0.78rem;color:#8b93a7;"></span>
+          </div>
+          <div class="field-row">
+            <div>
+              <label>Channel name</label>
+              <input type="text" id="scrapeNameInput" />
+            </div>
+            <div>
+              <label>Slug (URL key)</label>
+              <input type="text" id="scrapeSlugInput" />
+            </div>
+          </div>
+          <div>
+            <label>Stream URL</label>
+            <div id="scrapeStreamUrl" class="stream-url-full">—</div>
+          </div>
+          <div class="field-row" style="margin-top:8px;">
+            <div>
+              <label>Stream type</label>
+              <input type="text" id="scrapeStreamType" readonly />
+            </div>
+            <div>
+              <label>Category</label>
+              <select id="scrapeCategorySelect"></select>
+            </div>
+          </div>
+          <div style="margin-top:6px;">
+            <label>
+              <input type="checkbox" id="scrapeRequiresProxy" />
+              Requires proxy
+            </label>
+          </div>
+          <div style="margin-top:12px;">
+            <button type="button" id="btnAddChannel" class="success">Add to channels</button>
+            <button type="button" class="secondary" id="btnClearScrape" style="font-size:0.85rem;">Clear</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
     const api = (path) => "/api" + path;
+    let allCategories = [];
+    let scrapeData = null;
 
-    // ── Auth helpers ────────────────────────────────────────────────────────────
+    // ── Auth helpers ──────────────────────────────────────────────────────────────
     function authHeader() {
       const u = document.getElementById("user").value.trim();
       const p = document.getElementById("pass").value;
       if (!u || !p) throw new Error("Enter username and password");
       return "Basic " + btoa(unescape(encodeURIComponent(u + ":" + p)));
     }
-    function showErr(msg) {
-      const e = document.getElementById("err");
+    function showErr(id, msg) {
+      const e = document.getElementById(id);
       e.textContent = msg || "";
       e.hidden = !msg;
+    }
+    function showOk(id, msg) {
+      const e = document.getElementById(id);
+      e.textContent = msg || "";
+      e.hidden = !msg;
+      if (msg) setTimeout(() => { e.hidden = true; }, 4000);
     }
     async function authedFetch(path, opts = {}) {
       let r = await fetch(api(path), { credentials: "same-origin", ...opts });
       if (r.status === 401) {
         r = await fetch(api(path), {
-          credentials: "same-origin",
-          ...opts,
+          credentials: "same-origin", ...opts,
           headers: { ...(opts.headers || {}), Authorization: authHeader() },
         });
       }
@@ -162,29 +269,26 @@
       return r;
     }
 
-    // ── Session ─────────────────────────────────────────────────────────────────
+    // ── Session ───────────────────────────────────────────────────────────────────
     async function saveSession() {
-      showErr("");
+      showErr("err", "");
       try {
         const r = await fetch(api("/admin/session"), {
-          method: "POST",
-          headers: { Authorization: authHeader() },
-          credentials: "same-origin",
+          method: "POST", headers: { Authorization: authHeader() }, credentials: "same-origin",
         });
         if (!r.ok) throw new Error(r.status === 401 ? "Invalid credentials" : "HTTP " + r.status);
         await loadAll();
-      } catch (e) { showErr(e.message || String(e)); }
+      } catch (e) { showErr("err", e.message || String(e)); }
     }
-
     async function loadAll() {
-      showErr("");
+      showErr("err", "");
       try {
         await Promise.all([loadCategories(), loadAnalytics()]);
         document.getElementById("main").hidden = false;
-      } catch (e) { showErr(e.message || String(e)); }
+      } catch (e) { showErr("err", e.message || String(e)); }
     }
 
-    // ── Tab switching ────────────────────────────────────────────────────────────
+    // ── Tab switching ─────────────────────────────────────────────────────────────
     document.querySelectorAll(".tab-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
         const id = btn.dataset.tab;
@@ -195,39 +299,140 @@
       });
     });
 
-    // ── Categories ───────────────────────────────────────────────────────────────
+    // ── Categories ────────────────────────────────────────────────────────────────
     async function loadCategories() {
       const r = await authedFetch("/admin/categories");
-      renderCategories(await r.json());
+      allCategories = await r.json();
+      renderCategories(allCategories);
     }
+
     function renderCategories(rows) {
       const tb = document.getElementById("tbody");
       tb.innerHTML = "";
       for (const row of rows) {
         const tr = document.createElement("tr");
+        tr.className = "cat-row";
+        tr.dataset.slug = row.slug;
         tr.innerHTML =
+          "<td><button class='cat-expand-btn' title='Show channels'>▶</button></td>" +
           "<td><code>" + esc(row.slug) + "</code></td>" +
-          "<td>" + esc(row.label) + "</td>" +
-          "<td>" + row.sort_order + "</td>" +
-          "<td>" + (row.active ? "yes" : "no") + "</td>" +
-          "<td class='row-actions'><button type='button' class='danger' data-del='" + esc(row.slug) + "'>Delete</button></td>";
+          "<td>" +
+            "<span class='cat-label-display' title='Click to edit'>" + esc(row.label) + "</span>" +
+            "<span class='inline-edit' id='edit-" + esc(row.slug) + "'>" +
+              "<input type='text' value='" + esc(row.label) + "' class='edit-label' style='width:120px' />" +
+              "<input type='number' value='" + row.sort_order + "' class='edit-sort' style='width:60px' />" +
+              "<button class='sm' onclick='saveInlineEdit(\"" + esc(row.slug) + "\")'>Save</button>" +
+              "<button class='sm secondary' onclick='cancelInlineEdit(\"" + esc(row.slug) + "\")'>✕</button>" +
+            "</span>" +
+          "</td>" +
+          "<td class='sort-cell'>" + row.sort_order + "</td>" +
+          "<td><span class='active-toggle' title='Toggle active' data-slug='" + esc(row.slug) + "' data-active='" + row.active + "'>" +
+            (row.active ? "✓ yes" : "✗ no") +
+          "</span></td>" +
+          "<td><span class='ch-count' id='count-" + esc(row.slug) + "'>…</span></td>" +
+          "<td class='row-actions'>" +
+            "<button class='sm secondary' onclick='startInlineEdit(\"" + esc(row.slug) + "\")'>Edit</button>" +
+            "<button class='sm danger' data-del='" + esc(row.slug) + "'>Delete</button>" +
+          "</td>";
         tb.appendChild(tr);
+
+        // Drawer row (hidden by default)
+        const drawerTr = document.createElement("tr");
+        drawerTr.className = "ch-drawer-row";
+        drawerTr.id = "drawer-" + row.slug;
+        drawerTr.style.display = "none";
+        drawerTr.innerHTML = "<td colspan='7'><div class='ch-drawer' id='drawer-content-" + esc(row.slug) + "'></div></td>";
+        tb.appendChild(drawerTr);
       }
+
+      // Bind expand buttons
+      tb.querySelectorAll(".cat-expand-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          const slug = e.target.closest("tr").dataset.slug;
+          toggleDrawer(slug, btn);
+        });
+      });
+      // Bind active toggle
+      tb.querySelectorAll(".active-toggle").forEach((el) => {
+        el.addEventListener("click", () => toggleActive(el.dataset.slug, el.dataset.active === "true", el));
+      });
+      // Bind inline label click
+      tb.querySelectorAll(".cat-label-display").forEach((el) => {
+        el.addEventListener("click", () => {
+          const slug = el.closest("tr").dataset.slug;
+          if (slug) startInlineEdit(slug);
+        });
+      });
+      // Bind delete
       tb.querySelectorAll("button[data-del]").forEach((btn) =>
         btn.addEventListener("click", () => delCategory(btn.getAttribute("data-del")))
       );
+
+      // Load channel counts for all categories
+      loadChannelCounts(rows.map(r => r.slug));
     }
+
+    async function loadChannelCounts(slugs) {
+      for (const slug of slugs) {
+        authedFetch("/admin/channels?category=" + encodeURIComponent(slug))
+          .then(r => r.json())
+          .then(list => {
+            const el = document.getElementById("count-" + slug);
+            if (el) el.textContent = list.length;
+          })
+          .catch(() => {});
+      }
+    }
+
+    // ── Inline edit ───────────────────────────────────────────────────────────────
+    function startInlineEdit(slug) {
+      document.getElementById("edit-" + slug).classList.add("visible");
+    }
+    function cancelInlineEdit(slug) {
+      document.getElementById("edit-" + slug).classList.remove("visible");
+    }
+    async function saveInlineEdit(slug) {
+      const editEl = document.getElementById("edit-" + slug);
+      const label = editEl.querySelector(".edit-label").value.trim();
+      const sortOrder = parseInt(editEl.querySelector(".edit-sort").value, 10);
+      if (!label) return;
+      try {
+        await authedFetch("/admin/categories/" + encodeURIComponent(slug), {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ label, sort_order: sortOrder }),
+        });
+        await loadCategories();
+      } catch (e) { showErr("cat-err", e.message || String(e)); }
+    }
+
+    // ── Active toggle ─────────────────────────────────────────────────────────────
+    async function toggleActive(slug, current, el) {
+      try {
+        await authedFetch("/admin/categories/" + encodeURIComponent(slug), {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ active: !current }),
+        });
+        el.dataset.active = String(!current);
+        el.textContent = !current ? "✓ yes" : "✗ no";
+      } catch (e) { showErr("cat-err", e.message || String(e)); }
+    }
+
+    // ── Delete ────────────────────────────────────────────────────────────────────
     async function delCategory(slug) {
-      if (!confirm("Delete " + slug + "?")) return;
-      showErr("");
+      if (!confirm('Delete category "' + slug + '"?')) return;
+      showErr("cat-err", "");
       try {
         await authedFetch("/admin/categories/" + encodeURIComponent(slug), { method: "DELETE" });
         await loadCategories();
-      } catch (e) { showErr(e.message || String(e)); }
+      } catch (e) { showErr("cat-err", e.message || String(e)); }
     }
+
+    // ── Add category form ─────────────────────────────────────────────────────────
     document.getElementById("add").addEventListener("submit", async (ev) => {
       ev.preventDefault();
-      showErr("");
+      showErr("cat-err", "");
       const fd = new FormData(ev.target);
       const body = {
         slug: fd.get("slug"), label: fd.get("label"),
@@ -236,16 +441,172 @@
       };
       try {
         await authedFetch("/admin/categories", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
+          method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
         });
         ev.target.reset();
         await loadCategories();
-      } catch (e) { showErr(e.message || String(e)); }
+      } catch (e) { showErr("cat-err", e.message || String(e)); }
     });
 
-    // ── Analytics ────────────────────────────────────────────────────────────────
+    // ── Channel drawer ────────────────────────────────────────────────────────────
+    const openDrawers = new Set();
+
+    async function toggleDrawer(slug, btn) {
+      const drawer = document.getElementById("drawer-" + slug);
+      if (!drawer) return;
+      if (openDrawers.has(slug)) {
+        drawer.style.display = "none";
+        btn.textContent = "▶";
+        openDrawers.delete(slug);
+      } else {
+        drawer.style.display = "";
+        btn.textContent = "▼";
+        openDrawers.add(slug);
+        await loadDrawer(slug);
+      }
+    }
+
+    async function loadDrawer(slug) {
+      const content = document.getElementById("drawer-content-" + slug);
+      content.innerHTML = "<p class='loading-text'>Loading channels…</p>";
+      try {
+        const r = await authedFetch("/admin/channels?category=" + encodeURIComponent(slug));
+        const channels = await r.json();
+        renderDrawer(slug, channels, content);
+      } catch (e) {
+        content.innerHTML = "<p class='err'>" + esc(e.message) + "</p>";
+      }
+    }
+
+    function renderDrawer(slug, channels, container) {
+      const otherCats = allCategories.filter(c => c.slug !== slug);
+
+      let html = "<h4>" + esc(slug) + " — " + channels.length + " channel" + (channels.length !== 1 ? "s" : "") + "</h4>";
+      if (!channels.length) {
+        html += "<p class='loading-text'>No channels in this category.</p>";
+      } else {
+        html += "<ul class='ch-list' id='chlist-" + esc(slug) + "'>";
+        for (const ch of channels) {
+          const opts = otherCats.map(c =>
+            "<option value='" + esc(c.slug) + "'>" + esc(c.label) + "</option>"
+          ).join("");
+          html +=
+            "<li class='ch-row' draggable='true' data-slug='" + esc(ch.slug) + "'>" +
+              "<span class='ch-grip' title='Drag to reorder'>⠿</span>" +
+              "<span class='ch-name' title='" + esc(ch.slug) + "'>" + esc(ch.name) + "</span>" +
+              "<span class='ch-move'>" +
+                "<select class='move-select' data-channel='" + esc(ch.slug) + "'>" +
+                  "<option value=''>Move to…</option>" + opts +
+                "</select>" +
+              "</span>" +
+              "<button class='sm ch-remove' data-channel='" + esc(ch.slug) + "' data-cat='" + esc(slug) + "'" +
+                " title='Move to Other'>✕</button>" +
+            "</li>";
+        }
+        html += "</ul>";
+      }
+      html +=
+        "<div class='drawer-actions'>" +
+          "<button class='sm' onclick='saveOrder(\"" + esc(slug) + "\")'>Save order</button>" +
+          "<button class='sm secondary' onclick='loadDrawer(\"" + esc(slug) + "\")'>↺ Reload</button>" +
+          "<p id='drawer-err-" + esc(slug) + "' class='err' style='margin:0;'></p>" +
+          "<p id='drawer-ok-" + esc(slug) + "' class='ok' style='margin:0;'></p>" +
+        "</div>";
+
+      container.innerHTML = html;
+
+      // Bind move selects
+      container.querySelectorAll(".move-select").forEach(sel => {
+        sel.addEventListener("change", async () => {
+          const targetCat = sel.value;
+          if (!targetCat) return;
+          const chSlug = sel.dataset.channel;
+          await moveChannel(chSlug, targetCat, slug);
+        });
+      });
+      // Bind remove buttons (move to other)
+      container.querySelectorAll(".ch-remove").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const chSlug = btn.dataset.channel;
+          const catSlug = btn.dataset.cat;
+          if (chSlug === "other") return;
+          if (!confirm('Move "' + chSlug + '" to Other?')) return;
+          await moveChannel(chSlug, "other", catSlug);
+        });
+      });
+      // Init drag-and-drop
+      const list = container.querySelector(".ch-list");
+      if (list) initDrag(list);
+    }
+
+    async function moveChannel(channelSlug, targetCategory, currentCategory) {
+      try {
+        await authedFetch("/admin/channels/" + encodeURIComponent(channelSlug) + "/category", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ category_slug: targetCategory }),
+        });
+        // Reload both affected drawers
+        await loadDrawer(currentCategory);
+        if (openDrawers.has(targetCategory)) await loadDrawer(targetCategory);
+        // Update counts
+        loadChannelCounts([currentCategory, targetCategory]);
+        showOk("drawer-ok-" + currentCategory, "Moved to " + targetCategory);
+      } catch (e) {
+        showErr("drawer-err-" + currentCategory, e.message || String(e));
+      }
+    }
+
+    async function saveOrder(slug) {
+      const list = document.getElementById("chlist-" + slug);
+      if (!list) return;
+      const order = [...list.querySelectorAll(".ch-row")].map(el => el.dataset.slug);
+      try {
+        await authedFetch("/admin/categories/" + encodeURIComponent(slug) + "/channels/order", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ order }),
+        });
+        showOk("drawer-ok-" + slug, "Order saved (" + order.length + " channels)");
+      } catch (e) {
+        showErr("drawer-err-" + slug, e.message || String(e));
+      }
+    }
+
+    // ── Drag-and-drop reorder ─────────────────────────────────────────────────────
+    function initDrag(list) {
+      let dragged = null;
+      list.querySelectorAll(".ch-row").forEach(row => {
+        row.addEventListener("dragstart", e => {
+          dragged = row;
+          setTimeout(() => row.classList.add("dragging"), 0);
+          e.dataTransfer.effectAllowed = "move";
+        });
+        row.addEventListener("dragend", () => {
+          dragged = null;
+          row.classList.remove("dragging");
+          list.querySelectorAll(".ch-row").forEach(r => r.classList.remove("drag-over"));
+        });
+        row.addEventListener("dragover", e => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = "move";
+          list.querySelectorAll(".ch-row").forEach(r => r.classList.remove("drag-over"));
+          if (dragged && dragged !== row) row.classList.add("drag-over");
+        });
+        row.addEventListener("dragleave", () => row.classList.remove("drag-over"));
+        row.addEventListener("drop", e => {
+          e.preventDefault();
+          row.classList.remove("drag-over");
+          if (!dragged || dragged === row) return;
+          const rect = row.getBoundingClientRect();
+          const mid = rect.top + rect.height / 2;
+          if (e.clientY > mid) row.after(dragged);
+          else row.before(dragged);
+        });
+      });
+    }
+
+    // ── Analytics ─────────────────────────────────────────────────────────────────
     function parseBrowser(ua) {
       if (!ua) return "Unknown";
       if (/Edg\/|Edge\//.test(ua)) return "Edge";
@@ -264,7 +625,6 @@
       });
     }
     function fmtIp(ip) {
-      // Truncate last octet for display
       const v4 = ip.match(/^(\d+\.\d+\.\d+)\.\d+$/);
       if (v4) return v4[1] + ".x";
       const v6 = ip.match(/^([0-9a-f:]+:[0-9a-f:]+):[0-9a-f:]+$/i);
@@ -286,36 +646,25 @@
         container.appendChild(col);
       }
     }
-
     async function loadAnalytics() {
       const days = parseInt(document.getElementById("daysPicker").value, 10);
       const [summary, top, recent, byHour, byDay] = await Promise.all([
-        authedFetch("/admin/analytics/summary").then((r) => r.json()),
-        authedFetch("/admin/analytics/top-channels?days=" + days + "&limit=15").then((r) => r.json()),
-        authedFetch("/admin/analytics/recent?limit=50").then((r) => r.json()),
-        authedFetch("/admin/analytics/by-hour?days=" + days).then((r) => r.json()),
-        authedFetch("/admin/analytics/by-day?days=" + days).then((r) => r.json()),
+        authedFetch("/admin/analytics/summary").then(r => r.json()),
+        authedFetch("/admin/analytics/top-channels?days=" + days + "&limit=15").then(r => r.json()),
+        authedFetch("/admin/analytics/recent?limit=50").then(r => r.json()),
+        authedFetch("/admin/analytics/by-hour?days=" + days).then(r => r.json()),
+        authedFetch("/admin/analytics/by-day?days=" + days).then(r => r.json()),
       ]);
-
-      // Summary cards
       document.getElementById("s-total").textContent = summary.total_views ?? 0;
       document.getElementById("s-today").textContent = summary.today_views ?? 0;
       document.getElementById("s-ips").textContent = summary.unique_ips ?? 0;
       document.getElementById("s-channels").textContent = summary.unique_channels ?? 0;
-
-      // Hour chart (fill 0–23 gaps)
-      const hourMap = Object.fromEntries(byHour.map((r) => [r.hour, r.views]));
+      const hourMap = Object.fromEntries(byHour.map(r => [r.hour, r.views]));
       const hourData = Array.from({ length: 24 }, (_, h) => ({ hour: h, views: hourMap[h] || 0 }));
       document.getElementById("hourChartLabel").textContent = "(last " + days + " days)";
-      barChart(document.getElementById("hourChart"), hourData, "hour",  "views",
-        (h) => String(h).padStart(2, "0"));
-
-      // Day chart
+      barChart(document.getElementById("hourChart"), hourData, "hour", "views", (h) => String(h).padStart(2, "0"));
       document.getElementById("dayChartLabel").textContent = "(last " + days + " days)";
-      barChart(document.getElementById("dayChart"), byDay, "day", "views",
-        (d) => d.slice(5)); // MM-DD
-
-      // Top channels
+      barChart(document.getElementById("dayChart"), byDay, "day", "views", (d) => d.slice(5));
       const topTb = document.getElementById("topChannels");
       topTb.innerHTML = "";
       if (!top.length) {
@@ -330,8 +679,6 @@
           topTb.appendChild(tr);
         });
       }
-
-      // Recent views
       const recTb = document.getElementById("recentViews");
       recTb.innerHTML = "";
       if (!recent.length) {
@@ -349,13 +696,117 @@
       }
     }
 
-    // ── Wiring ───────────────────────────────────────────────────────────────────
-    function esc(s) {
-      const d = document.createElement("div");
-      d.textContent = s;
-      return d.innerHTML;
+    // ── Manual Scraper ────────────────────────────────────────────────────────────
+    function populateCategorySelect(selectEl, selectedValue) {
+      selectEl.innerHTML = "";
+      for (const cat of allCategories) {
+        const opt = document.createElement("option");
+        opt.value = cat.slug;
+        opt.textContent = cat.label;
+        if (cat.slug === selectedValue) opt.selected = true;
+        selectEl.appendChild(opt);
+      }
     }
 
+    document.getElementById("btnScrape").addEventListener("click", async () => {
+      const url = document.getElementById("scrapeUrl").value.trim();
+      showErr("scrape-err", "");
+      showOk("scrape-ok", "");
+      if (!url) { showErr("scrape-err", "Enter a URL first"); return; }
+      document.getElementById("scrapeResult").hidden = true;
+      document.getElementById("btnScrape").textContent = "Scraping…";
+      document.getElementById("btnScrape").disabled = true;
+      try {
+        const r = await authedFetch("/admin/scrape", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url }),
+        });
+        scrapeData = await r.json();
+        renderScrapeResult(scrapeData);
+      } catch (e) {
+        showErr("scrape-err", e.message || String(e));
+      } finally {
+        document.getElementById("btnScrape").textContent = "Scrape";
+        document.getElementById("btnScrape").disabled = false;
+      }
+    });
+
+    function renderScrapeResult(data) {
+      document.getElementById("scrapeNameInput").value = data.name || "";
+      document.getElementById("scrapeSlugInput").value = data.slug || "";
+      document.getElementById("scrapeStreamUrl").textContent = data.stream_url || "Not detected";
+      document.getElementById("scrapeStreamType").value = data.stream_type || "";
+      document.getElementById("scrapeRequiresProxy").checked = !!data.requires_proxy;
+
+      const logoRow = document.getElementById("scrapeLogoRow");
+      if (data.logo_url) {
+        document.getElementById("scrapeLogo").src = data.logo_url;
+        document.getElementById("scrapeLogoUrl").textContent = data.logo_url;
+        logoRow.style.display = "";
+      } else {
+        logoRow.style.display = "none";
+      }
+
+      const catSel = document.getElementById("scrapeCategorySelect");
+      populateCategorySelect(catSel, "other");
+
+      document.getElementById("scrapeResult").hidden = false;
+    }
+
+    document.getElementById("btnAddChannel").addEventListener("click", async () => {
+      if (!scrapeData) return;
+      showErr("scrape-err", "");
+      showOk("scrape-ok", "");
+      const name = document.getElementById("scrapeNameInput").value.trim();
+      const slug = document.getElementById("scrapeSlugInput").value.trim();
+      const category = document.getElementById("scrapeCategorySelect").value;
+      const requiresProxy = document.getElementById("scrapeRequiresProxy").checked;
+      try {
+        document.getElementById("btnAddChannel").disabled = true;
+        const r = await authedFetch("/admin/channels/add", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            page_url: scrapeData.page_url,
+            name: name || scrapeData.name,
+            stream_url: scrapeData.stream_url,
+            stream_type: scrapeData.stream_type,
+            stream_host: scrapeData.stream_host,
+            requires_proxy: requiresProxy,
+            ai_category: category,
+            slug: slug || scrapeData.slug,
+            logo_url: scrapeData.logo_url,
+          }),
+        });
+        const result = await r.json();
+        showOk("scrape-ok", 'Added as "' + result.slug + '" — reload the app to see it.');
+        document.getElementById("scrapeResult").hidden = true;
+        document.getElementById("scrapeUrl").value = "";
+        scrapeData = null;
+        // Update channel count for that category
+        loadChannelCounts([category]);
+      } catch (e) {
+        showErr("scrape-err", e.message || String(e));
+      } finally {
+        document.getElementById("btnAddChannel").disabled = false;
+      }
+    });
+
+    document.getElementById("btnClearScrape").addEventListener("click", () => {
+      scrapeData = null;
+      document.getElementById("scrapeResult").hidden = true;
+      document.getElementById("scrapeUrl").value = "";
+      showErr("scrape-err", "");
+      showOk("scrape-ok", "");
+    });
+
+    // ── Wiring ────────────────────────────────────────────────────────────────────
+    function esc(s) {
+      const d = document.createElement("div");
+      d.textContent = String(s ?? "");
+      return d.innerHTML;
+    }
     document.getElementById("btnSession").addEventListener("click", saveSession);
     document.getElementById("btnLoad").addEventListener("click", loadAll);
     document.getElementById("btnRefresh").addEventListener("click", loadAnalytics);

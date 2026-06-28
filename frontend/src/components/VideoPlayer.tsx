@@ -146,11 +146,14 @@ export function VideoPlayer({
       hls.loadSource(playbackSrc)
       hls.attachMedia(video)
       hls.on(Hls.Events.ERROR, (_, data) => {
-        if (data.fatal) {
+        if (!data.fatal) return
+        if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+          hls.recoverMediaError()
+        } else {
           setError(
             channel.requires_proxy
-              ? "Stream blocked (proxy required). This host may not allow playback outside the original site."
-              : "Playback error. Try again later.",
+              ? "Stream unavailable. The channel may be geo-restricted or temporarily offline."
+              : "Playback error. The stream may be temporarily unavailable.",
           )
         }
       })

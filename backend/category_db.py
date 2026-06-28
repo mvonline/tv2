@@ -53,6 +53,33 @@ def init_schema(conn: sqlite3.Connection) -> None:
         )
         """
     )
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS channel_category_overrides (
+            channel_slug TEXT PRIMARY KEY NOT NULL,
+            category_slug TEXT NOT NULL
+        )
+        """
+    )
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS category_channel_order (
+            category_slug TEXT NOT NULL,
+            channel_slug TEXT NOT NULL,
+            sort_order INTEGER NOT NULL DEFAULT 0,
+            PRIMARY KEY (category_slug, channel_slug)
+        )
+        """
+    )
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS channel_stream_overrides (
+            channel_slug TEXT PRIMARY KEY NOT NULL,
+            stream_url   TEXT,     -- NULL = keep original
+            requires_proxy INTEGER -- NULL = keep original; 0/1 = override
+        )
+        """
+    )
     conn.commit()
 
 
@@ -119,6 +146,94 @@ def upsert_category(
 
 def delete_category(conn: sqlite3.Connection, slug: str) -> bool:
     cur = conn.execute("DELETE FROM categories WHERE slug = ?", (slug.strip().lower(),))
+    conn.commit()
+    return cur.rowcount > 0
+
+
+def get_channel_category_overrides(conn: sqlite3.Connection) -> dict[str, str]:
+    rows = conn.execute(
+        "SELECT channel_slug, category_slug FROM channel_category_overrides"
+    ).fetchall()
+    return {r["channel_slug"]: r["category_slug"] for r in rows}
+
+
+def set_channel_category(conn: sqlite3.Connection, channel_slug: str, category_slug: str) -> None:
+    conn.execute(
+        """
+        INSERT INTO channel_category_overrides (channel_slug, category_slug)
+        VALUES (?, ?)
+        ON CONFLICT(channel_slug) DO UPDATE SET category_slug = excluded.category_slug
+        """,
+        (channel_slug.strip(), category_slug.strip().lower()),
+    )
+    conn.commit()
+
+
+def get_all_channel_orders(conn: sqlite3.Connection) -> dict[str, list[str]]:
+    rows = conn.execute(
+        "SELECT category_slug, channel_slug FROM category_channel_order ORDER BY category_slug, sort_order"
+    ).fetchall()
+    result: dict[str, list[str]] = {}
+    for r in rows:
+        cs = r["category_slug"]
+        result.setdefault(cs, []).append(r["channel_slug"])
+    return result
+
+
+def set_category_channel_order(
+    conn: sqlite3.Connection, category_slug: str, ordered_slugs: list[str]
+) -> None:
+    conn.execute(
+        "DELETE FROM category_channel_order WHERE category_slug = ?", (category_slug,)
+    )
+    conn.executemany(
+        "INSERT INTO category_channel_order (category_slug, channel_slug, sort_order) VALUES (?, ?, ?)",
+        [(category_slug, slug, i) for i, slug in enumerate(ordered_slugs)],
+    )
+    conn.commit()
+
+
+def get_stream_overrides(conn: sqlite3.Connection) -> dict[str, dict]:
+    rows = conn.execute(
+        "SELECT channel_slug, stream_url, requires_proxy FROM channel_stream_overrides"
+    ).fetchall()
+    return {
+        r["channel_slug"]: {
+            "stream_url": r["stream_url"],
+            "requires_proxy": None if r["requires_proxy"] is None else bool(r["requires_proxy"]),
+        }
+        for r in rows
+    }
+
+
+def set_stream_override(
+    conn: sqlite3.Connection,
+    channel_slug: str,
+    stream_url: str | None,
+    requires_proxy: bool | None,
+) -> None:
+    conn.execute(
+        """
+        INSERT INTO channel_stream_overrides (channel_slug, stream_url, requires_proxy)
+        VALUES (?, ?, ?)
+        ON CONFLICT(channel_slug) DO UPDATE SET
+            stream_url     = excluded.stream_url,
+            requires_proxy = excluded.requires_proxy
+        """,
+        (
+            channel_slug.strip(),
+            stream_url,
+            None if requires_proxy is None else (1 if requires_proxy else 0),
+        ),
+    )
+    conn.commit()
+
+
+def delete_stream_override(conn: sqlite3.Connection, channel_slug: str) -> bool:
+    cur = conn.execute(
+        "DELETE FROM channel_stream_overrides WHERE channel_slug = ?",
+        (channel_slug.strip(),),
+    )
     conn.commit()
     return cur.rowcount > 0
 

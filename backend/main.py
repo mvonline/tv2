@@ -37,6 +37,7 @@ from analytics_routes import router as analytics_router
 from category_routes import admin_router, router as category_public_router, serve_admin_page
 from channels_fetch import maybe_fetch_channels_json
 from hls_proxy import router as hls_router
+from scraper_routes import router as scraper_router
 
 
 def _cors_allow_origins() -> list[str]:
@@ -84,6 +85,7 @@ app.include_router(category_public_router, prefix="/api")
 app.include_router(admin_router, prefix="/api")
 app.include_router(analytics_router, prefix="/api")
 app.include_router(analytics_admin_router, prefix="/api")
+app.include_router(scraper_router, prefix="/api")
 
 # Admin HTML — HTTP Basic (same handler at both paths)
 app.add_api_route("/admin", serve_admin_page, methods=["GET"])

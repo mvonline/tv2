@@ -1,4 +1,5 @@
 import {
+  Film,
   LayoutGrid,
   List,
   ListTree,
@@ -13,6 +14,7 @@ const VISUALS: { id: VisualTheme; label: string; Icon: typeof Monitor }[] = [
   { id: "tv", label: "TV mode — large controls", Icon: Monitor },
   { id: "neon", label: "Neon theme", Icon: Sparkles },
   { id: "glass", label: "Glass theme", Icon: Layers },
+  { id: "cinema", label: "Cinema theme", Icon: Film },
 ]
 
 const LAYOUTS: { id: LayoutMode; label: string; Icon: typeof LayoutGrid }[] = [

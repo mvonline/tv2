@@ -48,9 +48,11 @@ UPSTREAM_HEADERS = {
 }
 
 
+_ALLOWED_SUFFIXES = (".hls2.xyz", ".presstv.ir")
+
 def allowed_host(hostname: str) -> bool:
     h = hostname.lower()
-    return h.endswith(".hls2.xyz")
+    return any(h == s or h.endswith("." + s) if not s.startswith(".") else h.endswith(s) for s in _ALLOWED_SUFFIXES)
 
 
 def proxy_base_url(request: Request) -> str:

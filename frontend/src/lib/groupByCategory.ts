@@ -1,3 +1,4 @@
+import type { ChannelConfig } from "@/context/CategoriesContext"
 import type { CategoryConfig } from "@/types/categoryConfig"
 import type { Channel } from "@/types/channel"
 
@@ -63,24 +64,43 @@ function mergeInactiveIntoOther(
 }
 
 /**
- * Group by `ai_category`. If `dbCategories` is set (from API), section order and inactive
- * handling follow the DB; otherwise use built-in `AI_CATEGORY_SECTION_ORDER`.
+ * Group by `ai_category` (with optional overrides from channel-config).
+ * If `dbCategories` is set (from API), section order and inactive handling follow the DB;
+ * otherwise use built-in `AI_CATEGORY_SECTION_ORDER`.
  */
 export function groupChannelsByAiCategory(
   channels: Channel[],
   dbCategories: CategoryConfig[] | null,
+  channelConfig?: ChannelConfig | null,
 ): Map<string, Channel[]> {
+  const overrides = channelConfig?.category_overrides ?? {}
+  const channelOrder = channelConfig?.channel_order ?? {}
+
   const map = new Map<string, Channel[]>()
   for (const c of channels) {
-    const key = (c.ai_category || "other").trim().toLowerCase() || "other"
+    const base = (c.ai_category || "other").trim().toLowerCase() || "other"
+    const key = (overrides[c.slug] ?? base).toLowerCase()
     const list = map.get(key) ?? []
     list.push(c)
     map.set(key, list)
   }
-  for (const list of map.values()) {
-    list.sort((a, b) =>
-      (a.name ?? "").localeCompare(b.name ?? "", undefined, { sensitivity: "base" }),
-    )
+
+  // Sort channels within each category: respect custom order first, then alphabetical
+  for (const [cat, list] of map.entries()) {
+    const order = channelOrder[cat]
+    if (order && order.length > 0) {
+      const idx = Object.fromEntries(order.map((s, i) => [s, i]))
+      list.sort((a, b) => {
+        const ia = idx[a.slug] ?? order.length
+        const ib = idx[b.slug] ?? order.length
+        if (ia !== ib) return ia - ib
+        return (a.name ?? "").localeCompare(b.name ?? "", undefined, { sensitivity: "base" })
+      })
+    } else {
+      list.sort((a, b) =>
+        (a.name ?? "").localeCompare(b.name ?? "", undefined, { sensitivity: "base" }),
+      )
+    }
   }
 
   mergeInactiveIntoOther(map, dbCategories)

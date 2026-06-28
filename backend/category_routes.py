@@ -9,9 +9,10 @@ import json
 import os
 import secrets
 import time
+from pathlib import Path
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from fastapi.responses import FileResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel, Field
@@ -19,11 +20,50 @@ from pydantic import BaseModel, Field
 from category_db import (
     connect,
     delete_category,
+    delete_stream_override,
+    get_all_channel_orders,
+    get_channel_category_overrides,
+    get_stream_overrides,
     init_db,
     list_all,
     list_categories_public,
+    set_category_channel_order,
+    set_channel_category,
+    set_stream_override,
     upsert_category,
 )
+
+
+def _channels_json_path() -> Path:
+    env = os.environ.get("CHANNELS_JSON_PATH", "").strip()
+    if env:
+        return Path(env)
+    return Path(__file__).resolve().parent / "data" / "channels.json"
+
+
+def _load_channels() -> list[dict]:
+    path = _channels_json_path()
+    if not path.exists():
+        return []
+    with open(path) as f:
+        data = json.load(f)
+    channels = data.get("channels", [])
+
+    init_db()
+    with connect() as conn:
+        stream_ovr = get_stream_overrides(conn)
+
+    if stream_ovr:
+        for c in channels:
+            ov = stream_ovr.get(c.get("slug", ""))
+            if not ov:
+                continue
+            if ov["stream_url"] is not None:
+                c["stream_url"] = ov["stream_url"]
+            if ov["requires_proxy"] is not None:
+                c["requires_proxy"] = ov["requires_proxy"]
+
+    return channels
 
 security_optional = HTTPBasic(auto_error=False)
 security_required = HTTPBasic()
@@ -111,6 +151,16 @@ def get_categories_public() -> list[dict]:
         return list_categories_public(conn)
 
 
+@router.get("/channel-config")
+def get_channel_config() -> dict:
+    """Public: category overrides + per-category channel ordering for the frontend."""
+    init_db()
+    with connect() as conn:
+        overrides = get_channel_category_overrides(conn)
+        orders = get_all_channel_orders(conn)
+    return {"category_overrides": overrides, "channel_order": orders}
+
+
 @admin_router.post("/admin/session")
 def admin_session(
     response: Response,
@@ -181,6 +231,116 @@ def admin_delete_category(slug: str, _: None = Depends(require_admin)) -> dict:
     with connect() as conn:
         if not delete_category(conn, slug):
             raise HTTPException(status_code=404, detail="Unknown slug")
+    return {"ok": True}
+
+
+class ChannelCategoryPayload(BaseModel):
+    category_slug: str = Field(..., min_length=1, max_length=64)
+
+
+class ChannelOrderPayload(BaseModel):
+    order: list[str]
+
+
+@admin_router.get("/admin/channels")
+def admin_list_channels(
+    category: str | None = Query(default=None),
+    _: None = Depends(require_admin),
+) -> list[dict]:
+    """List channels with their effective category. Filter by category slug if supplied."""
+    init_db()
+    channels = _load_channels()
+    with connect() as conn:
+        overrides = get_channel_category_overrides(conn)
+        orders = get_all_channel_orders(conn)
+
+    result = []
+    for c in channels:
+        slug = c.get("slug", "")
+        ai_cat = (c.get("ai_category") or "other").lower()
+        effective = overrides.get(slug, ai_cat)
+        if category is not None and effective != category.lower():
+            continue
+        result.append({
+            "slug": slug,
+            "name": c.get("name") or slug,
+            "ai_category": ai_cat,
+            "effective_category": effective,
+            "has_override": slug in overrides,
+            "logo": c.get("logo"),
+        })
+
+    if category and category in orders:
+        order_idx = {s: i for i, s in enumerate(orders[category])}
+        result.sort(key=lambda ch: (order_idx.get(ch["slug"], len(orders[category])), (ch["name"] or "").lower()))
+    else:
+        result.sort(key=lambda ch: (ch["name"] or "").lower())
+
+    return result
+
+
+@admin_router.put("/admin/channels/{slug}/category")
+def admin_move_channel(
+    slug: str,
+    body: ChannelCategoryPayload,
+    _: None = Depends(require_admin),
+) -> dict:
+    """Override a channel's category."""
+    init_db()
+    with connect() as conn:
+        set_channel_category(conn, slug, body.category_slug)
+    return {"ok": True}
+
+
+@admin_router.put("/admin/categories/{slug}/channels/order")
+def admin_set_channel_order(
+    slug: str,
+    body: ChannelOrderPayload,
+    _: None = Depends(require_admin),
+) -> dict:
+    """Set the display order of channels within a category."""
+    init_db()
+    with connect() as conn:
+        set_category_channel_order(conn, slug.strip().lower(), body.order)
+    return {"ok": True}
+
+
+class StreamOverridePayload(BaseModel):
+    stream_url: str | None = None
+    requires_proxy: bool | None = None
+
+
+@admin_router.get("/admin/stream-overrides")
+def admin_list_stream_overrides(_: None = Depends(require_admin)) -> list[dict]:
+    init_db()
+    with connect() as conn:
+        ovr = get_stream_overrides(conn)
+    return [{"slug": k, **v} for k, v in sorted(ovr.items())]
+
+
+@admin_router.put("/admin/channels/{slug}/stream")
+def admin_set_stream_override(
+    slug: str,
+    body: StreamOverridePayload,
+    _: None = Depends(require_admin),
+) -> dict:
+    """Override stream_url and/or requires_proxy for a channel (survives re-fetch)."""
+    init_db()
+    with connect() as conn:
+        set_stream_override(conn, slug, body.stream_url, body.requires_proxy)
+    return {"ok": True}
+
+
+@admin_router.delete("/admin/channels/{slug}/stream")
+def admin_delete_stream_override(
+    slug: str,
+    _: None = Depends(require_admin),
+) -> dict:
+    init_db()
+    with connect() as conn:
+        found = delete_stream_override(conn, slug)
+    if not found:
+        raise HTTPException(status_code=404, detail="No override for that slug")
     return {"ok": True}
 
 

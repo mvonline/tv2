@@ -48,9 +48,14 @@ CATEGORY_INDEX_RE = re.compile(
     re.IGNORECASE,
 )
 
-# hls2.xyz subdomains (gg., ggg., …) block direct browser playback off-site; needs same-origin or reverse proxy.
+# Hosts that must go through the HLS proxy (CORS-blocked or geo/ISP-blocked in EU).
+_PROXY_HOSTS = (
+    ".hls2.xyz",    # aparatchi CDN — blocks off-site Origin/Referer
+    ".presstv.ir",  # iFilm / PressTV — DNS-blocked by many EU ISPs (live*, live4*, etc.)
+)
+
 def stream_requires_proxy(url: str | None) -> bool:
     if not url:
         return False
     host = urlparse(url).netloc.lower()
-    return host.endswith(".hls2.xyz")
+    return any(host == h or host.endswith("." + h) if not h.startswith(".") else host.endswith(h) for h in _PROXY_HOSTS)
