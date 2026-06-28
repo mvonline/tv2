@@ -12,6 +12,9 @@ import * as PopupMenu from "resource:///org/gnome/shell/ui/popupMenu.js";
 const TV_URL = "http://127.0.0.1:8080/";
 const ADMIN_URL = "http://127.0.0.1:8080/admin";
 const FEATURED_URL = "http://127.0.0.1:8080/";
+const PROJECT_DIR = GLib.build_filenamev([GLib.get_home_dir(), "personal-project", "tv2"]);
+const CHANNELS_FILE = GLib.build_filenamev([PROJECT_DIR, "backend", "data", "channels.json"]);
+const MINI_PLAYER_GEOMETRY = "480x270-24-64";
 
 function shellQuote(value) {
   return `'${String(value).replace(/'/g, "'\\''")}'`;
@@ -26,6 +29,13 @@ function launch(commandLine) {
   } catch (error) {
     Main.notifyError("TV2 Shell", String(error));
   }
+}
+
+function launchProcess(args) {
+  return Gio.Subprocess.new(
+    args,
+    Gio.SubprocessFlags.STDOUT_SILENCE | Gio.SubprocessFlags.STDERR_SILENCE,
+  );
 }
 
 function openUrl(url, fullscreen = false) {
@@ -55,10 +65,34 @@ function openUrl(url, fullscreen = false) {
   launch(`${browser} --app=${shellQuote(url)}`);
 }
 
+function loadChannels() {
+  try {
+    const file = Gio.File.new_for_path(CHANNELS_FILE);
+    const [ok, contents] = file.load_contents(null);
+    if (!ok) {
+      return [];
+    }
+
+    const data = JSON.parse(new TextDecoder().decode(contents));
+    return (data.channels ?? [])
+      .filter((channel) => channel.media_type !== "radio" && channel.stream_url)
+      .map((channel) => ({
+        name: channel.name,
+        url: channel.stream_url,
+      }));
+  } catch (error) {
+    Main.notifyError("TV2 Mini Player", String(error));
+    return [];
+  }
+}
+
 const Tv2Indicator = GObject.registerClass(
   class Tv2Indicator extends PanelMenu.Button {
     _init() {
       super._init(0.0, "TV2 Shell");
+      this._channels = loadChannels();
+      this._channelIndex = 0;
+      this._playerProcess = null;
 
       const box = new St.BoxLayout({
         style_class: "tv2-panel-button",
@@ -81,9 +115,99 @@ const Tv2Indicator = GObject.registerClass(
       this.menu.addAction("Open Admin", () => openUrl(ADMIN_URL));
       this.menu.addAction("Featured Rotator", () => openUrl(FEATURED_URL));
       this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+      this._buildMiniPlayerMenu();
+      this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
       this.menu.addAction("Start TV2 Docker", () => {
-        launch("cd ~/personal-project/tv2 && docker compose up -d");
+        launch(`cd ${shellQuote(PROJECT_DIR)} && docker compose up -d`);
       });
+    }
+
+    _buildMiniPlayerMenu() {
+      const miniMenu = new PopupMenu.PopupSubMenuMenuItem("Mini Player");
+      this._channelLabel = new PopupMenu.PopupMenuItem(this._currentChannelLabel(), {
+        reactive: false,
+        can_focus: false,
+      });
+
+      miniMenu.menu.addMenuItem(this._channelLabel);
+      miniMenu.menu.addAction("Play / Bring to Front", () => this._playCurrentChannel());
+      miniMenu.menu.addAction("Previous Channel", () => this._stepChannel(-1));
+      miniMenu.menu.addAction("Next Channel", () => this._stepChannel(1));
+      miniMenu.menu.addAction("Stop Player", () => this._stopPlayer());
+      miniMenu.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+
+      this._channels.slice(0, 12).forEach((channel, index) => {
+        miniMenu.menu.addAction(channel.name, () => {
+          this._channelIndex = index;
+          this._playCurrentChannel();
+        });
+      });
+
+      this.menu.addMenuItem(miniMenu);
+    }
+
+    _currentChannelLabel() {
+      if (!this._channels.length) {
+        return "No local channels found";
+      }
+
+      return `${this._channelIndex + 1}/${this._channels.length}: ${this._channels[this._channelIndex].name}`;
+    }
+
+    _refreshChannelLabel() {
+      this._channelLabel?.label.set_text(this._currentChannelLabel());
+    }
+
+    _stepChannel(delta) {
+      if (!this._channels.length) {
+        Main.notifyError("TV2 Mini Player", `No channels found in ${CHANNELS_FILE}`);
+        return;
+      }
+
+      this._channelIndex = (this._channelIndex + delta + this._channels.length) % this._channels.length;
+      this._playCurrentChannel();
+    }
+
+    _stopPlayer() {
+      if (this._playerProcess) {
+        this._playerProcess.force_exit();
+        this._playerProcess = null;
+      }
+    }
+
+    _playCurrentChannel() {
+      if (!this._channels.length) {
+        Main.notifyError("TV2 Mini Player", `No channels found in ${CHANNELS_FILE}`);
+        return;
+      }
+
+      if (!GLib.find_program_in_path("mpv")) {
+        Main.notifyError("TV2 Mini Player", "Install mpv to use the always-on-top mini player.");
+        return;
+      }
+
+      const channel = this._channels[this._channelIndex];
+      this._stopPlayer();
+      this._refreshChannelLabel();
+
+      try {
+        this._playerProcess = launchProcess([
+          "mpv",
+          "--ontop",
+          "--force-window=yes",
+          `--geometry=${MINI_PLAYER_GEOMETRY}`,
+          "--no-terminal",
+          "--title=TV2 Mini Player",
+          channel.url,
+        ]);
+      } catch (error) {
+        Main.notifyError("TV2 Mini Player", String(error));
+      }
+    }
+
+    destroy() {
+      this._stopPlayer();
+      super.destroy();
     }
   },
 );
