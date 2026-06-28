@@ -1,0 +1,13 @@
+{
+  "uuid": "tv2@mvonline.local",
+  "name": "TV2 Shell",
+  "description": "Open TV2 live TV and admin from the GNOME top bar.",
+  "shell-version": [
+    "45",
+    "46",
+    "47",
+    "48"
+  ],
+  "url": "https://github.com/mvonline/tv2",
+  "version": 1
+}

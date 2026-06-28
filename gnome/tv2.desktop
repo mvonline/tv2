@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=TV2
+Comment=Watch TV2 live channels
+Exec=sh -lc 'command -v google-chrome >/dev/null && google-chrome --app=http://127.0.0.1:8080/ || command -v chromium >/dev/null && chromium --app=http://127.0.0.1:8080/ || command -v chromium-browser >/dev/null && chromium-browser --app=http://127.0.0.1:8080/ || xdg-open http://127.0.0.1:8080/'
+Icon=video-display
+Terminal=false
+Categories=AudioVideo;TV;Player;
+StartupNotify=true
