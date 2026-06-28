@@ -80,6 +80,14 @@ def init_schema(conn: sqlite3.Connection) -> None:
         )
         """
     )
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS featured_channels (
+            channel_slug TEXT PRIMARY KEY NOT NULL,
+            sort_order INTEGER NOT NULL DEFAULT 0
+        )
+        """
+    )
     conn.commit()
 
 
@@ -189,6 +197,27 @@ def set_category_channel_order(
     conn.executemany(
         "INSERT INTO category_channel_order (category_slug, channel_slug, sort_order) VALUES (?, ?, ?)",
         [(category_slug, slug, i) for i, slug in enumerate(ordered_slugs)],
+    )
+    conn.commit()
+
+
+def get_featured_channel_slugs(conn: sqlite3.Connection) -> list[str]:
+    rows = conn.execute(
+        "SELECT channel_slug FROM featured_channels ORDER BY sort_order, channel_slug"
+    ).fetchall()
+    return [r["channel_slug"] for r in rows]
+
+
+def set_featured_channel_slugs(conn: sqlite3.Connection, slugs: list[str]) -> None:
+    conn.execute("DELETE FROM featured_channels")
+    clean: list[str] = []
+    for slug in slugs:
+        key = slug.strip()
+        if key and key not in clean:
+            clean.append(key)
+    conn.executemany(
+        "INSERT INTO featured_channels (channel_slug, sort_order) VALUES (?, ?)",
+        [(slug, i) for i, slug in enumerate(clean)],
     )
     conn.commit()
 

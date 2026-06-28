@@ -48,11 +48,25 @@ UPSTREAM_HEADERS = {
 }
 
 
-_ALLOWED_SUFFIXES = (".hls2.xyz", ".presstv.ir")
+TELEWEBION_HEADERS = {
+    **UPSTREAM_HEADERS,
+    "Referer": "https://www.telewebion.com/",
+    "Origin": "https://www.telewebion.com",
+}
+
+
+_ALLOWED_SUFFIXES = (".hls2.xyz", ".presstv.ir", ".telewebion.ir")
 
 def allowed_host(hostname: str) -> bool:
     h = hostname.lower()
     return any(h == s or h.endswith("." + s) if not s.startswith(".") else h.endswith(s) for s in _ALLOWED_SUFFIXES)
+
+
+def upstream_headers(hostname: str) -> dict[str, str]:
+    h = hostname.lower()
+    if h == "telewebion.ir" or h.endswith(".telewebion.ir"):
+        return dict(TELEWEBION_HEADERS)
+    return dict(UPSTREAM_HEADERS)
 
 
 def proxy_base_url(request: Request) -> str:
@@ -125,7 +139,7 @@ def proxy_hls(request: Request, url: str = Query(..., description="Upstream HLS 
     # stream=True prevents requests from buffering the full response body in memory.
     r = SESSION.get(
         url,
-        headers=dict(UPSTREAM_HEADERS),
+        headers=upstream_headers(target.netloc),
         timeout=60,
         allow_redirects=True,
         stream=True,
@@ -146,8 +160,9 @@ def proxy_hls(request: Request, url: str = Query(..., description="Upstream HLS 
     if is_m3u8:
         # Manifests are tiny (<10 KB) — buffer so we can rewrite URLs, then close.
         text = r.text
+        playlist_url = r.url or url
         r.close()
-        out = rewrite_playlist(text, url, proxy_self)
+        out = rewrite_playlist(text, playlist_url, proxy_self)
         return Response(
             content=out,
             media_type="application/vnd.apple.mpegurl",

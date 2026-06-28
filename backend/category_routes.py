@@ -23,12 +23,14 @@ from category_db import (
     delete_stream_override,
     get_all_channel_orders,
     get_channel_category_overrides,
+    get_featured_channel_slugs,
     get_stream_overrides,
     init_db,
     list_all,
     list_categories_public,
     set_category_channel_order,
     set_channel_category,
+    set_featured_channel_slugs,
     set_stream_override,
     upsert_category,
 )
@@ -161,6 +163,14 @@ def get_channel_config() -> dict:
     return {"category_overrides": overrides, "channel_order": orders}
 
 
+@router.get("/featured-channels")
+def get_featured_channels() -> dict:
+    init_db()
+    with connect() as conn:
+        slugs = get_featured_channel_slugs(conn)
+    return {"slugs": slugs}
+
+
 @admin_router.post("/admin/session")
 def admin_session(
     response: Response,
@@ -242,6 +252,10 @@ class ChannelOrderPayload(BaseModel):
     order: list[str]
 
 
+class FeaturedChannelsPayload(BaseModel):
+    slugs: list[str]
+
+
 @admin_router.get("/admin/channels")
 def admin_list_channels(
     category: str | None = Query(default=None),
@@ -303,6 +317,26 @@ def admin_set_channel_order(
     with connect() as conn:
         set_category_channel_order(conn, slug.strip().lower(), body.order)
     return {"ok": True}
+
+
+@admin_router.get("/admin/featured-channels")
+def admin_get_featured_channels(_: None = Depends(require_admin)) -> dict:
+    init_db()
+    with connect() as conn:
+        slugs = get_featured_channel_slugs(conn)
+    return {"slugs": slugs}
+
+
+@admin_router.put("/admin/featured-channels")
+def admin_set_featured_channels(
+    body: FeaturedChannelsPayload,
+    _: None = Depends(require_admin),
+) -> dict:
+    init_db()
+    with connect() as conn:
+        set_featured_channel_slugs(conn, body.slugs)
+        slugs = get_featured_channel_slugs(conn)
+    return {"ok": True, "slugs": slugs}
 
 
 class StreamOverridePayload(BaseModel):

@@ -2,6 +2,8 @@
 set -e
 cd /app
 export CATEGORY_DB_PATH="${CATEGORY_DB_PATH:-/data/categories.db}"
+export ANALYTICS_DB_PATH="${ANALYTICS_DB_PATH:-/data/analytics.db}"
+export EPG_DB_PATH="${EPG_DB_PATH:-/data/epg.db}"
 export CHANNELS_JSON_PATH="${CHANNELS_JSON_PATH:-/data/channel-data/channels.json}"
 export LOGO_DIR="${LOGO_DIR:-/data/logos}"
 
@@ -10,6 +12,8 @@ SCRAPE_MARKER="$CHANNEL_DATA_DIR/.tv2_scraped"
 SCRAPE_MODE="${SCRAPE_ON_START:-once}"
 
 mkdir -p "$(dirname "$CATEGORY_DB_PATH")"
+mkdir -p "$(dirname "$ANALYTICS_DB_PATH")"
+mkdir -p "$(dirname "$EPG_DB_PATH")"
 mkdir -p "$CHANNEL_DATA_DIR"
 mkdir -p "$LOGO_DIR"
 

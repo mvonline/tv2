@@ -32,10 +32,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 import analytics_db
+import epg_db
 from analytics_routes import admin_router as analytics_admin_router
 from analytics_routes import router as analytics_router
 from category_routes import admin_router, router as category_public_router, serve_admin_page
 from channels_fetch import maybe_fetch_channels_json
+from epg_routes import admin_router as epg_admin_router
+from epg_routes import refresh_all_configured_sources
+from epg_routes import router as epg_router
 from hls_proxy import router as hls_router
 from scraper_routes import router as scraper_router
 
@@ -58,7 +62,13 @@ async def _analytics_cleanup_loop(retention_days: int) -> None:
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     analytics_db.init_db()
+    epg_db.init_db()
     maybe_fetch_channels_json()
+    if os.environ.get("EPG_REFRESH_ON_STARTUP", "0").strip() == "1":
+        try:
+            refresh_all_configured_sources()
+        except Exception as exc:
+            print(f"EPG startup refresh failed: {exc}", flush=True)
     retention_days = max(1, int(os.environ.get("ANALYTICS_RETENTION_DAYS", "90")))
     cleanup_task = asyncio.create_task(_analytics_cleanup_loop(retention_days))
     try:
@@ -85,6 +95,8 @@ app.include_router(category_public_router, prefix="/api")
 app.include_router(admin_router, prefix="/api")
 app.include_router(analytics_router, prefix="/api")
 app.include_router(analytics_admin_router, prefix="/api")
+app.include_router(epg_router, prefix="/api")
+app.include_router(epg_admin_router, prefix="/api")
 app.include_router(scraper_router, prefix="/api")
 
 # Admin HTML — HTTP Basic (same handler at both paths)

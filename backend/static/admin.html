@@ -3,243 +3,723 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TV2 — Admin</title>
+  <title>TV2 Command</title>
   <style>
-    :root { font-family: system-ui, sans-serif; background: #0c0e14; color: #e8ecf5; }
-    body { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
-    h1 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem; }
-    p.muted { color: #8b93a7; font-size: 0.9rem; }
-    label { display: block; margin-top: 0.75rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: #8b93a7; }
-    input, button, select, textarea { font: inherit; padding: 0.5rem 0.75rem; border-radius: 8px; border: 1px solid #2a3142; background: #141824; color: inherit; }
-    textarea { resize: vertical; width: 100%; box-sizing: border-box; }
-    button { cursor: pointer; margin-top: 1rem; margin-right: 0.5rem; background: #2d3d8f; border-color: #4a5fc1; }
-    button.secondary { background: transparent; }
-    button.danger { background: #7f1d1d; border-color: #ef4444; }
-    button.success { background: #14532d; border-color: #22c55e; }
-    button.sm { font-size: 0.78rem; padding: 0.22rem 0.55rem; margin: 0; }
-    table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.88rem; }
-    th, td { text-align: left; padding: 0.45rem 0.5rem; border-bottom: 1px solid #1e2535; }
-    th { color: #8b93a7; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
-    .err { color: #f87171; margin-top: 0.5rem; font-size: 0.88rem; }
-    .ok { color: #4ade80; margin-top: 0.5rem; font-size: 0.88rem; }
-    .row-actions { display: flex; gap: 6px; align-items: center; }
-    .row-actions button { margin: 0; }
+    :root {
+      color-scheme: dark;
+      --bg: #080907;
+      --panel: #10120f;
+      --panel-2: #171a15;
+      --line: #2b3027;
+      --line-strong: #47503d;
+      --text: #f3f0e8;
+      --muted: #aaa796;
+      --soft: #777463;
+      --gold: #d6ff6d;
+      --green: #36e08f;
+      --cyan: #6ee7f7;
+      --red: #ff6b5f;
+      --amber: #ffbf5f;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
 
-    /* Tabs */
-    .tabs { display: flex; gap: 4px; margin: 1.5rem 0 1rem; border-bottom: 1px solid #2a3142; }
-    .tab-btn { background: transparent; border: none; border-bottom: 2px solid transparent; border-radius: 0; margin: 0; padding: 0.6rem 1rem; font-size: 0.9rem; color: #8b93a7; cursor: pointer; margin-bottom: -1px; }
-    .tab-btn.active { color: #e8ecf5; border-bottom-color: #4a5fc1; }
+    * { box-sizing: border-box; }
+    html { min-height: 100%; background: var(--bg); }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background:
+        linear-gradient(90deg, rgba(214, 255, 109, 0.04) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(214, 255, 109, 0.035) 1px, transparent 1px),
+        radial-gradient(circle at 20% 0%, rgba(54, 224, 143, 0.16), transparent 28rem),
+        radial-gradient(circle at 85% 16%, rgba(110, 231, 247, 0.12), transparent 26rem),
+        #080907;
+      background-size: 48px 48px, 48px 48px, auto, auto, auto;
+      padding: 18px;
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button {
+      min-height: 38px;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      padding: 0 14px;
+      color: var(--text);
+      background: linear-gradient(180deg, #252b1f, #151812);
+      cursor: pointer;
+    }
+    button:hover { border-color: var(--gold); }
+    button:disabled { opacity: 0.55; cursor: wait; }
+    button.secondary { background: rgba(255,255,255,0.03); color: var(--muted); }
+    button.danger { border-color: rgba(255,107,95,0.55); color: #ffd8d4; background: rgba(255,107,95,0.10); }
+    button.success { border-color: rgba(54,224,143,0.58); color: #d9ffeb; background: rgba(54,224,143,0.12); }
+    button.sm { min-height: 30px; padding: 0 10px; font-size: 0.78rem; margin: 0; }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #0b0d0a;
+      color: var(--text);
+      padding: 10px 11px;
+      outline: none;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(214,255,109,0.1); }
+    label {
+      display: block;
+      margin: 0 0 7px;
+      color: var(--soft);
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    code { color: var(--cyan); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+    .shell {
+      min-height: calc(100vh - 36px);
+      border: 1px solid rgba(214,255,109,0.2);
+      border-radius: 22px;
+      background: rgba(8, 9, 7, 0.72);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(10, 12, 9, 0.86);
+      backdrop-filter: blur(18px);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      border: 1px solid rgba(214,255,109,0.4);
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      background: linear-gradient(135deg, rgba(214,255,109,0.18), rgba(54,224,143,0.06));
+      font-weight: 900;
+    }
+    h1 { margin: 0; font-size: 1.05rem; letter-spacing: 0; }
+    .subtitle { margin: 2px 0 0; color: var(--muted); font-size: 0.82rem; }
+    .status-strip { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 30px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.03);
+      font-size: 0.78rem;
+    }
+    .dot { width: 7px; height: 7px; border-radius: 999px; background: var(--green); box-shadow: 0 0 16px var(--green); }
+
+    .console {
+      display: grid;
+      grid-template-columns: 82px minmax(0, 1fr);
+      min-height: calc(100vh - 105px);
+    }
+    .rail {
+      padding: 14px 12px;
+      border-right: 1px solid var(--line);
+      background: rgba(13, 15, 11, 0.82);
+    }
+    .tabs {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 0;
+      border: 0;
+    }
+    .tab-btn {
+      width: 58px;
+      height: 58px;
+      min-height: 58px;
+      border-radius: 14px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid transparent;
+      margin: 0;
+      font-weight: 900;
+      font-size: 1.15rem;
+    }
+    .tab-btn.active {
+      color: var(--bg);
+      background: var(--gold);
+      border-color: var(--gold);
+      box-shadow: 0 12px 35px rgba(214,255,109,0.18);
+    }
+    .tab-btn span { font-size: 0.58rem; display: block; margin-top: 2px; font-weight: 900; }
+    .workspace { min-width: 0; padding: 22px; }
+
+    .login-panel {
+      display: grid;
+      grid-template-columns: minmax(280px, 440px) minmax(240px, 1fr);
+      gap: 22px;
+      padding: 24px;
+    }
+    .login-card, .hero-panel, .command-card, .chart-section, .scrape-result {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(16, 18, 15, 0.86);
+      box-shadow: 0 14px 44px rgba(0,0,0,0.25);
+    }
+    .login-card { padding: 22px; }
+    .login-card h2, .hero-panel h2 { margin: 0 0 8px; font-size: 1.45rem; }
+    .hero-panel { padding: 22px; display: flex; flex-direction: column; justify-content: space-between; min-height: 330px; }
+    .signal-line {
+      height: 120px;
+      border: 1px solid rgba(214,255,109,0.16);
+      border-radius: 12px;
+      background:
+        linear-gradient(90deg, transparent 0 7%, rgba(214,255,109,0.45) 7% 8%, transparent 8% 17%, rgba(110,231,247,0.35) 17% 18%, transparent 18% 100%),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 18px);
+    }
+    .form-grid { display: grid; gap: 13px; margin-top: 18px; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 16px; }
+
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .kicker { margin: 0 0 5px; color: var(--gold); font-size: 0.72rem; text-transform: uppercase; font-weight: 900; }
+    .panel-head h2 { margin: 0; font-size: clamp(1.5rem, 4vw, 3.2rem); line-height: 0.96; max-width: 780px; }
+    .muted { color: var(--muted); font-size: 0.9rem; }
+    .err, .ok { margin: 10px 0 0; font-size: 0.88rem; }
+    .err { color: var(--red); }
+    .ok { color: var(--green); }
 
-    /* Stat cards */
-    .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin: 1rem 0 1.5rem; }
-    .stat-card { background: #141824; border: 1px solid #2a3142; border-radius: 10px; padding: 1rem 1.25rem; }
-    .stat-card__val { font-size: 1.75rem; font-weight: 700; font-variant-numeric: tabular-nums; color: #a5b4fc; }
-    .stat-card__lbl { font-size: 0.75rem; color: #8b93a7; margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 0.06em; }
-
-    /* Bar chart */
-    .bar-chart { display: flex; align-items: flex-end; gap: 3px; height: 80px; margin: 0.75rem 0 0.25rem; }
-    .bar-chart__col { display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%; justify-content: flex-end; }
-    .bar-chart__bar { width: 100%; background: #4a5fc1; border-radius: 3px 3px 0 0; min-height: 2px; transition: height 0.3s; }
-    .bar-chart__bar:hover { background: #818cf8; }
-    .bar-chart__lbl { font-size: 0.6rem; color: #8b93a7; margin-top: 3px; }
-    .chart-section { background: #141824; border: 1px solid #2a3142; border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; }
-    .chart-section h3 { margin: 0 0 0.5rem; font-size: 0.88rem; color: #8b93a7; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
-
-    /* Browser badge */
-    .badge { display: inline-block; font-size: 0.72rem; padding: 2px 7px; border-radius: 999px; background: #1e2535; color: #a5b4fc; }
-    .ip-cell { font-family: monospace; font-size: 0.82rem; }
-    .time-cell { color: #8b93a7; white-space: nowrap; }
-
-    /* Category expand panel */
-    .cat-expand-btn { background: transparent; border: none; color: #8b93a7; padding: 0 4px; margin: 0; font-size: 0.9rem; cursor: pointer; }
-    .cat-expand-btn:hover { color: #e8ecf5; }
-    tr.cat-row { cursor: default; }
-    tr.cat-row td { vertical-align: middle; }
-    .inline-edit { display: none; gap: 6px; align-items: center; }
-    .inline-edit input { padding: 0.2rem 0.4rem; font-size: 0.85rem; width: auto; }
+    .category-stage {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 18px;
+      align-items: start;
+    }
+    .command-card { padding: 16px; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; background: rgba(10,12,9,0.72); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td { text-align: left; padding: 12px 13px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+    th { color: var(--soft); font-size: 0.68rem; font-weight: 900; text-transform: uppercase; white-space: nowrap; }
+    tbody tr:hover td { background: rgba(214,255,109,0.035); }
+    .row-actions, .drawer-actions, .ch-move { display: flex; gap: 7px; align-items: center; flex-wrap: wrap; }
+    .cat-expand-btn {
+      width: 30px;
+      min-height: 30px;
+      padding: 0;
+      margin: 0;
+      border-radius: 999px;
+      background: rgba(214,255,109,0.08);
+      color: var(--gold);
+    }
+    .cat-label-display { cursor: pointer; font-weight: 700; }
+    .inline-edit { display: none; gap: 7px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
     .inline-edit.visible { display: flex; }
-    .cat-label-display { cursor: pointer; }
-    .cat-label-display:hover { text-decoration: underline dotted; }
+    .inline-edit input { width: 130px; min-height: 32px; padding: 6px 8px; }
+    .ch-count, .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 0 9px;
+      border-radius: 999px;
+      background: rgba(110,231,247,0.10);
+      color: var(--cyan);
+      border: 1px solid rgba(110,231,247,0.2);
+      font-size: 0.76rem;
+    }
+    .active-toggle { cursor: pointer; color: var(--green); font-weight: 800; }
 
-    /* Channel drawer */
-    tr.ch-drawer-row td { padding: 0; border-bottom: 2px solid #4a5fc1; }
-    .ch-drawer { background: #0f1320; border-left: 3px solid #4a5fc1; padding: 12px 16px; }
-    .ch-drawer h4 { margin: 0 0 10px; font-size: 0.82rem; color: #8b93a7; text-transform: uppercase; letter-spacing: 0.05em; }
-    .ch-list { list-style: none; margin: 0; padding: 0; max-height: 360px; overflow-y: auto; }
-    .ch-row { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 6px; margin-bottom: 3px; background: #141824; border: 1px solid #1e2535; }
-    .ch-row.dragging { opacity: 0.4; }
-    .ch-row.drag-over { border-color: #4a5fc1; background: #1a2040; }
-    .ch-grip { color: #4a5566; cursor: grab; font-size: 1rem; user-select: none; flex-shrink: 0; }
-    .ch-grip:active { cursor: grabbing; }
-    .ch-name { flex: 1; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .ch-move { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-    .ch-move select { padding: 0.18rem 0.4rem; font-size: 0.78rem; }
-    .ch-remove { background: transparent; border: 1px solid #3a2020; color: #f87171; flex-shrink: 0; }
-    .ch-remove:hover { background: #3a2020; }
-    .drawer-actions { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
-    .drawer-actions button { margin: 0; }
-    .ch-count { font-size: 0.78rem; color: #8b93a7; background: #1e2535; padding: 2px 8px; border-radius: 999px; }
-    .loading-text { color: #8b93a7; font-size: 0.85rem; padding: 8px 0; }
+    tr.ch-drawer-row td { padding: 0; background: #0c0e0b; }
+    .ch-drawer { padding: 14px; border-left: 4px solid var(--gold); }
+    .ch-drawer h4 { margin: 0 0 12px; color: var(--muted); text-transform: uppercase; font-size: 0.75rem; }
+    .ch-list { list-style: none; padding: 0; margin: 0; max-height: 420px; overflow-y: auto; display: grid; gap: 7px; }
+    .ch-row {
+      display: grid;
+      grid-template-columns: 28px minmax(160px, 1fr) auto auto auto;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.03);
+    }
+    .ch-row.dragging { opacity: 0.42; }
+    .ch-row.drag-over { border-color: var(--gold); background: rgba(214,255,109,0.08); }
+    .ch-grip { color: var(--soft); cursor: grab; user-select: none; }
+    .ch-name { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .ch-remove { min-width: 32px; }
+    .loading-text { color: var(--muted); }
 
-    /* Scraper */
-    .scrape-result { background: #141824; border: 1px solid #2a3142; border-radius: 10px; padding: 1rem 1.25rem; margin-top: 1rem; }
-    .scrape-result h3 { margin: 0 0 0.75rem; font-size: 0.88rem; color: #8b93a7; text-transform: uppercase; letter-spacing: 0.05em; }
-    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px; }
-    .field-row label { margin-top: 0; }
-    .field-row input, .field-row select { width: 100%; box-sizing: border-box; }
-    .stream-url-full { font-family: monospace; font-size: 0.78rem; color: #a5b4fc; word-break: break-all; background: #0c0e14; padding: 6px 8px; border-radius: 6px; border: 1px solid #2a3142; margin: 6px 0; }
-    .logo-preview { width: 40px; height: 40px; object-fit: contain; border-radius: 4px; background: #1e2535; vertical-align: middle; margin-right: 6px; }
-    .active-toggle { cursor: pointer; }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(130px, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .stat-card {
+      min-height: 128px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(214,255,109,0.08), rgba(255,255,255,0.025));
+    }
+    .stat-card__val { font-size: 2.4rem; font-weight: 950; color: var(--gold); font-variant-numeric: tabular-nums; }
+    .stat-card__lbl { margin-top: 8px; color: var(--muted); font-size: 0.72rem; text-transform: uppercase; font-weight: 900; }
+    .chart-section { padding: 16px; margin-bottom: 14px; }
+    .chart-section h3 { margin: 0 0 12px; font-size: 0.82rem; color: var(--muted); text-transform: uppercase; }
+    .bar-chart { display: flex; align-items: flex-end; gap: 4px; height: 120px; }
+    .bar-chart__col { flex: 1; min-width: 8px; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; }
+    .bar-chart__bar { width: 100%; min-height: 2px; border-radius: 6px 6px 0 0; background: linear-gradient(180deg, var(--gold), var(--green)); }
+    .bar-chart__lbl { margin-top: 5px; color: var(--soft); font-size: 0.58rem; }
+    .analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .ip-cell { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--cyan); }
+    .time-cell { color: var(--muted); white-space: nowrap; }
+
+    .scrape-shell { display: grid; grid-template-columns: minmax(280px, 420px) minmax(0, 1fr); gap: 18px; }
+    .scrape-result { padding: 16px; margin-top: 0; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .stream-url-full {
+      min-height: 42px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #090b08;
+      color: var(--cyan);
+      word-break: break-all;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.78rem;
+    }
+    .logo-preview { width: 46px; height: 46px; object-fit: contain; border-radius: 10px; background: #0b0d0a; border: 1px solid var(--line); vertical-align: middle; margin-right: 8px; }
+
+    @media (max-width: 980px) {
+      body { padding: 0; }
+      .shell { min-height: 100vh; border-radius: 0; border: 0; }
+      .console, .login-panel, .category-stage, .scrape-shell, .analytics-grid { grid-template-columns: 1fr; }
+      .rail { border-right: 0; border-bottom: 1px solid var(--line); padding: 10px; }
+      .tabs { flex-direction: row; }
+      .tab-btn { width: 100%; height: 48px; min-height: 48px; }
+      .workspace { padding: 16px; }
+      .stat-grid { grid-template-columns: repeat(2, minmax(130px, 1fr)); }
+      .panel-head { align-items: start; flex-direction: column; }
+      .topbar { align-items: start; flex-direction: column; }
+      .status-strip { justify-content: flex-start; }
+      .ch-row { grid-template-columns: 24px minmax(120px, 1fr); }
+      .ch-move, .ch-remove { grid-column: 2; }
+      .field-row { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .stat-grid { grid-template-columns: 1fr; }
+      .login-card, .hero-panel, .command-card, .chart-section, .scrape-result { border-radius: 12px; }
+      th, td { padding: 10px; }
+    }
   </style>
 </head>
 <body>
-  <h1>TV2 Admin</h1>
-  <p class="muted">Sign in with HTTP Basic (<code>ADMIN_USER</code> / <code>ADMIN_PASSWORD</code>). Session cookie is set after "Save session".</p>
-
-  <div id="login">
-    <label>Username</label>
-    <input type="text" id="user" autocomplete="username" />
-    <label>Password</label>
-    <input type="password" id="pass" autocomplete="current-password" />
-    <div>
-      <button type="button" id="btnSession">Save session (cookie)</button>
-      <button type="button" class="secondary" id="btnLoad">Load</button>
-    </div>
-    <p id="err" class="err" hidden></p>
-  </div>
-
-  <div id="main" hidden>
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="categories">Categories</button>
-      <button class="tab-btn" data-tab="analytics">Analytics</button>
-      <button class="tab-btn" data-tab="scraper">Manual Scraper</button>
-    </div>
-
-    <!-- ── Categories tab ── -->
-    <div class="tab-panel active" id="tab-categories">
-      <p class="muted" style="margin:0 0 0.5rem">Click a category row to expand and manage its channels. Drag channels to reorder.</p>
-      <table id="tbl">
-        <thead>
-          <tr><th></th><th>Slug</th><th>Label</th><th>Sort</th><th>Active</th><th>Channels</th><th>Actions</th></tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-      </table>
-
-      <form id="add">
-        <h2 style="font-size:1rem;margin-top:2rem;">Add / update category</h2>
-        <label>Slug</label>
-        <input name="slug" required pattern="[a-z0-9-]+" placeholder="e.g. sport" />
-        <label>Label</label>
-        <input name="label" required />
-        <label>Sort order</label>
-        <input name="sort_order" type="number" value="100" />
-        <label><input type="checkbox" name="active" checked /> Active</label>
-        <div><button type="submit">Add</button></div>
-        <p id="cat-err" class="err" hidden></p>
-      </form>
-    </div>
-
-    <!-- ── Analytics tab ── -->
-    <div class="tab-panel" id="tab-analytics">
-      <div style="display:flex;gap:8px;align-items:center;margin:0.75rem 0;">
-        <button type="button" class="secondary" id="btnRefresh" style="margin:0;">↺ Refresh</button>
-        <select id="daysPicker" style="margin:0;">
-          <option value="7">Last 7 days</option>
-          <option value="30" selected>Last 30 days</option>
-          <option value="90">Last 90 days</option>
-        </select>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark">TV2</div>
+        <div>
+          <h1>Signal Command</h1>
+          <p class="subtitle">Categories, streams, analytics, and capture tools.</p>
+        </div>
       </div>
-      <div class="stat-grid" id="statGrid">
-        <div class="stat-card"><div class="stat-card__val" id="s-total">—</div><div class="stat-card__lbl">Total views</div></div>
-        <div class="stat-card"><div class="stat-card__val" id="s-today">—</div><div class="stat-card__lbl">Today</div></div>
-        <div class="stat-card"><div class="stat-card__val" id="s-ips">—</div><div class="stat-card__lbl">Unique IPs</div></div>
-        <div class="stat-card"><div class="stat-card__val" id="s-channels">—</div><div class="stat-card__lbl">Channels watched</div></div>
+      <div class="status-strip">
+        <span class="pill"><span class="dot"></span>Backend admin</span>
+        <span class="pill">Port 8787</span>
+        <span class="pill">FastAPI</span>
       </div>
-      <div class="chart-section">
-        <h3>Views by hour of day <span id="hourChartLabel" style="font-weight:400;color:#6b7280;"></span></h3>
-        <div class="bar-chart" id="hourChart"></div>
-      </div>
-      <div class="chart-section">
-        <h3>Views by day <span id="dayChartLabel" style="font-weight:400;color:#6b7280;"></span></h3>
-        <div class="bar-chart" id="dayChart"></div>
-      </div>
-      <h3 style="font-size:0.88rem;color:#8b93a7;text-transform:uppercase;letter-spacing:0.05em;margin:1.5rem 0 0.5rem;">Top channels</h3>
-      <table>
-        <thead><tr><th>#</th><th>Channel</th><th>Views</th></tr></thead>
-        <tbody id="topChannels"></tbody>
-      </table>
-      <h3 style="font-size:0.88rem;color:#8b93a7;text-transform:uppercase;letter-spacing:0.05em;margin:1.5rem 0 0.5rem;">Recent views (last 50)</h3>
-      <table>
-        <thead><tr><th>Time</th><th>Channel</th><th>IP</th><th>Browser</th></tr></thead>
-        <tbody id="recentViews"></tbody>
-      </table>
-    </div>
+    </header>
 
-    <!-- ── Manual Scraper tab ── -->
-    <div class="tab-panel" id="tab-scraper">
-      <p class="muted" style="margin:0 0 1rem">Paste a channel page URL to extract the stream and add it to the channel list.</p>
-      <label>Channel page URL</label>
-      <div style="display:flex;gap:8px;align-items:flex-end;margin-top:6px;">
-        <input type="url" id="scrapeUrl" placeholder="https://example.com/live/channel-name" style="flex:1;" />
-        <button type="button" id="btnScrape" style="margin:0;">Scrape</button>
-      </div>
-      <p id="scrape-err" class="err" hidden></p>
-      <p id="scrape-ok" class="ok" hidden></p>
-
-      <div id="scrapeResult" hidden>
-        <div class="scrape-result">
-          <h3>Detected channel</h3>
-          <div id="scrapeLogoRow" style="margin-bottom:8px;display:none;">
-            <img id="scrapeLogo" class="logo-preview" src="" alt="" />
-            <span id="scrapeLogoUrl" style="font-size:0.78rem;color:#8b93a7;"></span>
-          </div>
-          <div class="field-row">
-            <div>
-              <label>Channel name</label>
-              <input type="text" id="scrapeNameInput" />
-            </div>
-            <div>
-              <label>Slug (URL key)</label>
-              <input type="text" id="scrapeSlugInput" />
-            </div>
+    <section id="login" class="login-panel">
+      <div class="login-card">
+        <p class="kicker">Access</p>
+        <h2>Open the control room.</h2>
+        <p class="muted">Use <code>ADMIN_USER</code> and <code>ADMIN_PASSWORD</code>. Saving a session stores the admin cookie.</p>
+        <div class="form-grid">
+          <div>
+            <label>Username</label>
+            <input type="text" id="user" autocomplete="username" />
           </div>
           <div>
-            <label>Stream URL</label>
-            <div id="scrapeStreamUrl" class="stream-url-full">—</div>
+            <label>Password</label>
+            <input type="password" id="pass" autocomplete="current-password" />
           </div>
-          <div class="field-row" style="margin-top:8px;">
+        </div>
+        <div class="actions">
+          <button type="button" id="btnSession">Save session</button>
+          <button type="button" class="secondary" id="btnLoad">Load once</button>
+        </div>
+        <p id="err" class="err" hidden></p>
+      </div>
+      <div class="hero-panel">
+        <div>
+          <p class="kicker">Live operations</p>
+          <h2>One interface for tuning the whole channel graph.</h2>
+          <p class="muted">Built around quick scanning, direct edits, and fewer page transitions.</p>
+        </div>
+        <div class="signal-line" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section id="main" class="console" hidden>
+      <aside class="rail">
+        <nav class="tabs" aria-label="Admin sections">
+          <button class="tab-btn active" data-tab="categories" title="Categories">C<span>CAT</span></button>
+          <button class="tab-btn" data-tab="channels" title="Channels">L<span>LIST</span></button>
+          <button class="tab-btn" data-tab="featured" title="Featured">F<span>FEAT</span></button>
+          <button class="tab-btn" data-tab="analytics" title="Analytics">A<span>DATA</span></button>
+          <button class="tab-btn" data-tab="epg" title="EPG viewer">E<span>EPG</span></button>
+          <button class="tab-btn" data-tab="scraper" title="Manual scraper">S<span>SCAN</span></button>
+        </nav>
+      </aside>
+
+      <div class="workspace">
+        <div class="tab-panel active" id="tab-categories">
+          <div class="panel-head">
             <div>
-              <label>Stream type</label>
-              <input type="text" id="scrapeStreamType" readonly />
+              <p class="kicker">Channel topology</p>
+              <h2>Shape categories without leaving the list.</h2>
             </div>
+            <p class="muted">Expand a row to move, remove, or reorder channels.</p>
+          </div>
+          <div class="category-stage">
+            <div class="table-wrap">
+              <table id="tbl">
+                <thead>
+                  <tr><th></th><th>Slug</th><th>Label</th><th>Sort</th><th>Active</th><th>Channels</th><th>Actions</th></tr>
+                </thead>
+                <tbody id="tbody"></tbody>
+              </table>
+            </div>
+
+            <form id="add" class="command-card">
+              <p class="kicker">Create node</p>
+              <h2 style="margin:0 0 14px;font-size:1.2rem;">Add or update category</h2>
+              <div class="form-grid">
+                <div>
+                  <label>Slug</label>
+                  <input name="slug" required pattern="[a-z0-9-]+" placeholder="sport" />
+                </div>
+                <div>
+                  <label>Label</label>
+                  <input name="label" required placeholder="Sport" />
+                </div>
+                <div>
+                  <label>Sort order</label>
+                  <input name="sort_order" type="number" value="100" />
+                </div>
+                <label style="display:flex;gap:9px;align-items:center;margin:2px 0 0;text-transform:none;font-size:.86rem;color:var(--muted);">
+                  <input type="checkbox" name="active" checked style="width:auto;" /> Active
+                </label>
+              </div>
+              <div class="actions"><button type="submit">Commit category</button></div>
+              <p id="cat-err" class="err" hidden></p>
+            </form>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-channels">
+          <div class="panel-head">
             <div>
-              <label>Category</label>
-              <select id="scrapeCategorySelect"></select>
+              <p class="kicker">Channel registry</p>
+              <h2>Search, edit, and remove channels.</h2>
+            </div>
+            <div class="actions" style="margin:0;">
+              <button type="button" class="secondary" id="btnChannelsRefresh">Refresh</button>
             </div>
           </div>
-          <div style="margin-top:6px;">
-            <label>
-              <input type="checkbox" id="scrapeRequiresProxy" />
-              Requires proxy
-            </label>
+          <div class="scrape-shell">
+            <div class="command-card">
+              <label>Search channels</label>
+              <input type="search" id="channelSearchInput" placeholder="name, slug, host, category" />
+              <div class="actions"><button type="button" id="btnChannelSearch">Search</button></div>
+              <div class="table-wrap" style="margin-top:14px;max-height:520px;overflow:auto;">
+                <table>
+                  <thead><tr><th>Name</th><th>Slug</th><th>Host</th></tr></thead>
+                  <tbody id="channelCrudRows"><tr><td colspan="3" class="muted">Load channels to edit.</td></tr></tbody>
+                </table>
+              </div>
+              <p id="channels-err" class="err" hidden></p>
+              <p id="channels-ok" class="ok" hidden></p>
+            </div>
+            <div class="scrape-result">
+              <p class="kicker">Edit channel</p>
+              <div id="channelEditorEmpty" class="muted">Select a channel from the list.</div>
+              <div id="channelEditor" hidden>
+                <div class="field-row">
+                  <div>
+                    <label>Name</label>
+                    <input type="text" id="editChannelName" />
+                  </div>
+                  <div>
+                    <label>Slug</label>
+                    <input type="text" id="editChannelSlug" />
+                  </div>
+                </div>
+                <label>Page URL</label>
+                <input type="url" id="editChannelPageUrl" />
+                <label style="margin-top:12px;">Stream URL</label>
+                <textarea id="editChannelStreamUrl" rows="3"></textarea>
+                <div class="field-row" style="margin-top:12px;">
+                  <div>
+                    <label>Stream type</label>
+                    <input type="text" id="editChannelStreamType" placeholder="hls" />
+                  </div>
+                  <div>
+                    <label>Media type</label>
+                    <select id="editChannelMediaType">
+                      <option value="tv">TV</option>
+                      <option value="radio">Radio</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field-row">
+                  <div>
+                    <label>Category</label>
+                    <select id="editChannelCategory"></select>
+                  </div>
+                  <div>
+                    <label>Logo path</label>
+                    <input type="text" id="editChannelLogo" placeholder="logo/example.svg" />
+                  </div>
+                </div>
+                <label style="display:flex;gap:9px;align-items:center;margin-top:6px;text-transform:none;font-size:.86rem;color:var(--muted);">
+                  <input type="checkbox" id="editChannelRequiresProxy" style="width:auto;" />
+                  Requires proxy
+                </label>
+                <div class="actions">
+                  <button type="button" id="btnChannelSave" class="success">Save channel</button>
+                  <button type="button" id="btnChannelDelete" class="danger">Delete channel</button>
+                </div>
+              </div>
+            </div>
           </div>
-          <div style="margin-top:12px;">
-            <button type="button" id="btnAddChannel" class="success">Add to channels</button>
-            <button type="button" class="secondary" id="btnClearScrape" style="font-size:0.85rem;">Clear</button>
+        </div>
+
+        <div class="tab-panel" id="tab-featured">
+          <div class="panel-head">
+            <div>
+              <p class="kicker">Homepage rotator</p>
+              <h2>Select channels for the featured carousel.</h2>
+            </div>
+            <div class="actions" style="margin:0;">
+              <button type="button" class="secondary" id="btnFeaturedReload">Reload</button>
+              <button type="button" id="btnFeaturedSave" class="success">Save featured</button>
+            </div>
+          </div>
+          <div class="scrape-shell">
+            <div class="command-card">
+              <label>Find channels</label>
+              <input type="search" id="featuredSearchInput" placeholder="name, slug, host, category" />
+              <div class="actions"><button type="button" id="btnFeaturedSearch">Search</button></div>
+              <div class="table-wrap" style="margin-top:14px;max-height:520px;overflow:auto;">
+                <table>
+                  <thead><tr><th>Name</th><th>Slug</th><th></th></tr></thead>
+                  <tbody id="featuredSearchRows"><tr><td colspan="3" class="muted">Search channels to add.</td></tr></tbody>
+                </table>
+              </div>
+              <p id="featured-err" class="err" hidden></p>
+              <p id="featured-ok" class="ok" hidden></p>
+            </div>
+            <div class="scrape-result">
+              <p class="kicker">Featured order</p>
+              <ul class="ch-list" id="featuredSelectedList"></ul>
+              <p class="muted" id="featuredEmpty">No featured channels selected.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-analytics">
+          <div class="panel-head">
+            <div>
+              <p class="kicker">Audience telemetry</p>
+              <h2>Watch demand move through time.</h2>
+            </div>
+            <div class="actions" style="margin:0;">
+              <button type="button" class="secondary" id="btnRefresh">Refresh</button>
+              <select id="daysPicker" style="width:150px;">
+                <option value="7">Last 7 days</option>
+                <option value="30" selected>Last 30 days</option>
+                <option value="90">Last 90 days</option>
+              </select>
+            </div>
+          </div>
+          <div class="stat-grid" id="statGrid">
+            <div class="stat-card"><div class="stat-card__val" id="s-total">-</div><div class="stat-card__lbl">Total views</div></div>
+            <div class="stat-card"><div class="stat-card__val" id="s-today">-</div><div class="stat-card__lbl">Today</div></div>
+            <div class="stat-card"><div class="stat-card__val" id="s-ips">-</div><div class="stat-card__lbl">Unique IPs</div></div>
+            <div class="stat-card"><div class="stat-card__val" id="s-channels">-</div><div class="stat-card__lbl">Channels watched</div></div>
+          </div>
+          <div class="analytics-grid">
+            <div class="chart-section">
+              <h3>Views by hour <span id="hourChartLabel"></span></h3>
+              <div class="bar-chart" id="hourChart"></div>
+            </div>
+            <div class="chart-section">
+              <h3>Views by day <span id="dayChartLabel"></span></h3>
+              <div class="bar-chart" id="dayChart"></div>
+            </div>
+          </div>
+          <div class="analytics-grid">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>#</th><th>Channel</th><th>Views</th></tr></thead>
+                <tbody id="topChannels"></tbody>
+              </table>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Time</th><th>Channel</th><th>IP</th><th>Browser</th></tr></thead>
+                <tbody id="recentViews"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-epg">
+          <div class="panel-head">
+            <div>
+              <p class="kicker">Programme guide</p>
+              <h2>Map XMLTV IDs and preview schedules.</h2>
+            </div>
+            <div class="actions" style="margin:0;">
+              <button type="button" class="secondary" id="btnEpgRefresh">Refresh XMLTV</button>
+            </div>
+          </div>
+          <div class="scrape-shell">
+            <div class="command-card">
+              <p class="kicker">Channel mapping</p>
+              <div class="form-grid">
+                <div>
+                  <label>Channel</label>
+                  <select id="epgChannelSelect"></select>
+                </div>
+                <div>
+                  <label>XMLTV channel id</label>
+                  <input type="text" id="epgIdInput" placeholder="BBCOne.uk" />
+                </div>
+                <div>
+                  <label>XMLTV URL override</label>
+                  <input type="url" id="epgUrlInput" placeholder="Uses EPG_XMLTV_URL when empty" />
+                </div>
+              </div>
+              <div class="actions">
+                <button type="button" id="btnSaveEpg">Save mapping</button>
+                <button type="button" class="secondary" id="btnLoadEpg">Load guide</button>
+                <button type="button" class="danger" id="btnDeleteEpg">Delete</button>
+              </div>
+              <p id="epg-err" class="err" hidden></p>
+              <p id="epg-ok" class="ok" hidden></p>
+            </div>
+            <div class="scrape-result">
+              <p class="kicker">Now and next</p>
+              <div id="epgNow" class="muted">Choose a mapped channel and load the guide.</div>
+              <div class="table-wrap" style="margin-top:14px;">
+                <table>
+                  <thead><tr><th>Time</th><th>Title</th><th>Category</th></tr></thead>
+                  <tbody id="epgRows"><tr><td colspan="3" class="muted">No guide loaded</td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-scraper">
+          <div class="panel-head">
+            <div>
+              <p class="kicker">Capture</p>
+              <h2>Extract a channel and stage it for the lineup.</h2>
+            </div>
+          </div>
+          <div class="scrape-shell">
+            <div class="command-card">
+              <label>Channel page URL</label>
+              <input type="url" id="scrapeUrl" placeholder="https://example.com/live/channel-name" />
+              <div class="actions"><button type="button" id="btnScrape">Scrape URL</button></div>
+              <p id="scrape-err" class="err" hidden></p>
+              <p id="scrape-ok" class="ok" hidden></p>
+            </div>
+
+            <div id="scrapeResult" hidden>
+              <div class="scrape-result">
+                <p class="kicker">Detected channel</p>
+                <div id="scrapeLogoRow" style="margin-bottom:12px;display:none;">
+                  <img id="scrapeLogo" class="logo-preview" src="" alt="" />
+                  <span id="scrapeLogoUrl" class="muted"></span>
+                </div>
+                <div class="field-row">
+                  <div>
+                    <label>Channel name</label>
+                    <input type="text" id="scrapeNameInput" />
+                  </div>
+                  <div>
+                    <label>Slug</label>
+                    <input type="text" id="scrapeSlugInput" />
+                  </div>
+                </div>
+                <label>Stream URL</label>
+                <textarea id="scrapeStreamUrlInput" rows="3" placeholder="https://example.com/live/master.m3u8"></textarea>
+                <div class="field-row" style="margin-top:12px;">
+                  <div>
+                    <label>Stream type</label>
+                    <input type="text" id="scrapeStreamType" placeholder="hls" />
+                  </div>
+                  <div>
+                    <label>Category</label>
+                    <select id="scrapeCategorySelect"></select>
+                  </div>
+                </div>
+                <label style="display:flex;gap:9px;align-items:center;margin-top:6px;text-transform:none;font-size:.86rem;color:var(--muted);">
+                  <input type="checkbox" id="scrapeRequiresProxy" style="width:auto;" />
+                  Requires proxy
+                </label>
+                <div class="actions">
+                  <button type="button" id="btnAddChannel" class="success">Add to channels</button>
+                  <button type="button" class="secondary" id="btnClearScrape">Clear</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <script>
     const api = (path) => "/api" + path;
     let allCategories = [];
     let scrapeData = null;
+    let epgMappings = [];
+    let channelCrudRows = [];
+    let selectedChannelSlug = "";
+    let featuredSlugs = [];
+    let featuredSearchRows = [];
 
-    // ── Auth helpers ──────────────────────────────────────────────────────────────
     function authHeader() {
       const u = document.getElementById("user").value.trim();
       const p = document.getElementById("pass").value;
@@ -269,7 +749,6 @@
       return r;
     }
 
-    // ── Session ───────────────────────────────────────────────────────────────────
     async function saveSession() {
       showErr("err", "");
       try {
@@ -284,11 +763,30 @@
       showErr("err", "");
       try {
         await Promise.all([loadCategories(), loadAnalytics()]);
+        await loadChannelCrud();
+        await loadFeatured();
         document.getElementById("main").hidden = false;
+        document.getElementById("login").hidden = true;
       } catch (e) { showErr("err", e.message || String(e)); }
     }
 
-    // ── Tab switching ─────────────────────────────────────────────────────────────
+    function populateCategoryOptions(selectEl, selectedValue) {
+      selectEl.innerHTML = "";
+      for (const cat of allCategories) {
+        const opt = document.createElement("option");
+        opt.value = cat.slug;
+        opt.textContent = cat.label;
+        if (cat.slug === selectedValue) opt.selected = true;
+        selectEl.appendChild(opt);
+      }
+    }
+
+    async function loadEpgMappings() {
+      const r = await authedFetch("/admin/epg/mappings");
+      epgMappings = await r.json();
+      await renderEpgChannelSelect();
+    }
+
     document.querySelectorAll(".tab-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
         const id = btn.dataset.tab;
@@ -299,11 +797,11 @@
       });
     });
 
-    // ── Categories ────────────────────────────────────────────────────────────────
     async function loadCategories() {
       const r = await authedFetch("/admin/categories");
       allCategories = await r.json();
       renderCategories(allCategories);
+      await loadEpgMappings();
     }
 
     function renderCategories(rows) {
@@ -314,29 +812,28 @@
         tr.className = "cat-row";
         tr.dataset.slug = row.slug;
         tr.innerHTML =
-          "<td><button class='cat-expand-btn' title='Show channels'>▶</button></td>" +
+          "<td><button class='cat-expand-btn' title='Show channels'>+</button></td>" +
           "<td><code>" + esc(row.slug) + "</code></td>" +
           "<td>" +
             "<span class='cat-label-display' title='Click to edit'>" + esc(row.label) + "</span>" +
             "<span class='inline-edit' id='edit-" + esc(row.slug) + "'>" +
-              "<input type='text' value='" + esc(row.label) + "' class='edit-label' style='width:120px' />" +
-              "<input type='number' value='" + row.sort_order + "' class='edit-sort' style='width:60px' />" +
+              "<input type='text' value='" + esc(row.label) + "' class='edit-label' />" +
+              "<input type='number' value='" + row.sort_order + "' class='edit-sort' style='width:76px' />" +
               "<button class='sm' onclick='saveInlineEdit(\"" + esc(row.slug) + "\")'>Save</button>" +
-              "<button class='sm secondary' onclick='cancelInlineEdit(\"" + esc(row.slug) + "\")'>✕</button>" +
+              "<button class='sm secondary' onclick='cancelInlineEdit(\"" + esc(row.slug) + "\")'>Cancel</button>" +
             "</span>" +
           "</td>" +
           "<td class='sort-cell'>" + row.sort_order + "</td>" +
           "<td><span class='active-toggle' title='Toggle active' data-slug='" + esc(row.slug) + "' data-active='" + row.active + "'>" +
-            (row.active ? "✓ yes" : "✗ no") +
+            (row.active ? "Live" : "Hidden") +
           "</span></td>" +
-          "<td><span class='ch-count' id='count-" + esc(row.slug) + "'>…</span></td>" +
+          "<td><span class='ch-count' id='count-" + esc(row.slug) + "'>...</span></td>" +
           "<td class='row-actions'>" +
             "<button class='sm secondary' onclick='startInlineEdit(\"" + esc(row.slug) + "\")'>Edit</button>" +
             "<button class='sm danger' data-del='" + esc(row.slug) + "'>Delete</button>" +
           "</td>";
         tb.appendChild(tr);
 
-        // Drawer row (hidden by default)
         const drawerTr = document.createElement("tr");
         drawerTr.className = "ch-drawer-row";
         drawerTr.id = "drawer-" + row.slug;
@@ -345,30 +842,25 @@
         tb.appendChild(drawerTr);
       }
 
-      // Bind expand buttons
       tb.querySelectorAll(".cat-expand-btn").forEach((btn) => {
         btn.addEventListener("click", (e) => {
           const slug = e.target.closest("tr").dataset.slug;
           toggleDrawer(slug, btn);
         });
       });
-      // Bind active toggle
       tb.querySelectorAll(".active-toggle").forEach((el) => {
         el.addEventListener("click", () => toggleActive(el.dataset.slug, el.dataset.active === "true", el));
       });
-      // Bind inline label click
       tb.querySelectorAll(".cat-label-display").forEach((el) => {
         el.addEventListener("click", () => {
           const slug = el.closest("tr").dataset.slug;
           if (slug) startInlineEdit(slug);
         });
       });
-      // Bind delete
       tb.querySelectorAll("button[data-del]").forEach((btn) =>
         btn.addEventListener("click", () => delCategory(btn.getAttribute("data-del")))
       );
 
-      // Load channel counts for all categories
       loadChannelCounts(rows.map(r => r.slug));
     }
 
@@ -384,7 +876,6 @@
       }
     }
 
-    // ── Inline edit ───────────────────────────────────────────────────────────────
     function startInlineEdit(slug) {
       document.getElementById("edit-" + slug).classList.add("visible");
     }
@@ -406,7 +897,6 @@
       } catch (e) { showErr("cat-err", e.message || String(e)); }
     }
 
-    // ── Active toggle ─────────────────────────────────────────────────────────────
     async function toggleActive(slug, current, el) {
       try {
         await authedFetch("/admin/categories/" + encodeURIComponent(slug), {
@@ -415,11 +905,10 @@
           body: JSON.stringify({ active: !current }),
         });
         el.dataset.active = String(!current);
-        el.textContent = !current ? "✓ yes" : "✗ no";
+        el.textContent = !current ? "Live" : "Hidden";
       } catch (e) { showErr("cat-err", e.message || String(e)); }
     }
 
-    // ── Delete ────────────────────────────────────────────────────────────────────
     async function delCategory(slug) {
       if (!confirm('Delete category "' + slug + '"?')) return;
       showErr("cat-err", "");
@@ -429,7 +918,6 @@
       } catch (e) { showErr("cat-err", e.message || String(e)); }
     }
 
-    // ── Add category form ─────────────────────────────────────────────────────────
     document.getElementById("add").addEventListener("submit", async (ev) => {
       ev.preventDefault();
       showErr("cat-err", "");
@@ -448,7 +936,6 @@
       } catch (e) { showErr("cat-err", e.message || String(e)); }
     });
 
-    // ── Channel drawer ────────────────────────────────────────────────────────────
     const openDrawers = new Set();
 
     async function toggleDrawer(slug, btn) {
@@ -456,11 +943,11 @@
       if (!drawer) return;
       if (openDrawers.has(slug)) {
         drawer.style.display = "none";
-        btn.textContent = "▶";
+        btn.textContent = "+";
         openDrawers.delete(slug);
       } else {
         drawer.style.display = "";
-        btn.textContent = "▼";
+        btn.textContent = "-";
         openDrawers.add(slug);
         await loadDrawer(slug);
       }
@@ -468,7 +955,7 @@
 
     async function loadDrawer(slug) {
       const content = document.getElementById("drawer-content-" + slug);
-      content.innerHTML = "<p class='loading-text'>Loading channels…</p>";
+      content.innerHTML = "<p class='loading-text'>Loading channels...</p>";
       try {
         const r = await authedFetch("/admin/channels?category=" + encodeURIComponent(slug));
         const channels = await r.json();
@@ -481,7 +968,7 @@
     function renderDrawer(slug, channels, container) {
       const otherCats = allCategories.filter(c => c.slug !== slug);
 
-      let html = "<h4>" + esc(slug) + " — " + channels.length + " channel" + (channels.length !== 1 ? "s" : "") + "</h4>";
+      let html = "<h4>" + esc(slug) + " / " + channels.length + " channel" + (channels.length !== 1 ? "s" : "") + "</h4>";
       if (!channels.length) {
         html += "<p class='loading-text'>No channels in this category.</p>";
       } else {
@@ -492,30 +979,30 @@
           ).join("");
           html +=
             "<li class='ch-row' draggable='true' data-slug='" + esc(ch.slug) + "'>" +
-              "<span class='ch-grip' title='Drag to reorder'>⠿</span>" +
+              "<span class='ch-grip' title='Drag to reorder'>::</span>" +
               "<span class='ch-name' title='" + esc(ch.slug) + "'>" + esc(ch.name) + "</span>" +
               "<span class='ch-move'>" +
                 "<select class='move-select' data-channel='" + esc(ch.slug) + "'>" +
-                  "<option value=''>Move to…</option>" + opts +
+                  "<option value=''>Move to...</option>" + opts +
                 "</select>" +
               "</span>" +
+              "<button class='sm secondary epg-open' data-channel='" + esc(ch.slug) + "'>EPG</button>" +
               "<button class='sm ch-remove' data-channel='" + esc(ch.slug) + "' data-cat='" + esc(slug) + "'" +
-                " title='Move to Other'>✕</button>" +
+                " title='Move to Other'>X</button>" +
             "</li>";
         }
         html += "</ul>";
       }
       html +=
-        "<div class='drawer-actions'>" +
+        "<div class='drawer-actions' style='margin-top:12px;'>" +
           "<button class='sm' onclick='saveOrder(\"" + esc(slug) + "\")'>Save order</button>" +
-          "<button class='sm secondary' onclick='loadDrawer(\"" + esc(slug) + "\")'>↺ Reload</button>" +
+          "<button class='sm secondary' onclick='loadDrawer(\"" + esc(slug) + "\")'>Reload</button>" +
           "<p id='drawer-err-" + esc(slug) + "' class='err' style='margin:0;'></p>" +
           "<p id='drawer-ok-" + esc(slug) + "' class='ok' style='margin:0;'></p>" +
         "</div>";
 
       container.innerHTML = html;
 
-      // Bind move selects
       container.querySelectorAll(".move-select").forEach(sel => {
         sel.addEventListener("change", async () => {
           const targetCat = sel.value;
@@ -524,7 +1011,6 @@
           await moveChannel(chSlug, targetCat, slug);
         });
       });
-      // Bind remove buttons (move to other)
       container.querySelectorAll(".ch-remove").forEach(btn => {
         btn.addEventListener("click", async () => {
           const chSlug = btn.dataset.channel;
@@ -534,9 +1020,319 @@
           await moveChannel(chSlug, "other", catSlug);
         });
       });
-      // Init drag-and-drop
+      container.querySelectorAll(".epg-open").forEach(btn => {
+        btn.addEventListener("click", () => openEpgForChannel(btn.dataset.channel));
+      });
       const list = container.querySelector(".ch-list");
       if (list) initDrag(list);
+    }
+
+    async function allAdminChannels() {
+      const seen = new Map();
+      for (const cat of allCategories) {
+        try {
+          const r = await authedFetch("/admin/channels?category=" + encodeURIComponent(cat.slug));
+          const list = await r.json();
+          for (const ch of list) seen.set(ch.slug, ch);
+        } catch (_) {}
+      }
+      return [...seen.values()].sort((a, b) => String(a.name).localeCompare(String(b.name)));
+    }
+
+    async function renderEpgChannelSelect(selectedSlug) {
+      const select = document.getElementById("epgChannelSelect");
+      if (!select) return;
+      const current = selectedSlug || select.value;
+      const channels = await allAdminChannels();
+      select.innerHTML = "";
+      for (const ch of channels) {
+        const opt = document.createElement("option");
+        opt.value = ch.slug;
+        opt.textContent = ch.name + " / " + ch.slug;
+        if (ch.slug === current) opt.selected = true;
+        select.appendChild(opt);
+      }
+      fillEpgForm(select.value);
+    }
+
+    async function loadChannelCrud() {
+      showErr("channels-err", "");
+      const q = document.getElementById("channelSearchInput").value.trim();
+      const r = await authedFetch("/admin/channels/full?q=" + encodeURIComponent(q));
+      channelCrudRows = await r.json();
+      renderChannelCrudRows();
+    }
+
+    function renderChannelCrudRows() {
+      const tb = document.getElementById("channelCrudRows");
+      tb.innerHTML = "";
+      if (!channelCrudRows.length) {
+        tb.innerHTML = "<tr><td colspan='3' class='muted'>No channels found.</td></tr>";
+        return;
+      }
+      for (const ch of channelCrudRows) {
+        const tr = document.createElement("tr");
+        tr.style.cursor = "pointer";
+        tr.dataset.slug = ch.slug;
+        tr.innerHTML = "<td>" + esc(ch.name || ch.slug) + "</td><td><code>" + esc(ch.slug) + "</code></td><td class='muted'>" + esc(ch.stream_host || "") + "</td>";
+        tr.addEventListener("click", () => selectChannelForEdit(ch.slug));
+        tb.appendChild(tr);
+      }
+    }
+
+    function selectChannelForEdit(slug) {
+      const ch = channelCrudRows.find(x => x.slug === slug);
+      if (!ch) return;
+      selectedChannelSlug = slug;
+      document.getElementById("channelEditorEmpty").hidden = true;
+      document.getElementById("channelEditor").hidden = false;
+      document.getElementById("editChannelName").value = ch.name || "";
+      document.getElementById("editChannelSlug").value = ch.slug || "";
+      document.getElementById("editChannelPageUrl").value = ch.page_url || "";
+      document.getElementById("editChannelStreamUrl").value = ch.stream_url || "";
+      document.getElementById("editChannelStreamType").value = ch.stream_type || "hls";
+      document.getElementById("editChannelMediaType").value = ch.media_type || "tv";
+      document.getElementById("editChannelLogo").value = ch.logo || "";
+      document.getElementById("editChannelRequiresProxy").checked = !!ch.requires_proxy;
+      populateCategoryOptions(document.getElementById("editChannelCategory"), ch.ai_category || "other");
+    }
+
+    async function saveChannelEdit() {
+      if (!selectedChannelSlug) return;
+      showErr("channels-err", "");
+      showOk("channels-ok", "");
+      const streamUrl = document.getElementById("editChannelStreamUrl").value.trim();
+      try {
+        const r = await authedFetch("/admin/channels/" + encodeURIComponent(selectedChannelSlug), {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: document.getElementById("editChannelName").value.trim(),
+            slug: document.getElementById("editChannelSlug").value.trim(),
+            page_url: document.getElementById("editChannelPageUrl").value.trim(),
+            stream_url: streamUrl,
+            stream_type: document.getElementById("editChannelStreamType").value.trim() || "hls",
+            requires_proxy: document.getElementById("editChannelRequiresProxy").checked,
+            ai_category: document.getElementById("editChannelCategory").value,
+            logo: document.getElementById("editChannelLogo").value.trim(),
+            media_type: document.getElementById("editChannelMediaType").value,
+          }),
+        });
+        const data = await r.json();
+        selectedChannelSlug = data.slug;
+        showOk("channels-ok", "Channel saved");
+        await loadChannelCrud();
+        await loadCategories();
+        selectChannelForEdit(selectedChannelSlug);
+      } catch (e) { showErr("channels-err", e.message || String(e)); }
+    }
+
+    async function deleteSelectedChannel() {
+      if (!selectedChannelSlug) return;
+      if (!confirm("Delete channel " + selectedChannelSlug + "?")) return;
+      showErr("channels-err", "");
+      showOk("channels-ok", "");
+      try {
+        await authedFetch("/admin/channels/" + encodeURIComponent(selectedChannelSlug), { method: "DELETE" });
+        showOk("channels-ok", "Channel deleted");
+        selectedChannelSlug = "";
+        document.getElementById("channelEditor").hidden = true;
+        document.getElementById("channelEditorEmpty").hidden = false;
+        await loadChannelCrud();
+        await loadCategories();
+      } catch (e) { showErr("channels-err", e.message || String(e)); }
+    }
+
+    async function loadFeatured() {
+      showErr("featured-err", "");
+      const r = await authedFetch("/admin/featured-channels");
+      const data = await r.json();
+      featuredSlugs = data.slugs || [];
+      renderFeaturedSelected();
+    }
+
+    async function searchFeaturedChannels() {
+      showErr("featured-err", "");
+      const q = document.getElementById("featuredSearchInput").value.trim();
+      const r = await authedFetch("/admin/channels/full?q=" + encodeURIComponent(q));
+      featuredSearchRows = await r.json();
+      renderFeaturedSearch();
+    }
+
+    function channelBySlug(slug) {
+      return [...featuredSearchRows, ...channelCrudRows].find(ch => ch.slug === slug);
+    }
+
+    function renderFeaturedSearch() {
+      const tb = document.getElementById("featuredSearchRows");
+      tb.innerHTML = "";
+      if (!featuredSearchRows.length) {
+        tb.innerHTML = "<tr><td colspan='3' class='muted'>No channels found.</td></tr>";
+        return;
+      }
+      for (const ch of featuredSearchRows) {
+        const selected = featuredSlugs.includes(ch.slug);
+        const tr = document.createElement("tr");
+        tr.innerHTML = "<td>" + esc(ch.name || ch.slug) + "</td><td><code>" + esc(ch.slug) + "</code></td><td><button class='sm secondary' data-slug='" + esc(ch.slug) + "'" + (selected ? " disabled" : "") + ">" + (selected ? "Added" : "Add") + "</button></td>";
+        tr.querySelector("button").addEventListener("click", () => addFeatured(ch.slug));
+        tb.appendChild(tr);
+      }
+    }
+
+    function renderFeaturedSelected() {
+      const list = document.getElementById("featuredSelectedList");
+      const empty = document.getElementById("featuredEmpty");
+      list.innerHTML = "";
+      empty.hidden = featuredSlugs.length > 0;
+      featuredSlugs.forEach((slug, index) => {
+        const ch = channelBySlug(slug);
+        const li = document.createElement("li");
+        li.className = "ch-row";
+        li.innerHTML =
+          "<span class='ch-grip'>" + (index + 1) + "</span>" +
+          "<span class='ch-name'>" + esc((ch && ch.name) || slug) + "<br><code>" + esc(slug) + "</code></span>" +
+          "<button class='sm secondary' data-up='" + esc(slug) + "'" + (index === 0 ? " disabled" : "") + ">Up</button>" +
+          "<button class='sm secondary' data-down='" + esc(slug) + "'" + (index === featuredSlugs.length - 1 ? " disabled" : "") + ">Down</button>" +
+          "<button class='sm danger' data-remove='" + esc(slug) + "'>Remove</button>";
+        li.querySelector("[data-up]")?.addEventListener("click", () => moveFeatured(slug, -1));
+        li.querySelector("[data-down]")?.addEventListener("click", () => moveFeatured(slug, 1));
+        li.querySelector("[data-remove]")?.addEventListener("click", () => removeFeatured(slug));
+        list.appendChild(li);
+      });
+      renderFeaturedSearch();
+    }
+
+    function addFeatured(slug) {
+      if (!featuredSlugs.includes(slug)) featuredSlugs.push(slug);
+      renderFeaturedSelected();
+    }
+
+    function removeFeatured(slug) {
+      featuredSlugs = featuredSlugs.filter(s => s !== slug);
+      renderFeaturedSelected();
+    }
+
+    function moveFeatured(slug, delta) {
+      const i = featuredSlugs.indexOf(slug);
+      const j = i + delta;
+      if (i < 0 || j < 0 || j >= featuredSlugs.length) return;
+      const copy = [...featuredSlugs];
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+      featuredSlugs = copy;
+      renderFeaturedSelected();
+    }
+
+    async function saveFeatured() {
+      showErr("featured-err", "");
+      showOk("featured-ok", "");
+      try {
+        const r = await authedFetch("/admin/featured-channels", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ slugs: featuredSlugs }),
+        });
+        const data = await r.json();
+        featuredSlugs = data.slugs || featuredSlugs;
+        renderFeaturedSelected();
+        showOk("featured-ok", "Featured channels saved");
+      } catch (e) { showErr("featured-err", e.message || String(e)); }
+    }
+
+    function fillEpgForm(slug) {
+      const m = epgMappings.find(x => x.channel_slug === slug);
+      document.getElementById("epgIdInput").value = m ? m.epg_id : "";
+      document.getElementById("epgUrlInput").value = m && m.epg_url ? m.epg_url : "";
+    }
+
+    async function openEpgForChannel(slug) {
+      document.querySelector('.tab-btn[data-tab="epg"]').click();
+      await renderEpgChannelSelect(slug);
+      await loadEpgGuide();
+    }
+
+    function fmtRange(row) {
+      return fmtTime(row.start_ts) + " - " + new Date(row.stop_ts * 1000).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+    }
+
+    async function saveEpgMapping() {
+      const slug = document.getElementById("epgChannelSelect").value;
+      const epgId = document.getElementById("epgIdInput").value.trim();
+      const epgUrl = document.getElementById("epgUrlInput").value.trim();
+      showErr("epg-err", "");
+      showOk("epg-ok", "");
+      if (!slug || !epgId) { showErr("epg-err", "Choose a channel and enter an XMLTV id"); return; }
+      try {
+        await authedFetch("/admin/channels/" + encodeURIComponent(slug) + "/epg", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ epg_id: epgId, epg_url: epgUrl || null }),
+        });
+        await loadEpgMappings();
+        showOk("epg-ok", "EPG mapping saved");
+      } catch (e) { showErr("epg-err", e.message || String(e)); }
+    }
+
+    async function deleteEpgMapping() {
+      const slug = document.getElementById("epgChannelSelect").value;
+      if (!slug || !confirm("Delete EPG mapping for " + slug + "?")) return;
+      showErr("epg-err", "");
+      try {
+        await authedFetch("/admin/channels/" + encodeURIComponent(slug) + "/epg", { method: "DELETE" });
+        await loadEpgMappings();
+        document.getElementById("epgRows").innerHTML = "<tr><td colspan='3' class='muted'>No guide loaded</td></tr>";
+        document.getElementById("epgNow").textContent = "Mapping deleted.";
+      } catch (e) { showErr("epg-err", e.message || String(e)); }
+    }
+
+    async function refreshEpg() {
+      showErr("epg-err", "");
+      showOk("epg-ok", "");
+      const btn = document.getElementById("btnEpgRefresh");
+      btn.disabled = true;
+      btn.textContent = "Refreshing...";
+      try {
+        const r = await authedFetch("/admin/epg/refresh", { method: "POST" });
+        const data = await r.json();
+        const count = data.sources.reduce((n, s) => n + (s.programmes || 0), 0);
+        showOk("epg-ok", "Refreshed " + count + " programmes");
+        await loadEpgGuide();
+      } catch (e) { showErr("epg-err", e.message || String(e)); }
+      finally {
+        btn.disabled = false;
+        btn.textContent = "Refresh XMLTV";
+      }
+    }
+
+    async function loadEpgGuide() {
+      const slug = document.getElementById("epgChannelSelect").value;
+      showErr("epg-err", "");
+      if (!slug) return;
+      try {
+        const nowR = await authedFetch("/epg/" + encodeURIComponent(slug) + "/now");
+        const guideR = await authedFetch("/epg/" + encodeURIComponent(slug));
+        const nowData = await nowR.json();
+        const guide = await guideR.json();
+        const nowBox = document.getElementById("epgNow");
+        if (nowData.now) {
+          const p = nowData.now;
+          const pct = Math.max(0, Math.min(100, Math.round(((nowData.at - p.start_ts) / (p.stop_ts - p.start_ts)) * 100)));
+          nowBox.innerHTML = "<strong>" + esc(p.title) + "</strong><br><span class='muted'>" + esc(fmtRange(p)) + "</span>" +
+            "<div style='height:8px;background:#0b0d0a;border:1px solid var(--line);border-radius:999px;margin-top:10px;overflow:hidden;'><div style='height:100%;width:" + pct + "%;background:var(--gold);'></div></div>";
+        } else {
+          nowBox.textContent = "No current programme in cache. Refresh XMLTV or check the mapping id.";
+        }
+        const rows = document.getElementById("epgRows");
+        if (!guide.programmes.length) {
+          rows.innerHTML = "<tr><td colspan='3' class='muted'>No programmes cached for this window</td></tr>";
+        } else {
+          rows.innerHTML = "";
+          for (const p of guide.programmes) {
+            const tr = document.createElement("tr");
+            tr.innerHTML = "<td class='time-cell'>" + esc(fmtRange(p)) + "</td><td>" + esc(p.title) + (p.description ? "<div class='muted'>" + esc(p.description) + "</div>" : "") + "</td><td>" + esc(p.category || "") + "</td>";
+            rows.appendChild(tr);
+          }
+        }
+      } catch (e) { showErr("epg-err", e.message || String(e)); }
     }
 
     async function moveChannel(channelSlug, targetCategory, currentCategory) {
@@ -546,10 +1342,8 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ category_slug: targetCategory }),
         });
-        // Reload both affected drawers
         await loadDrawer(currentCategory);
         if (openDrawers.has(targetCategory)) await loadDrawer(targetCategory);
-        // Update counts
         loadChannelCounts([currentCategory, targetCategory]);
         showOk("drawer-ok-" + currentCategory, "Moved to " + targetCategory);
       } catch (e) {
@@ -573,7 +1367,6 @@
       }
     }
 
-    // ── Drag-and-drop reorder ─────────────────────────────────────────────────────
     function initDrag(list) {
       let dragged = null;
       list.querySelectorAll(".ch-row").forEach(row => {
@@ -606,7 +1399,6 @@
       });
     }
 
-    // ── Analytics ─────────────────────────────────────────────────────────────────
     function parseBrowser(ua) {
       if (!ua) return "Unknown";
       if (/Edg\/|Edge\//.test(ua)) return "Edge";
@@ -628,7 +1420,7 @@
       const v4 = ip.match(/^(\d+\.\d+\.\d+)\.\d+$/);
       if (v4) return v4[1] + ".x";
       const v6 = ip.match(/^([0-9a-f:]+:[0-9a-f:]+):[0-9a-f:]+$/i);
-      if (v6) return v6[1] + ":…";
+      if (v6) return v6[1] + ":...";
       return ip;
     }
     function barChart(container, data, labelKey, valueKey, labelFmt) {
@@ -668,12 +1460,12 @@
       const topTb = document.getElementById("topChannels");
       topTb.innerHTML = "";
       if (!top.length) {
-        topTb.innerHTML = "<tr><td colspan='3' style='color:#8b93a7'>No views yet</td></tr>";
+        topTb.innerHTML = "<tr><td colspan='3' style='color:#aaa796'>No views yet</td></tr>";
       } else {
         top.forEach((row, i) => {
           const tr = document.createElement("tr");
           tr.innerHTML =
-            "<td style='color:#8b93a7'>" + (i + 1) + "</td>" +
+            "<td style='color:#aaa796'>" + (i + 1) + "</td>" +
             "<td>" + esc(row.channel_name || row.channel_slug) + "</td>" +
             "<td><strong>" + row.views + "</strong></td>";
           topTb.appendChild(tr);
@@ -682,7 +1474,7 @@
       const recTb = document.getElementById("recentViews");
       recTb.innerHTML = "";
       if (!recent.length) {
-        recTb.innerHTML = "<tr><td colspan='4' style='color:#8b93a7'>No views yet</td></tr>";
+        recTb.innerHTML = "<tr><td colspan='4' style='color:#aaa796'>No views yet</td></tr>";
       } else {
         for (const row of recent) {
           const tr = document.createElement("tr");
@@ -696,7 +1488,6 @@
       }
     }
 
-    // ── Manual Scraper ────────────────────────────────────────────────────────────
     function populateCategorySelect(selectEl, selectedValue) {
       selectEl.innerHTML = "";
       for (const cat of allCategories) {
@@ -714,7 +1505,7 @@
       showOk("scrape-ok", "");
       if (!url) { showErr("scrape-err", "Enter a URL first"); return; }
       document.getElementById("scrapeResult").hidden = true;
-      document.getElementById("btnScrape").textContent = "Scraping…";
+      document.getElementById("btnScrape").textContent = "Scraping...";
       document.getElementById("btnScrape").disabled = true;
       try {
         const r = await authedFetch("/admin/scrape", {
@@ -725,18 +1516,44 @@
         scrapeData = await r.json();
         renderScrapeResult(scrapeData);
       } catch (e) {
-        showErr("scrape-err", e.message || String(e));
+        showErr("scrape-err", (e.message || String(e)) + " - fill the fields manually.");
+        scrapeData = manualScrapeData(url);
+        renderScrapeResult(scrapeData);
       } finally {
-        document.getElementById("btnScrape").textContent = "Scrape";
+        document.getElementById("btnScrape").textContent = "Scrape URL";
         document.getElementById("btnScrape").disabled = false;
       }
     });
 
+    function slugFromUrl(url) {
+      try {
+        const path = new URL(url).pathname.replace(/\/+$/, "");
+        const last = path.split("/").filter(Boolean).pop();
+        return (last || "channel").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "channel";
+      } catch (_) {
+        return "channel";
+      }
+    }
+
+    function manualScrapeData(url) {
+      const slug = slugFromUrl(url);
+      return {
+        page_url: url,
+        name: slug.replace(/-/g, " ").replace(/\b\w/g, (m) => m.toUpperCase()),
+        stream_url: "",
+        stream_type: "hls",
+        stream_host: "",
+        requires_proxy: false,
+        slug,
+        logo_url: "",
+      };
+    }
+
     function renderScrapeResult(data) {
       document.getElementById("scrapeNameInput").value = data.name || "";
       document.getElementById("scrapeSlugInput").value = data.slug || "";
-      document.getElementById("scrapeStreamUrl").textContent = data.stream_url || "Not detected";
-      document.getElementById("scrapeStreamType").value = data.stream_type || "";
+      document.getElementById("scrapeStreamUrlInput").value = data.stream_url || "";
+      document.getElementById("scrapeStreamType").value = data.stream_type || "hls";
       document.getElementById("scrapeRequiresProxy").checked = !!data.requires_proxy;
 
       const logoRow = document.getElementById("scrapeLogoRow");
@@ -750,7 +1567,6 @@
 
       const catSel = document.getElementById("scrapeCategorySelect");
       populateCategorySelect(catSel, "other");
-
       document.getElementById("scrapeResult").hidden = false;
     }
 
@@ -760,8 +1576,11 @@
       showOk("scrape-ok", "");
       const name = document.getElementById("scrapeNameInput").value.trim();
       const slug = document.getElementById("scrapeSlugInput").value.trim();
+      const streamUrl = document.getElementById("scrapeStreamUrlInput").value.trim();
+      const streamType = document.getElementById("scrapeStreamType").value.trim();
       const category = document.getElementById("scrapeCategorySelect").value;
       const requiresProxy = document.getElementById("scrapeRequiresProxy").checked;
+      if (!streamUrl) { showErr("scrape-err", "Stream URL is required"); return; }
       try {
         document.getElementById("btnAddChannel").disabled = true;
         const r = await authedFetch("/admin/channels/add", {
@@ -770,9 +1589,9 @@
           body: JSON.stringify({
             page_url: scrapeData.page_url,
             name: name || scrapeData.name,
-            stream_url: scrapeData.stream_url,
-            stream_type: scrapeData.stream_type,
-            stream_host: scrapeData.stream_host,
+            stream_url: streamUrl,
+            stream_type: streamType || scrapeData.stream_type || "hls",
+            stream_host: streamHostFromUrl(streamUrl) || scrapeData.stream_host,
             requires_proxy: requiresProxy,
             ai_category: category,
             slug: slug || scrapeData.slug,
@@ -780,11 +1599,10 @@
           }),
         });
         const result = await r.json();
-        showOk("scrape-ok", 'Added as "' + result.slug + '" — reload the app to see it.');
+        showOk("scrape-ok", 'Added as "' + result.slug + '"');
         document.getElementById("scrapeResult").hidden = true;
         document.getElementById("scrapeUrl").value = "";
         scrapeData = null;
-        // Update channel count for that category
         loadChannelCounts([category]);
       } catch (e) {
         showErr("scrape-err", e.message || String(e));
@@ -792,6 +1610,11 @@
         document.getElementById("btnAddChannel").disabled = false;
       }
     });
+
+    function streamHostFromUrl(url) {
+      try { return new URL(url).host; }
+      catch (_) { return ""; }
+    }
 
     document.getElementById("btnClearScrape").addEventListener("click", () => {
       scrapeData = null;
@@ -801,7 +1624,6 @@
       showOk("scrape-ok", "");
     });
 
-    // ── Wiring ────────────────────────────────────────────────────────────────────
     function esc(s) {
       const d = document.createElement("div");
       d.textContent = String(s ?? "");
@@ -811,6 +1633,24 @@
     document.getElementById("btnLoad").addEventListener("click", loadAll);
     document.getElementById("btnRefresh").addEventListener("click", loadAnalytics);
     document.getElementById("daysPicker").addEventListener("change", loadAnalytics);
+    document.getElementById("btnChannelsRefresh").addEventListener("click", loadChannelCrud);
+    document.getElementById("btnChannelSearch").addEventListener("click", loadChannelCrud);
+    document.getElementById("channelSearchInput").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") loadChannelCrud();
+    });
+    document.getElementById("btnChannelSave").addEventListener("click", saveChannelEdit);
+    document.getElementById("btnChannelDelete").addEventListener("click", deleteSelectedChannel);
+    document.getElementById("btnFeaturedReload").addEventListener("click", loadFeatured);
+    document.getElementById("btnFeaturedSave").addEventListener("click", saveFeatured);
+    document.getElementById("btnFeaturedSearch").addEventListener("click", searchFeaturedChannels);
+    document.getElementById("featuredSearchInput").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") searchFeaturedChannels();
+    });
+    document.getElementById("epgChannelSelect").addEventListener("change", () => fillEpgForm(document.getElementById("epgChannelSelect").value));
+    document.getElementById("btnSaveEpg").addEventListener("click", saveEpgMapping);
+    document.getElementById("btnLoadEpg").addEventListener("click", loadEpgGuide);
+    document.getElementById("btnDeleteEpg").addEventListener("click", deleteEpgMapping);
+    document.getElementById("btnEpgRefresh").addEventListener("click", refreshEpg);
   </script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 import { type CSSProperties, useCallback, useEffect, useMemo, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
+import { Grid3X3, ListChecks, Play, RotateCcw, SlidersHorizontal } from "lucide-react"
 import { ChannelCard } from "@/components/ChannelCard"
 import { CinemaHero } from "@/components/CinemaHero"
 import { ChannelDetailsRow } from "@/components/ChannelDetailsRow"
@@ -21,6 +22,7 @@ import { useTvRemote, DIGIT_AUTO_SUBMIT_AFTER_MS } from "@/hooks/useTvRemote"
 import { useMobileViewport } from "@/hooks/useMobileViewport"
 import { isMobileViewport } from "@/lib/mobileLayout"
 import { watchUrlForChannel } from "@/lib/paths"
+import { channelLogoUrl } from "@/lib/publicUrl"
 import type { Channel } from "@/types/channel"
 
 function filterChannels(channels: Channel[], q: string): Channel[] {
@@ -30,6 +32,21 @@ function filterChannels(channels: Channel[], q: string): Channel[] {
     const n = (c.name ?? "").toLowerCase()
     return n.includes(s) || c.slug.toLowerCase().includes(s)
   })
+}
+
+type FeaturedConfig = {
+  slugs: string[]
+}
+
+async function fetchFeaturedSlugs(): Promise<string[]> {
+  try {
+    const res = await fetch("/api/featured-channels", { cache: "no-store" })
+    if (!res.ok) return []
+    const data = (await res.json()) as FeaturedConfig
+    return Array.isArray(data.slugs) ? data.slugs : []
+  } catch {
+    return []
+  }
 }
 
 export function HomePage() {
@@ -56,7 +73,19 @@ export function HomePage() {
   const isCinema = visual === "cinema"
   const [query, setQuery] = useState("")
   const [reorderMode, setReorderMode] = useState(false)
+  const [featuredSlugs, setFeaturedSlugs] = useState<string[]>([])
+  const [featuredIndex, setFeaturedIndex] = useState(0)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    let cancelled = false
+    fetchFeaturedSlugs().then((slugs) => {
+      if (!cancelled) setFeaturedSlugs(slugs)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const canReorder = query.trim() === ""
 
@@ -108,6 +137,36 @@ export function HomePage() {
 
   const layoutClass =
     layout === "thumbnail" ? "channel-grid" : layout === "list" ? "channel-list" : "channel-details"
+
+  const featuredChannels = useMemo(
+    () =>
+      featuredSlugs
+        .map((slug) => ordered.find((ch) => ch.slug === slug))
+        .filter((ch): ch is Channel => Boolean(ch)),
+    [featuredSlugs, ordered],
+  )
+
+  useEffect(() => {
+    if (featuredChannels.length <= 1) return
+    const id = window.setInterval(() => {
+      setFeaturedIndex((i) => (i + 1) % featuredChannels.length)
+    }, 9000)
+    return () => window.clearInterval(id)
+  }, [featuredChannels.length])
+
+  useEffect(() => {
+    if (featuredIndex >= featuredChannels.length) setFeaturedIndex(0)
+  }, [featuredIndex, featuredChannels.length])
+
+  const featuredChannel =
+    featuredChannels[featuredIndex] ?? recentFiltered[0] ?? favoritesFiltered[0] ?? ordered[0]
+  const featuredNo = featuredChannel
+    ? channelNoByUrl.get(featuredChannel.page_url) ?? channelNumber(ordered, featuredChannel)
+    : 1
+  const featuredLogo = featuredChannel ? channelLogoUrl(featuredChannel.logo) : null
+  const categoryCount = byAiCategory.size
+  const radioCount = ordered.filter((c) => c.media_type === "radio").length
+  const liveCount = ordered.filter((c) => c.media_type !== "radio").length
 
   const renderChannel = useCallback(
     (ch: Channel, opts?: { linkless?: boolean }) => {
@@ -166,38 +225,92 @@ export function HomePage() {
 
   return (
     <div className="page home home-guide">
-      <div className="home-hero" aria-hidden>
-        <div className="home-hero__orb home-hero__orb--a" />
-        <div className="home-hero__orb home-hero__orb--b" />
-        <div className="home-hero__orb home-hero__orb--c" />
-      </div>
-
-      <header className="home-header">
-        <div className="home-header__top">
-          <p className="home-eyebrow">Channel guide</p>
-          <h1 className="home-title">
-            <span className="home-title__gradient">Live TV</span>
-          </h1>
-          <p className="home-subtitle">
-            <span className="home-stat-badge">{ordered.length} channels</span>
-            <span className="home-subtitle__sep" aria-hidden>
-              ·
-            </span>
-            <span className="home-subtitle__desc">
-              Grouped by topic · global CH numbers · digits + Enter · favorites
-            </span>
-          </p>
+      <header className="home-command">
+        <div className="home-command__brand">
+          <span className="home-command__mark">TV2</span>
+          <div>
+            <p className="home-eyebrow">Signal directory</p>
+            <h1 className="home-title">Live channels, tuned fast.</h1>
+          </div>
         </div>
-        <div className="home-header__controls">
+        <div className="home-command__actions">
+          <Link to="/multiview" className="btn-ghost home-multiview-link">
+            <Grid3X3 size={18} aria-hidden />
+            Multi-view
+          </Link>
+          {mobile && (
+            <button
+              type="button"
+              className={`btn-ghost home-style-tools-toggle ${styleToolsOpen ? "is-active" : ""}`}
+              onClick={() => setStyleToolsOpen((v) => !v)}
+            >
+              <SlidersHorizontal size={18} aria-hidden />
+              Display
+            </button>
+          )}
+        </div>
+      </header>
+
+      <section className="home-stage" aria-label="Featured channel and controls">
+        <div className="home-stage__feature">
+          {featuredChannel && (
+            <>
+              <div className="home-stage__screen">
+                <div className="home-stage__scanlines" aria-hidden />
+                <span className="home-stage__live">Live</span>
+                {featuredLogo ? (
+                  <img src={featuredLogo} alt="" className="home-stage__logo" />
+                ) : (
+                  <span className="home-stage__placeholder" aria-hidden>
+                    TV
+                  </span>
+                )}
+              </div>
+              <div className="home-stage__meta">
+                <span className="home-stage__channel">CH {featuredNo}</span>
+                <h2>{featuredChannel.name ?? featuredChannel.slug}</h2>
+                <p>
+                  {formatAiCategoryTitle(featuredChannel.ai_category ?? "other", useDbCategories ? dbCategories : null)}
+                </p>
+                <Link to={watchUrlForChannel(featuredChannel)} className="home-stage__play">
+                  <Play size={18} fill="currentColor" aria-hidden />
+                  Watch now
+                </Link>
+                {featuredChannels.length > 1 && (
+                  <div className="home-stage__rotator" aria-label="Featured channels">
+                    {featuredChannels.map((ch, index) => (
+                      <button
+                        key={ch.slug}
+                        type="button"
+                        className={index === featuredIndex ? "is-active" : ""}
+                        onClick={() => setFeaturedIndex(index)}
+                        aria-label={`Show ${ch.name ?? ch.slug}`}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className="home-stage__controls">
+          <div className="home-metrics" aria-label="Channel summary">
+            <span><strong>{ordered.length}</strong> total</span>
+            <span><strong>{liveCount}</strong> TV</span>
+            <span><strong>{radioCount}</strong> radio</span>
+            <span><strong>{categoryCount}</strong> topics</span>
+          </div>
           <SearchBar
             value={query}
             onChange={(v) => {
               setQuery(v)
               if (v.trim() !== "") setReorderMode(false)
             }}
+            placeholder="Find a channel, topic, or slug"
             id="home-search"
           />
-          <div className="home-header__reorder">
+          <div className="home-stage__toolrow">
             <button
               type="button"
               className={`btn-ghost home-reorder-toggle ${reorderMode ? "is-active" : ""}`}
@@ -211,28 +324,21 @@ export function HomePage() {
                     : "Drag channels to change CH order"
               }
             >
-              {reorderMode ? "Done reordering" : "Reorder channels"}
+              <ListChecks size={18} aria-hidden />
+              {reorderMode ? "Done" : "Reorder"}
             </button>
             {hasCustomChannelOrder && (
               <button
                 type="button"
                 className="btn-ghost home-reorder-reset"
                 onClick={() => resetChannelOrder()}
-                title="Restore alphabetical order (A–Z)"
+                title="Restore alphabetical order"
               >
-                Reset A–Z
+                <RotateCcw size={17} aria-hidden />
+                Reset
               </button>
             )}
           </div>
-          {mobile && (
-            <button
-              type="button"
-              className={`btn-ghost home-style-tools-toggle ${styleToolsOpen ? "is-active" : ""}`}
-              onClick={() => setStyleToolsOpen((v) => !v)}
-            >
-              {styleToolsOpen ? "Hide display options" : "Display options"}
-            </button>
-          )}
           <div
             className={
               mobile && !styleToolsOpen
@@ -242,11 +348,8 @@ export function HomePage() {
           >
             <StyleToolbar />
           </div>
-          <Link to="/multiview" className="btn-ghost home-multiview-link">
-            Multi-view
-          </Link>
         </div>
-      </header>
+      </section>
 
       <DigitOverlay
         buffer={digitBuffer}

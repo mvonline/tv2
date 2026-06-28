@@ -52,6 +52,7 @@ CATEGORY_INDEX_RE = re.compile(
 _PROXY_HOSTS = (
     ".hls2.xyz",    # aparatchi CDN — blocks off-site Origin/Referer
     ".presstv.ir",  # iFilm / PressTV — DNS-blocked by many EU ISPs (live*, live4*, etc.)
+    ".telewebion.ir",
 )
 
 def stream_requires_proxy(url: str | None) -> bool:

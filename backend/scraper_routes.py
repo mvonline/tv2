@@ -7,10 +7,10 @@ import os
 import time
 from pathlib import Path
 from typing import Annotated
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 
 import requests
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 
 from category_routes import require_admin
@@ -44,6 +44,56 @@ class AddChannelRequest(BaseModel):
     ai_category: str = "other"
     slug: str | None = None
     logo_url: str | None = None
+
+
+class ChannelUpdateRequest(BaseModel):
+    page_url: str | None = None
+    name: str | None = None
+    stream_url: str | None = None
+    stream_type: str | None = None
+    stream_host: str | None = None
+    requires_proxy: bool | None = None
+    ai_category: str | None = None
+    slug: str | None = None
+    logo: str | None = None
+    media_type: str | None = None
+
+
+def _load_channels_payload() -> dict:
+    path = _channels_path()
+    if not path.exists():
+        raise HTTPException(500, "channels.json not found")
+    with open(path) as f:
+        return json.load(f)
+
+
+def _write_channels_payload(data: dict) -> None:
+    path = _channels_path()
+    data["count"] = len(data.get("channels", []))
+    with open(path, "w") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+
+def _slug_candidates(slug: str) -> list[str]:
+    key = slug.strip()
+    decoded = unquote(key)
+    candidates = [key, decoded]
+    for value in (key, decoded):
+        candidates.append(value.replace("https:/", "https://", 1))
+        candidates.append(value.replace("http:/", "http://", 1))
+    result: list[str] = []
+    for value in candidates:
+        if value and value not in result:
+            result.append(value)
+    return result
+
+
+def _find_channel(channels: list[dict], slug: str) -> tuple[int, dict] | tuple[None, None]:
+    keys = set(_slug_candidates(slug))
+    for i, ch in enumerate(channels):
+        if ch.get("slug") in keys:
+            return i, ch
+    return None, None
 
 
 @router.post("/admin/scrape")
@@ -82,12 +132,7 @@ def admin_add_channel(
     _: None = Depends(require_admin),
 ) -> dict:
     """Append a manually scraped or entered channel to channels.json."""
-    path = _channels_path()
-    if not path.exists():
-        raise HTTPException(500, "channels.json not found")
-
-    with open(path) as f:
-        data = json.load(f)
+    data = _load_channels_payload()
 
     channels: list[dict] = data.get("channels", [])
 
@@ -125,9 +170,86 @@ def admin_add_channel(
 
     channels.append(new_channel)
     data["channels"] = channels
-    data["count"] = len(channels)
-
-    with open(path, "w") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    _write_channels_payload(data)
 
     return {"ok": True, "slug": slug, "channel": new_channel}
+
+
+@router.get("/admin/channels/full")
+def admin_list_channels_full(
+    _: None = Depends(require_admin),
+    q: str = Query(default=""),
+) -> list[dict]:
+    """List raw channels from channels.json for admin CRUD."""
+    data = _load_channels_payload()
+    channels: list[dict] = data.get("channels", [])
+    query = q.strip().lower()
+    if query:
+        channels = [
+            c for c in channels
+            if query in (c.get("slug") or "").lower()
+            or query in (c.get("name") or "").lower()
+            or query in (c.get("stream_host") or "").lower()
+            or query in (c.get("ai_category") or "").lower()
+        ]
+    return sorted(channels, key=lambda c: ((c.get("name") or c.get("slug") or "").lower()))
+
+
+@router.patch("/admin/channels/{slug:path}")
+def admin_update_channel(
+    slug: str,
+    body: ChannelUpdateRequest,
+    _: None = Depends(require_admin),
+) -> dict:
+    """Update a channel inside channels.json."""
+    data = _load_channels_payload()
+    channels: list[dict] = data.get("channels", [])
+    idx, ch = _find_channel(channels, slug)
+    if ch is None or idx is None:
+        raise HTTPException(404, "Channel not found")
+
+    new_slug = (body.slug if body.slug is not None else ch.get("slug") or slug).strip()
+    if not new_slug:
+        raise HTTPException(400, "slug required")
+    if new_slug != slug and any(c.get("slug") == new_slug for c in channels):
+        raise HTTPException(409, "slug already exists")
+
+    updates = body.model_dump(exclude_unset=True)
+    for key, value in updates.items():
+        if key == "logo":
+            ch["logo"] = (value or "").strip() or None
+        elif key == "requires_proxy":
+            ch["requires_proxy"] = bool(value)
+        elif key == "stream_host":
+            ch["stream_host"] = (value or "").strip() or None
+        elif key == "stream_url":
+            stream_url = (value or "").strip() or None
+            ch["stream_url"] = stream_url
+            if body.stream_host is None:
+                ch["stream_host"] = urlparse(stream_url).netloc if stream_url else None
+            if body.requires_proxy is None:
+                ch["requires_proxy"] = stream_requires_proxy(stream_url)
+        elif key in {"name", "stream_type", "ai_category", "slug", "media_type", "page_url"}:
+            ch[key] = (value or "").strip() if isinstance(value, str) else value
+
+    channels[idx] = ch
+    data["channels"] = channels
+    _write_channels_payload(data)
+    return {"ok": True, "slug": ch.get("slug"), "channel": ch}
+
+
+@router.delete("/admin/channels/{slug:path}")
+def admin_delete_channel(
+    slug: str,
+    _: None = Depends(require_admin),
+) -> dict:
+    """Delete a channel from channels.json."""
+    data = _load_channels_payload()
+    channels: list[dict] = data.get("channels", [])
+    idx, ch = _find_channel(channels, slug)
+    if ch is None or idx is None:
+        raise HTTPException(404, "Channel not found")
+    del channels[idx]
+    data["channels"] = channels
+    _write_channels_payload(data)
+    return {"ok": True, "slug": slug}
