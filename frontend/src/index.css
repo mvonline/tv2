@@ -1418,68 +1418,43 @@ body::before {
 }
 
 .radio-shell--ambilight {
-  --radio-ambilight-top: rgba(140, 110, 255, 0.7);
   --radio-ambilight-left: rgba(70, 140, 255, 0.72);
   --radio-ambilight-right: rgba(255, 92, 150, 0.68);
   --radio-ambilight-bottom: rgba(58, 220, 155, 0.66);
   --radio-ambilight-opacity: 0.6;
   --radio-ambilight-intensity: 1;
   isolation: isolate;
-  overflow: visible;
-}
-
-.radio-shell--ambilight::before,
-.radio-shell--ambilight::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
-  transition: opacity 0.12s linear;
 }
 
 .radio-shell--ambilight::before {
-  inset: -28px;
-  z-index: -1;
-  border-radius: calc(var(--radius) + 22px);
+  content: "";
+  position: absolute;
+  inset: -20px;
+  z-index: 0;
+  pointer-events: none;
   background:
-    linear-gradient(90deg, var(--radio-ambilight-left), transparent 20%, transparent 80%, var(--radio-ambilight-right)),
-    linear-gradient(180deg, var(--radio-ambilight-top), transparent 24%, transparent 76%, var(--radio-ambilight-bottom));
+    radial-gradient(ellipse 70% 52% at 18% 62%, var(--radio-ambilight-left), transparent 68%),
+    radial-gradient(ellipse 68% 52% at 84% 48%, var(--radio-ambilight-right), transparent 68%),
+    radial-gradient(ellipse 82% 38% at 50% 102%, var(--radio-ambilight-bottom), transparent 72%);
   opacity: var(--radio-ambilight-opacity);
   filter:
-    blur(calc(22px + (var(--radio-ambilight-intensity) * 5px)))
-    saturate(calc(1.12 + (var(--radio-ambilight-intensity) * 0.28)))
-    brightness(calc(0.95 + (var(--radio-ambilight-intensity) * 0.2)));
-}
-
-.radio-shell--ambilight::after {
-  inset: 0;
-  z-index: 1;
-  border-radius: inherit;
-  background:
-    linear-gradient(90deg, var(--radio-ambilight-left), transparent 13%, transparent 87%, var(--radio-ambilight-right)),
-    linear-gradient(180deg, var(--radio-ambilight-top), transparent 15%, transparent 85%, var(--radio-ambilight-bottom));
-  opacity: calc(var(--radio-ambilight-opacity) * 0.52);
-  filter:
-    blur(calc(11px + (var(--radio-ambilight-intensity) * 3px)))
-    saturate(calc(1.08 + (var(--radio-ambilight-intensity) * 0.18)));
-  mix-blend-mode: screen;
+    blur(calc(16px + (var(--radio-ambilight-intensity) * 5px)))
+    saturate(calc(1.05 + (var(--radio-ambilight-intensity) * 0.24)))
+    brightness(calc(0.9 + (var(--radio-ambilight-intensity) * 0.18)));
+  transition: opacity 0.12s linear;
 }
 
 .radio-shell--ambilight-performance::before {
-  inset: -16px;
+  inset: -12px;
   filter:
-    blur(calc(12px + (var(--radio-ambilight-intensity) * 2px)))
+    blur(calc(10px + (var(--radio-ambilight-intensity) * 3px)))
     saturate(calc(1 + (var(--radio-ambilight-intensity) * 0.12)))
     brightness(calc(0.88 + (var(--radio-ambilight-intensity) * 0.1)));
 }
 
-.radio-shell--ambilight-performance::after {
-  opacity: calc(var(--radio-ambilight-opacity) * 0.28);
-  filter: blur(8px) saturate(1.08);
-}
-
 .radio-shell--ambilight > * {
   position: relative;
-  z-index: 2;
+  z-index: 1;
 }
 
 .radio-shell__viz {
