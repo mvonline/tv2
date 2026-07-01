@@ -12,7 +12,7 @@ type Props = {
 }
 
 const BAR_COUNT = 48
-const SILENT_ANALYSER_FALLBACK_AFTER_MS = 1800
+const RESUME_AUDIO_VISUALIZER_EVENT = "tv2:resume-audio-visualizer"
 
 type WebkitAudioWindow = Window & {
   webkitAudioContext?: typeof AudioContext
@@ -103,8 +103,6 @@ export function AudioVisualizer({
     let sourceNode: MediaElementAudioSourceNode | null = null
     let t0 = performance.now()
     let lastLevelsEmit = 0
-    let analyserStartedAt = 0
-    let analyserHasSignal = false
     let onPlay: (() => void) | null = null
     let gestureCleanup: (() => void) | null = null
 
@@ -125,22 +123,23 @@ export function AudioVisualizer({
         source.connect(analyser)
         analyser.connect(actx.destination)
         dataArray = new Uint8Array(analyser.frequencyBinCount)
-        analyserStartedAt = performance.now()
         const resumeAudioContext = () => {
           if (actx.state === "suspended") void actx.resume()
         }
         onPlay = resumeAudioContext
         audio.addEventListener("play", onPlay)
+        window.addEventListener(RESUME_AUDIO_VISUALIZER_EVENT, resumeAudioContext)
         window.addEventListener("pointerdown", resumeAudioContext, { passive: true })
         window.addEventListener("touchstart", resumeAudioContext, { passive: true })
         window.addEventListener("keydown", resumeAudioContext)
         gestureCleanup = () => {
+          window.removeEventListener(RESUME_AUDIO_VISUALIZER_EVENT, resumeAudioContext)
           window.removeEventListener("pointerdown", resumeAudioContext)
           window.removeEventListener("touchstart", resumeAudioContext)
           window.removeEventListener("keydown", resumeAudioContext)
         }
       } catch {
-        /* CORS or duplicate source — use fake spectrum */
+        /* CORS or duplicate source — no real analyser is available. */
       }
     }
 
@@ -150,30 +149,16 @@ export function AudioVisualizer({
         analyser.getByteFrequencyData(
           dataArray as Parameters<AnalyserNode["getByteFrequencyData"]>[0],
         )
-        let peak = 0
         const step = Math.max(1, Math.floor(dataArray.length / BAR_COUNT))
         for (let i = 0; i < BAR_COUNT; i++) {
-          const value = dataArray[i * step] ?? 0
-          if (value > peak) peak = value
-          out[i] = value / 255
+          out[i] = (dataArray[i * step] ?? 0) / 255
         }
-        if (peak > 2) analyserHasSignal = true
-        if (
-          !analyserHasSignal &&
-          audio &&
-          !audio.paused &&
-          t - analyserStartedAt > SILENT_ANALYSER_FALLBACK_AFTER_MS
-        ) {
-          const elapsed = (t - t0) / 1000
-          for (let i = 0; i < BAR_COUNT; i++) {
-            const phase = elapsed * 2.2 + i * 0.15
-            out[i] =
-              0.15 +
-              0.55 *
-                (0.5 + 0.5 * Math.sin(phase)) *
-                (0.5 + 0.5 * Math.sin(elapsed * 1.7 + i * 0.08))
-          }
-        }
+        emitLevels(out, t)
+        drawBars(out)
+        return
+      }
+      if (!decorative) {
+        out.fill(0)
         emitLevels(out, t)
         drawBars(out)
         return
