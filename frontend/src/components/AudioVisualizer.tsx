@@ -99,6 +99,7 @@ export function AudioVisualizer({
     }
 
     let dataArray: Uint8Array | null = null
+    let timeArray: Uint8Array | null = null
     let analyser: AnalyserNode | null = null
     let sourceNode: MediaElementAudioSourceNode | null = null
     let actx: AudioContext | null = null
@@ -128,6 +129,7 @@ export function AudioVisualizer({
         source.connect(analyser)
         analyser.connect(actx.destination)
         dataArray = new Uint8Array(analyser.frequencyBinCount)
+        timeArray = new Uint8Array(analyser.fftSize)
         void actx.resume()
       } catch {
         /* CORS or duplicate source — use fake spectrum */
@@ -154,8 +156,31 @@ export function AudioVisualizer({
           dataArray as Parameters<AnalyserNode["getByteFrequencyData"]>[0],
         )
         const step = Math.max(1, Math.floor(dataArray.length / BAR_COUNT))
+        let peak = 0
         for (let i = 0; i < BAR_COUNT; i++) {
-          out[i] = (dataArray[i * step] ?? 0) / 255
+          const value = dataArray[i * step] ?? 0
+          if (value > peak) peak = value
+          out[i] = value / 255
+        }
+
+        if (peak <= 2 && timeArray) {
+          analyser.getByteTimeDomainData(
+            timeArray as Parameters<AnalyserNode["getByteTimeDomainData"]>[0],
+          )
+          const samplesPerBar = Math.max(1, Math.floor(timeArray.length / BAR_COUNT))
+          for (let i = 0; i < BAR_COUNT; i++) {
+            let total = 0
+            let count = 0
+            const start = i * samplesPerBar
+            const end = Math.min(timeArray.length, start + samplesPerBar)
+            for (let j = start; j < end; j += 1) {
+              const centered = ((timeArray[j] ?? 128) - 128) / 128
+              total += centered * centered
+              count += 1
+            }
+            const rms = count ? Math.sqrt(total / count) : 0
+            out[i] = Math.min(1, rms * 5)
+          }
         }
         emitLevels(out, t)
         drawBars(out)
