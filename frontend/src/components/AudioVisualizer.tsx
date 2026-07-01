@@ -12,17 +12,6 @@ type Props = {
 }
 
 const BAR_COUNT = 48
-const RESUME_AUDIO_VISUALIZER_EVENT = "tv2:resume-audio-visualizer"
-
-type WebkitAudioWindow = Window & {
-  webkitAudioContext?: typeof AudioContext
-}
-
-function createAudioContext(): AudioContext {
-  const AudioContextCtor =
-    window.AudioContext ?? (window as WebkitAudioWindow).webkitAudioContext
-  return new AudioContextCtor()
-}
 
 export function AudioVisualizer({
   audio,
@@ -104,7 +93,6 @@ export function AudioVisualizer({
     let t0 = performance.now()
     let lastLevelsEmit = 0
     let onPlay: (() => void) | null = null
-    let resumeCleanup: (() => void) | null = null
 
     const emitLevels = (levels: ArrayLike<number>, t: number) => {
       if (!onLevelsRef.current || t - lastLevelsEmit < 50) return
@@ -114,7 +102,7 @@ export function AudioVisualizer({
 
     if (!decorative && audio) {
       try {
-        const actx = createAudioContext()
+        const actx = new AudioContext()
         ctxRef.current = actx
         const source = actx.createMediaElementSource(audio)
         sourceNode = source
@@ -123,15 +111,10 @@ export function AudioVisualizer({
         source.connect(analyser)
         analyser.connect(actx.destination)
         dataArray = new Uint8Array(analyser.frequencyBinCount)
-        const resumeAudioContext = () => {
+        onPlay = () => {
           void actx.resume()
         }
-        onPlay = resumeAudioContext
         audio.addEventListener("play", onPlay)
-        window.addEventListener(RESUME_AUDIO_VISUALIZER_EVENT, resumeAudioContext)
-        resumeCleanup = () => {
-          window.removeEventListener(RESUME_AUDIO_VISUALIZER_EVENT, resumeAudioContext)
-        }
       } catch {
         /* CORS or duplicate source — use fake spectrum */
       }
@@ -183,7 +166,6 @@ export function AudioVisualizer({
       document.removeEventListener("visibilitychange", onVisibilityChange)
       roCleanup()
       if (audio && onPlay) audio.removeEventListener("play", onPlay)
-      resumeCleanup?.()
       sourceNode?.disconnect()
       analyser?.disconnect()
       const c = ctxRef.current
