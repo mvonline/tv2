@@ -94,13 +94,50 @@ function sampleRegion(
   ]
 }
 
-function tryPlay(media: HTMLMediaElement | null) {
+function tryPlay(media: HTMLMediaElement | null, onFailed?: () => void) {
   if (!media) return
   const result = media.play()
   if (result && typeof result.catch === "function") {
     result.catch(() => {
       /* Browser policy may block unmuted autoplay. */
+      onFailed?.()
     })
+  }
+}
+
+function createPlayRetrier(media: HTMLMediaElement) {
+  let retryTimer = 0
+  let stopped = false
+
+  const clearRetry = () => {
+    if (retryTimer) {
+      window.clearTimeout(retryTimer)
+      retryTimer = 0
+    }
+  }
+
+  const attempt = () => {
+    if (stopped || !media.paused || media.ended) return
+    tryPlay(media, () => {
+      if (stopped || retryTimer || !media.paused) return
+      retryTimer = window.setTimeout(() => {
+        retryTimer = 0
+        attempt()
+      }, 1000)
+    })
+  }
+
+  media.addEventListener("playing", clearRetry)
+  media.addEventListener("pause", attempt)
+
+  return {
+    attempt,
+    stop() {
+      stopped = true
+      clearRetry()
+      media.removeEventListener("playing", clearRetry)
+      media.removeEventListener("pause", attempt)
+    },
   }
 }
 
@@ -194,11 +231,13 @@ export function VideoPlayer({
 
     // Prefer native HLS when the stack advertises support (common on LG/Samsung/AppleTV Safari).
     if (isHls && nativeHlsLikely(video)) {
+      const playRetrier = createPlayRetrier(video)
       video.src = playbackSrc
-      const onCanPlay = () => tryPlay(video)
+      const onCanPlay = () => playRetrier.attempt()
       video.addEventListener("canplay", onCanPlay)
-      tryPlay(video)
+      playRetrier.attempt()
       return () => {
+        playRetrier.stop()
         video.removeEventListener("canplay", onCanPlay)
         video.removeAttribute("src")
         video.load()
@@ -206,6 +245,7 @@ export function VideoPlayer({
     }
 
     if (isHls && Hls.isSupported()) {
+      const playRetrier = createPlayRetrier(video)
       // Workers unreliable on TV Chromium; LL-HLS stresses weak demuxers.
       // Buffer limits prevent OOM on TVs that have 256-512 MB available to the web app.
       const hls = new Hls({
@@ -224,9 +264,9 @@ export function VideoPlayer({
       hlsRef.current = hls
       hls.loadSource(playbackSrc)
       hls.attachMedia(video)
-      const onCanPlay = () => tryPlay(video)
+      const onCanPlay = () => playRetrier.attempt()
       video.addEventListener("canplay", onCanPlay)
-      hls.on(Hls.Events.MANIFEST_PARSED, () => tryPlay(video))
+      hls.on(Hls.Events.MANIFEST_PARSED, () => playRetrier.attempt())
       hls.on(Hls.Events.ERROR, (_, data) => {
         if (!data.fatal) return
         if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
@@ -240,6 +280,7 @@ export function VideoPlayer({
         }
       })
       return () => {
+        playRetrier.stop()
         video.removeEventListener("canplay", onCanPlay)
         hls.destroy()
         hlsRef.current = null
@@ -247,11 +288,13 @@ export function VideoPlayer({
     }
 
     if (!isHls) {
+      const playRetrier = createPlayRetrier(video)
       video.src = url
-      const onCanPlay = () => tryPlay(video)
+      const onCanPlay = () => playRetrier.attempt()
       video.addEventListener("canplay", onCanPlay)
-      tryPlay(video)
+      playRetrier.attempt()
       return () => {
+        playRetrier.stop()
         video.removeEventListener("canplay", onCanPlay)
         video.removeAttribute("src")
         video.load()
