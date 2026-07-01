@@ -256,14 +256,28 @@ export function WatchPage() {
       window.clearTimeout(chromeHideTimer.current)
     }
     chromeHideTimer.current = window.setTimeout(() => {
-      setAmbilightOpen(false)
-      setRelatedDockOpen(false)
-      writeRelatedDockOpenToStorage(false)
+      const activeEl = document.activeElement
+      if (
+        activeEl instanceof HTMLElement &&
+        activeEl.closest(".watch-bar, .watch-sidebar, .related-dock, .ambilight-menu")
+      ) {
+        keepChromeVisible()
+        return
+      }
       setChromeHidden(true)
     }, WATCH_CHROME_AUTOHIDE_MS)
   }, [])
 
   useEffect(() => {
+    if (ambilightOpen || relatedDockOpen) {
+      setChromeHidden(false)
+      if (chromeHideTimer.current !== null) {
+        window.clearTimeout(chromeHideTimer.current)
+        chromeHideTimer.current = null
+      }
+      return
+    }
+
     keepChromeVisible()
 
     const events = [
@@ -289,7 +303,7 @@ export function WatchPage() {
         window.removeEventListener(eventName, keepChromeVisible)
       })
     }
-  }, [keepChromeVisible])
+  }, [ambilightOpen, relatedDockOpen, keepChromeVisible])
 
   const toggleSidebar = useCallback(() => {
     setSidebarCollapsed((c) => {
@@ -444,6 +458,7 @@ export function WatchPage() {
       <div className="watch-shell">
         <div
           className="watch-body"
+          onMouseMove={keepChromeVisible}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >

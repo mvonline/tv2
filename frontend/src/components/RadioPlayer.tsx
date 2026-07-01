@@ -3,7 +3,6 @@ import { Radio } from "lucide-react"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import type { Channel } from "@/types/channel"
 import { AudioVisualizer } from "@/components/AudioVisualizer"
-import { RadioNameArt } from "@/components/RadioNameArt"
 import { hlsPlaybackUrl } from "@/lib/hlsProxyUrl"
 import type { AmbilightSettings } from "@/components/VideoPlayer"
 
@@ -15,50 +14,13 @@ type Props = {
   ambilight?: AmbilightSettings
 }
 
-function tryPlay(media: HTMLMediaElement | null, onFailed?: () => void) {
+function tryPlay(media: HTMLMediaElement | null) {
   if (!media) return
   const result = media.play()
   if (result && typeof result.catch === "function") {
     result.catch(() => {
       /* Browser policy may block unmuted autoplay. */
-      onFailed?.()
     })
-  }
-}
-
-function createPlayRetrier(media: HTMLMediaElement) {
-  let retryTimer = 0
-  let stopped = false
-
-  const clearRetry = () => {
-    if (retryTimer) {
-      window.clearTimeout(retryTimer)
-      retryTimer = 0
-    }
-  }
-
-  const attempt = () => {
-    if (stopped || !media.paused || media.ended) return
-    tryPlay(media, () => {
-      if (stopped || retryTimer || !media.paused) return
-      retryTimer = window.setTimeout(() => {
-        retryTimer = 0
-        attempt()
-      }, 1000)
-    })
-  }
-
-  media.addEventListener("playing", clearRetry)
-  media.addEventListener("pause", attempt)
-
-  return {
-    attempt,
-    stop() {
-      stopped = true
-      clearRetry()
-      media.removeEventListener("playing", clearRetry)
-      media.removeEventListener("pause", attempt)
-    },
   }
 }
 
@@ -71,7 +33,6 @@ export function RadioPlayer({
   const [audioEl, setAudioEl] = useState<HTMLAudioElement | null>(null)
   const hlsRef = useRef<Hls | null>(null)
   const shellRef = useRef<HTMLDivElement>(null)
-  const levelsRef = useRef<Float32Array | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   const url = channel.stream_url
@@ -93,7 +54,6 @@ export function RadioPlayer({
     const source = isHls ? (hlsUrl ?? url) : url
 
     if (isHls && Hls.isSupported()) {
-      const playRetrier = createPlayRetrier(audio)
       // Workers unreliable on TV Chromium builds; buffer limits prevent OOM.
       const hls = new Hls({
         enableWorker: false,
@@ -105,9 +65,9 @@ export function RadioPlayer({
       hlsRef.current = hls
       hls.loadSource(source)
       hls.attachMedia(audio)
-      const onCanPlay = () => playRetrier.attempt()
+      const onCanPlay = () => tryPlay(audio)
       audio.addEventListener("canplay", onCanPlay)
-      hls.on(Hls.Events.MANIFEST_PARSED, () => playRetrier.attempt())
+      hls.on(Hls.Events.MANIFEST_PARSED, () => tryPlay(audio))
       hls.on(Hls.Events.ERROR, (_, data) => {
         if (data.fatal) {
           setError(
@@ -118,7 +78,6 @@ export function RadioPlayer({
         }
       })
       return () => {
-        playRetrier.stop()
         audio.removeEventListener("canplay", onCanPlay)
         hls.destroy()
         hlsRef.current = null
@@ -126,13 +85,11 @@ export function RadioPlayer({
     }
 
     if (isHls && audio.canPlayType("application/vnd.apple.mpegurl")) {
-      const playRetrier = createPlayRetrier(audio)
       audio.src = source
-      const onCanPlay = () => playRetrier.attempt()
+      const onCanPlay = () => tryPlay(audio)
       audio.addEventListener("canplay", onCanPlay)
-      playRetrier.attempt()
+      tryPlay(audio)
       return () => {
-        playRetrier.stop()
         audio.removeEventListener("canplay", onCanPlay)
         audio.removeAttribute("src")
         audio.load()
@@ -140,13 +97,11 @@ export function RadioPlayer({
     }
 
     if (!isHls) {
-      const playRetrier = createPlayRetrier(audio)
       audio.src = url
-      const onCanPlay = () => playRetrier.attempt()
+      const onCanPlay = () => tryPlay(audio)
       audio.addEventListener("canplay", onCanPlay)
-      playRetrier.attempt()
+      tryPlay(audio)
       return () => {
-        playRetrier.stop()
         audio.removeEventListener("canplay", onCanPlay)
         audio.removeAttribute("src")
         audio.load()
@@ -163,17 +118,10 @@ export function RadioPlayer({
   const syncAmbilightLevels = useCallback(
     (levels: ArrayLike<number>) => {
       const shell = shellRef.current
+      if (!shell || !ambilight?.enabled) return
+
       const len = levels.length
       if (!len) return
-
-      if (!levelsRef.current || levelsRef.current.length !== len) {
-        levelsRef.current = new Float32Array(len)
-      }
-      for (let i = 0; i < len; i += 1) {
-        levelsRef.current[i] = levels[i] ?? 0
-      }
-
-      if (!shell || !ambilight?.enabled) return
 
       const avgRange = (start: number, end: number) => {
         let total = 0
@@ -200,8 +148,6 @@ export function RadioPlayer({
       const leftPulse = Math.min(1, bass * 0.75 + high * 0.75 + mid * 0.2)
       const sideAlpha = (side: "top" | "right" | "bottom" | "left", value: number) =>
         ambilight.sides[side] ? Math.max(0.22, value * 0.78) : 0
-      const sideScale = (side: "top" | "right" | "bottom" | "left", value: number) =>
-        ambilight.sides[side] ? Math.max(0.08, Math.min(1, value)) : 0
 
       shell.style.setProperty("--radio-ambilight-opacity", String(opacity))
       shell.style.setProperty("--radio-ambilight-intensity", String(intensity))
@@ -209,10 +155,6 @@ export function RadioPlayer({
       shell.style.setProperty("--radio-ambilight-right", `rgba(255, ${Math.round(76 + high * 120)}, ${Math.round(120 + mid * 90)}, ${sideAlpha("right", rightPulse)})`)
       shell.style.setProperty("--radio-ambilight-bottom", `rgba(${Math.round(38 + mid * 110)}, ${Math.round(190 + bass * 55)}, ${Math.round(135 + high * 80)}, ${sideAlpha("bottom", bottomPulse)})`)
       shell.style.setProperty("--radio-ambilight-left", `rgba(${Math.round(70 + bass * 120)}, ${Math.round(120 + mid * 80)}, 255, ${sideAlpha("left", leftPulse)})`)
-      shell.style.setProperty("--radio-eq-top", String(sideScale("top", topPulse)))
-      shell.style.setProperty("--radio-eq-right", String(sideScale("right", rightPulse)))
-      shell.style.setProperty("--radio-eq-bottom", String(sideScale("bottom", bottomPulse)))
-      shell.style.setProperty("--radio-eq-left", String(sideScale("left", leftPulse)))
     },
     [ambilight],
   )
@@ -252,20 +194,7 @@ export function RadioPlayer({
         ambilight?.performanceMode ? "radio-shell--ambilight-performance" : ""
       } ${className ?? ""}`}
     >
-      {ambilightEnabled && (
-        <div className="radio-eq-edges" aria-hidden>
-          <span className="radio-eq-edge radio-eq-edge--top" />
-          <span className="radio-eq-edge radio-eq-edge--right" />
-          <span className="radio-eq-edge radio-eq-edge--bottom" />
-          <span className="radio-eq-edge radio-eq-edge--left" />
-        </div>
-      )}
       <div className="radio-shell__viz">
-        <RadioNameArt
-          name={channel.name ?? channel.slug}
-          levelsRef={levelsRef}
-          streamKey={streamKey}
-        />
         <AudioVisualizer
           audio={audioEl}
           decorative={false}
