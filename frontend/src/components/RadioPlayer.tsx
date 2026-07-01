@@ -1,5 +1,5 @@
 import Hls from "hls.js"
-import { Radio } from "lucide-react"
+import { Pause, Play, Radio } from "lucide-react"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import type { Channel } from "@/types/channel"
 import { AudioVisualizer } from "@/components/AudioVisualizer"
@@ -49,7 +49,6 @@ function createPlayRetrier(media: HTMLMediaElement) {
   }
 
   media.addEventListener("playing", clearRetry)
-  media.addEventListener("pause", attempt)
 
   return {
     attempt,
@@ -57,9 +56,14 @@ function createPlayRetrier(media: HTMLMediaElement) {
       stopped = true
       clearRetry()
       media.removeEventListener("playing", clearRetry)
-      media.removeEventListener("pause", attempt)
     },
   }
+}
+
+function resetMedia(media: HTMLMediaElement) {
+  media.pause()
+  media.removeAttribute("src")
+  media.load()
 }
 
 export function RadioPlayer({
@@ -73,6 +77,7 @@ export function RadioPlayer({
   const shellRef = useRef<HTMLDivElement>(null)
   const levelsRef = useRef<Float32Array | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
 
   const url = channel.stream_url
   const isHls =
@@ -89,6 +94,13 @@ export function RadioPlayer({
     setError(null)
     const audio = audioEl
     if (!audio || !url || isIframe) return
+    setIsPlaying(!audio.paused)
+
+    const syncPlaying = () => setIsPlaying(!audio.paused)
+    audio.addEventListener("play", syncPlaying)
+    audio.addEventListener("playing", syncPlaying)
+    audio.addEventListener("pause", syncPlaying)
+    audio.addEventListener("ended", syncPlaying)
 
     const source = isHls ? (hlsUrl ?? url) : url
 
@@ -119,9 +131,15 @@ export function RadioPlayer({
       })
       return () => {
         playRetrier.stop()
+        audio.removeEventListener("play", syncPlaying)
+        audio.removeEventListener("playing", syncPlaying)
+        audio.removeEventListener("pause", syncPlaying)
+        audio.removeEventListener("ended", syncPlaying)
         audio.removeEventListener("canplay", onCanPlay)
+        hls.detachMedia()
         hls.destroy()
         hlsRef.current = null
+        resetMedia(audio)
       }
     }
 
@@ -133,9 +151,12 @@ export function RadioPlayer({
       playRetrier.attempt()
       return () => {
         playRetrier.stop()
+        audio.removeEventListener("play", syncPlaying)
+        audio.removeEventListener("playing", syncPlaying)
+        audio.removeEventListener("pause", syncPlaying)
+        audio.removeEventListener("ended", syncPlaying)
         audio.removeEventListener("canplay", onCanPlay)
-        audio.removeAttribute("src")
-        audio.load()
+        resetMedia(audio)
       }
     }
 
@@ -147,9 +168,12 @@ export function RadioPlayer({
       playRetrier.attempt()
       return () => {
         playRetrier.stop()
+        audio.removeEventListener("play", syncPlaying)
+        audio.removeEventListener("playing", syncPlaying)
+        audio.removeEventListener("pause", syncPlaying)
+        audio.removeEventListener("ended", syncPlaying)
         audio.removeEventListener("canplay", onCanPlay)
-        audio.removeAttribute("src")
-        audio.load()
+        resetMedia(audio)
       }
     }
 
@@ -159,6 +183,16 @@ export function RadioPlayer({
 
   const streamKey = `${channel.page_url}|${url ?? ""}`
   const ambilightEnabled = Boolean(ambilight?.enabled)
+
+  const togglePlayback = useCallback(() => {
+    const audio = audioEl
+    if (!audio) return
+    if (audio.paused) {
+      tryPlay(audio)
+    } else {
+      audio.pause()
+    }
+  }, [audioEl])
 
   const syncAmbilightLevels = useCallback(
     (levels: ArrayLike<number>) => {
@@ -274,10 +308,24 @@ export function RadioPlayer({
         />
       </div>
       <div className="radio-shell__controls">
+        <button
+          type="button"
+          className="radio-play-btn"
+          onClick={togglePlayback}
+          aria-label={isPlaying ? "Pause radio" : "Play radio"}
+          title={isPlaying ? "Pause" : "Play"}
+        >
+          {isPlaying ? (
+            <Pause size={20} strokeWidth={2.4} aria-hidden />
+          ) : (
+            <Play size={20} strokeWidth={2.4} aria-hidden />
+          )}
+          <span>{isPlaying ? "Pause" : "Play"}</span>
+        </button>
         <audio
+          key={streamKey}
           ref={setAudioEl}
           className="radio-audio-el"
-          controls
           autoPlay
           muted={muted}
           crossOrigin="anonymous"
