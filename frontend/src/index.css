@@ -2734,6 +2734,7 @@ body:has(.home-guide) {
   }
 
   .watch-bar__actions--pills .watch-bar__pill,
+  .watch-bar__actions--pills .watch-bar__menu,
   .watch-bar__actions--pills .favorite-btn.favorite-btn--bar {
     flex: 0 0 44px;
     width: 44px;
@@ -2744,6 +2745,13 @@ body:has(.home-guide) {
     gap: 0;
   }
 
+  .watch-bar__actions--pills .watch-bar__menu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+  }
+
   .watch-bar__actions--pills .watch-bar__pill {
     font-size: 0;
   }
@@ -2751,6 +2759,15 @@ body:has(.home-guide) {
   .watch-bar__actions--pills .watch-bar__pill svg,
   .watch-bar__actions--pills .favorite-btn.favorite-btn--bar svg {
     flex: 0 0 auto;
+  }
+
+  .watch-bar__actions--pills .ambilight-menu {
+    position: fixed;
+    top: calc(max(10px, env(safe-area-inset-top)) + 104px);
+    right: max(12px, env(safe-area-inset-right));
+    left: max(12px, env(safe-area-inset-left));
+    z-index: 80;
+    width: auto;
   }
 
   /* Give tappable rows more vertical breathing room */
