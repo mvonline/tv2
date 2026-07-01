@@ -23,6 +23,7 @@ import os
 import time
 from contextlib import asynccontextmanager
 from pathlib import Path
+from urllib.parse import urlsplit, urlunsplit
 
 from dotenv import load_dotenv
 
@@ -48,7 +49,16 @@ def _cors_allow_origins() -> list[str]:
     raw = os.environ.get("CORS_ORIGINS", "*").strip()
     if not raw or raw == "*":
         return ["*"]
-    return [o.strip() for o in raw.split(",") if o.strip()]
+    origins: list[str] = []
+    for origin in (o.strip() for o in raw.split(",")):
+        if not origin:
+            continue
+        parsed = urlsplit(origin)
+        if parsed.scheme and parsed.netloc:
+            origins.append(urlunsplit((parsed.scheme, parsed.netloc, "", "", "")))
+        else:
+            origins.append(origin.rstrip("/"))
+    return origins
 
 
 async def _analytics_cleanup_loop(retention_days: int) -> None:
