@@ -1767,11 +1767,7 @@ body::before {
 }
 
 .radio-audio-el {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-  pointer-events: none;
+  display: none;
 }
 
 .radio-shell--iframe .radio-shell__iframe-wrap {
