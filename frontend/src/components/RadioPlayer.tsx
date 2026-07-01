@@ -7,6 +7,8 @@ import { RadioNameArt } from "@/components/RadioNameArt"
 import { hlsPlaybackUrl } from "@/lib/hlsProxyUrl"
 import type { AmbilightSettings } from "@/components/VideoPlayer"
 
+const RESUME_AUDIO_VISUALIZER_EVENT = "tv2:resume-audio-visualizer"
+
 type Props = {
   channel: Channel
   className?: string
@@ -188,6 +190,7 @@ export function RadioPlayer({
     const audio = audioEl
     if (!audio) return
     if (audio.paused) {
+      window.dispatchEvent(new Event(RESUME_AUDIO_VISUALIZER_EVENT))
       tryPlay(audio)
     } else {
       audio.pause()
