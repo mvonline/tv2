@@ -23,6 +23,11 @@ export function AudioVisualizer({
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const rafRef = useRef<number>(0)
   const ctxRef = useRef<AudioContext | null>(null)
+  const onLevelsRef = useRef(onLevels)
+
+  useEffect(() => {
+    onLevelsRef.current = onLevels
+  }, [onLevels])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -84,14 +89,23 @@ export function AudioVisualizer({
 
     let dataArray: Uint8Array | null = null
     let analyser: AnalyserNode | null = null
+    let sourceNode: MediaElementAudioSourceNode | null = null
     let t0 = performance.now()
+    let lastLevelsEmit = 0
     let onPlay: (() => void) | null = null
+
+    const emitLevels = (levels: ArrayLike<number>, t: number) => {
+      if (!onLevelsRef.current || t - lastLevelsEmit < 50) return
+      lastLevelsEmit = t
+      onLevelsRef.current(levels)
+    }
 
     if (!decorative && audio) {
       try {
         const actx = new AudioContext()
         ctxRef.current = actx
         const source = actx.createMediaElementSource(audio)
+        sourceNode = source
         analyser = actx.createAnalyser()
         analyser.fftSize = 256
         source.connect(analyser)
@@ -116,7 +130,7 @@ export function AudioVisualizer({
         for (let i = 0; i < BAR_COUNT; i++) {
           out[i] = (dataArray[i * step] ?? 0) / 255
         }
-        onLevels?.(out)
+        emitLevels(out, t)
         drawBars(out)
         return
       }
@@ -129,7 +143,7 @@ export function AudioVisualizer({
             (0.5 + 0.5 * Math.sin(phase)) *
             (0.5 + 0.5 * Math.sin(elapsed * 1.7 + i * 0.08))
       }
-      onLevels?.(out)
+      emitLevels(out, t)
       drawBars(out)
     }
 
@@ -152,11 +166,13 @@ export function AudioVisualizer({
       document.removeEventListener("visibilitychange", onVisibilityChange)
       roCleanup()
       if (audio && onPlay) audio.removeEventListener("play", onPlay)
+      sourceNode?.disconnect()
+      analyser?.disconnect()
       const c = ctxRef.current
       if (c?.state !== "closed") void c?.close()
       ctxRef.current = null
     }
-  }, [audio, decorative, streamKey, onLevels])
+  }, [audio, decorative, streamKey])
 
   return (
     <canvas
