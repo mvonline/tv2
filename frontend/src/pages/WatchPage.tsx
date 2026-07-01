@@ -41,10 +41,13 @@ import { channelFromRouteKey, watchUrlForChannel } from "@/lib/paths"
 import { channelLogoUrl } from "@/lib/publicUrl"
 
 const AMBILIGHT_KEY = "tv2-ambilight-settings"
+const AMBILIGHT_MIN_OPACITY = 0.2
+const AMBILIGHT_MAX_OPACITY = 2
 
 const DEFAULT_AMBILIGHT_SETTINGS: AmbilightSettings = {
   enabled: true,
-  opacity: 0.9,
+  opacity: 1.2,
+  performanceMode: false,
   sides: {
     top: true,
     right: true,
@@ -72,8 +75,12 @@ function readAmbilightSettings(): AmbilightSettings {
           : DEFAULT_AMBILIGHT_SETTINGS.enabled,
       opacity:
         typeof parsed.opacity === "number"
-          ? Math.max(0.2, Math.min(1, parsed.opacity))
+          ? Math.max(AMBILIGHT_MIN_OPACITY, Math.min(AMBILIGHT_MAX_OPACITY, parsed.opacity))
           : DEFAULT_AMBILIGHT_SETTINGS.opacity,
+      performanceMode:
+        typeof parsed.performanceMode === "boolean"
+          ? parsed.performanceMode
+          : DEFAULT_AMBILIGHT_SETTINGS.performanceMode,
       sides: {
         top: parsed.sides?.top ?? DEFAULT_AMBILIGHT_SETTINGS.sides.top,
         right: parsed.sides?.right ?? DEFAULT_AMBILIGHT_SETTINGS.sides.right,
@@ -153,7 +160,14 @@ export function WatchPage() {
   const setAmbilightOpacity = useCallback((value: number) => {
     setAmbilight((current) => ({
       ...current,
-      opacity: Math.max(0.2, Math.min(1, value)),
+      opacity: Math.max(AMBILIGHT_MIN_OPACITY, Math.min(AMBILIGHT_MAX_OPACITY, value)),
+    }))
+  }, [])
+
+  const toggleAmbilightPerformanceMode = useCallback(() => {
+    setAmbilight((current) => ({
+      ...current,
+      performanceMode: !current.performanceMode,
     }))
   }, [])
 
@@ -480,6 +494,14 @@ export function WatchPage() {
                         />
                         <span>Enable Ambilight</span>
                       </label>
+                      <label className="ambilight-menu__row">
+                        <input
+                          type="checkbox"
+                          checked={ambilight.performanceMode}
+                          onChange={toggleAmbilightPerformanceMode}
+                        />
+                        <span>Performance mode</span>
+                      </label>
                       <div className="ambilight-menu__sides">
                         {AMBILIGHT_SIDES.map((side) => (
                           <button
@@ -501,8 +523,8 @@ export function WatchPage() {
                         <span>Opacity {Math.round(ambilight.opacity * 100)}%</span>
                         <input
                           type="range"
-                          min="0.2"
-                          max="1"
+                          min={AMBILIGHT_MIN_OPACITY}
+                          max={AMBILIGHT_MAX_OPACITY}
                           step="0.05"
                           value={ambilight.opacity}
                           onChange={(event) =>

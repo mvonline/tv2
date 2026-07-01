@@ -20,6 +20,7 @@ export type AmbilightSettings = {
   enabled: boolean
   sides: Record<AmbilightSide, boolean>
   opacity: number
+  performanceMode: boolean
 }
 
 const DEFAULT_AMBILIGHT: AmbilightSettings = {
@@ -30,7 +31,8 @@ const DEFAULT_AMBILIGHT: AmbilightSettings = {
     bottom: true,
     left: true,
   },
-  opacity: 0.9,
+  opacity: 1.2,
+  performanceMode: false,
 }
 
 /** Embedded TV browsers (webOS, Tizen, …) often expose native HLS and choke on MSE workers. */
@@ -249,9 +251,10 @@ export function VideoPlayer({
     let lastSample = 0
     const canvas = document.createElement("canvas")
     const ctx = canvas.getContext("2d", { willReadFrequently: true })
-    const sampleWidth = 40
-    const sampleHeight = 24
-    const edge = 5
+    const sampleWidth = ambilight.performanceMode ? 24 : 40
+    const sampleHeight = ambilight.performanceMode ? 14 : 24
+    const edge = ambilight.performanceMode ? 3 : 5
+    const sampleInterval = ambilight.performanceMode ? 360 : 180
 
     if (!ctx) return
 
@@ -260,7 +263,7 @@ export function VideoPlayer({
 
     const sample = (now: number) => {
       if (stopped) return
-      if (now - lastSample < 180) return
+      if (now - lastSample < sampleInterval) return
       lastSample = now
 
       if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA || video.paused) {
@@ -338,15 +341,17 @@ export function VideoPlayer({
       }
       setAmbilightLive(false)
     }
-  }, [ambilight.enabled, ambilight.sides, isIframe, url, source])
+  }, [ambilight.enabled, ambilight.sides, ambilight.performanceMode, isIframe, url, source])
 
   useEffect(() => {
     const shell = shellRef.current
     if (!shell) return
 
-    const opacity = Math.max(0, Math.min(1, ambilight.opacity))
-    shell.style.setProperty("--ambilight-opacity", String(opacity))
-    shell.style.setProperty("--ambilight-inner-opacity", String(opacity * 0.42))
+    const intensity = Math.max(0, Math.min(2, ambilight.opacity))
+    shell.style.setProperty("--ambilight-opacity", String(Math.min(1, intensity)))
+    shell.style.setProperty("--ambilight-inner-opacity", String(Math.min(0.82, intensity * 0.42)))
+    shell.style.setProperty("--ambilight-intensity", String(intensity))
+    shell.style.setProperty("--ambilight-performance", ambilight.performanceMode ? "1" : "0")
 
     const sides: AmbilightSide[] = ["top", "right", "bottom", "left"]
     sides.forEach((side) => {
@@ -374,7 +379,7 @@ export function VideoPlayer({
     <div
       className={`video-shell video-shell--ambilight ${
         ambilight.enabled && ambilightLive ? "is-ambilight-live" : ""
-      } ${className ?? ""}`}
+      } ${ambilight.performanceMode ? "video-shell--ambilight-performance" : ""} ${className ?? ""}`}
       ref={shellRef}
     >
       <video

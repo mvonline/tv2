@@ -1447,6 +1447,7 @@ body::before {
   --ambilight-left: rgba(140, 99, 255, 0.46);
   --ambilight-opacity: 0.9;
   --ambilight-inner-opacity: 0.38;
+  --ambilight-intensity: 1;
   isolation: isolate;
   overflow: visible;
   border-color: rgba(255, 255, 255, 0.18);
@@ -1471,7 +1472,10 @@ body::before {
   background:
     linear-gradient(90deg, var(--ambilight-left), transparent 22%, transparent 78%, var(--ambilight-right)),
     linear-gradient(180deg, var(--ambilight-top), transparent 25%, transparent 75%, var(--ambilight-bottom));
-  filter: blur(26px) saturate(1.35);
+  filter:
+    blur(calc(24px + (var(--ambilight-intensity) * 6px)))
+    saturate(calc(1.15 + (var(--ambilight-intensity) * 0.35)))
+    brightness(calc(0.9 + (var(--ambilight-intensity) * 0.28)));
 }
 
 .video-shell--ambilight::after {
@@ -1481,7 +1485,10 @@ body::before {
   background:
     linear-gradient(90deg, var(--ambilight-left), transparent 12%, transparent 88%, var(--ambilight-right)),
     linear-gradient(180deg, var(--ambilight-top), transparent 14%, transparent 86%, var(--ambilight-bottom));
-  filter: blur(16px) saturate(1.35);
+  filter:
+    blur(calc(13px + (var(--ambilight-intensity) * 4px)))
+    saturate(calc(1.1 + (var(--ambilight-intensity) * 0.3)))
+    brightness(calc(0.9 + (var(--ambilight-intensity) * 0.22)));
   mix-blend-mode: screen;
   opacity: var(--ambilight-inner-opacity);
 }
@@ -1492,6 +1499,23 @@ body::before {
 
 .video-shell--ambilight.is-ambilight-live::after {
   opacity: var(--ambilight-inner-opacity);
+}
+
+.video-shell--ambilight-performance {
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.32);
+}
+
+.video-shell--ambilight-performance::before {
+  inset: -20px;
+  border-radius: calc(var(--radius) + 16px);
+  filter:
+    blur(calc(14px + (var(--ambilight-intensity) * 3px)))
+    saturate(calc(1.05 + (var(--ambilight-intensity) * 0.18)))
+    brightness(calc(0.88 + (var(--ambilight-intensity) * 0.16)));
+}
+
+.video-shell--ambilight-performance::after {
+  display: none;
 }
 
 .video-el {
