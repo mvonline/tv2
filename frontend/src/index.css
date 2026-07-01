@@ -1774,23 +1774,6 @@ body::before {
   pointer-events: none;
 }
 
-@supports (-webkit-touch-callout: none) {
-  @media (hover: none) {
-    .radio-play-btn {
-      display: none;
-    }
-
-    .radio-audio-el {
-      position: static;
-      width: 100%;
-      height: auto;
-      min-height: 48px;
-      opacity: 1;
-      pointer-events: auto;
-    }
-  }
-}
-
 .radio-shell--iframe .radio-shell__iframe-wrap {
   padding: 0 16px 8px;
 }
