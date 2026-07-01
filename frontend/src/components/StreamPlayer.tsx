@@ -13,10 +13,7 @@ type Props = {
 
 export function isRadioChannel(channel: Channel): boolean {
   if (channel.media_type === "radio") return true
-  if (channel.stream_type && ["aac", "audio", "mp3"].includes(channel.stream_type.toLowerCase())) {
-    return true
-  }
-  return false
+  return channel.category_path.toLowerCase().includes("radio")
 }
 
 /** Native video PiP is only for direct / HLS video, not iframe embeds or radio. */

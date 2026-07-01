@@ -63,7 +63,7 @@ export function RadioNameArt({ name, levelsRef, streamKey }: Props) {
       const levels = levelsRef.current
 
       g.clearRect(0, 0, w, h)
-      g.fillStyle = "rgba(3, 5, 10, 0.5)"
+      g.fillStyle = "rgba(3, 5, 10, 0.74)"
       g.fillRect(0, 0, w, h)
 
       let bass = 0.18
@@ -103,23 +103,16 @@ export function RadioNameArt({ name, levelsRef, streamKey }: Props) {
               Math.sin(tick * 0.32 + x * 0.34 + y * 0.72 + bass * 3)
           const v = Math.min(1, wave * (0.18 + pulse * 0.82) + high * 0.35)
           const idx = Math.min(BLOCKS.length - 1, Math.floor(v * BLOCKS.length))
-          g.fillStyle = `rgba(${Math.round(74 + high * 120)}, ${Math.round(
-            145 + mid * 82,
-          )}, ${Math.round(175 + bass * 62)}, ${0.08 + v * 0.34})`
+          g.fillStyle = `rgba(${Math.round(80 + high * 140)}, ${Math.round(
+            150 + mid * 90,
+          )}, ${Math.round(170 + bass * 70)}, ${0.12 + v * 0.48})`
           g.fillText(BLOCKS[idx], x * cellW + cellW / 2, y * cellH + cellH / 2)
         }
       }
 
       const centerY = h * 0.62
-      const panelX = w * 0.08
-      const panelY = centerY - cellH * 1.85
-      const panelW = w * 0.84
-      const panelH = cellH * 3.65
-      g.fillStyle = "rgba(1, 5, 12, 0.78)"
-      g.fillRect(panelX, panelY, panelW, panelH)
-      g.strokeStyle = "rgba(255, 255, 255, 0.16)"
-      g.lineWidth = Math.max(1, dpr)
-      g.strokeRect(panelX + 0.5 * dpr, panelY + 0.5 * dpr, panelW - dpr, panelH - dpr)
+      g.fillStyle = "rgba(0, 0, 0, 0.42)"
+      g.fillRect(w * 0.1, centerY - cellH * 1.65, w * 0.8, cellH * 3.3)
 
       g.fillStyle = `rgba(255, ${Math.round(205 + pulse * 45)}, 94, 0.94)`
       g.font = `${Math.max(11, Math.floor(cellH * 0.8))}px ui-monospace, monospace`
@@ -127,10 +120,7 @@ export function RadioNameArt({ name, levelsRef, streamKey }: Props) {
 
       g.fillStyle = "#f4f7ff"
       g.font = `700 ${Math.max(20, Math.floor(cellH * 1.55))}px ui-monospace, monospace`
-      g.shadowColor = "rgba(0, 0, 0, 0.9)"
-      g.shadowBlur = 10 * dpr
       g.fillText(title.toUpperCase(), w / 2, centerY + cellH * 0.38)
-      g.shadowBlur = 0
 
       const meterW = w * 0.58
       const meterX = (w - meterW) / 2

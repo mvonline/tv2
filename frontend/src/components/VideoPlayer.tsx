@@ -128,6 +128,7 @@ function createPlayRetrier(media: HTMLMediaElement) {
   }
 
   media.addEventListener("playing", clearRetry)
+  media.addEventListener("pause", attempt)
 
   return {
     attempt,
@@ -135,6 +136,7 @@ function createPlayRetrier(media: HTMLMediaElement) {
       stopped = true
       clearRetry()
       media.removeEventListener("playing", clearRetry)
+      media.removeEventListener("pause", attempt)
     },
   }
 }
