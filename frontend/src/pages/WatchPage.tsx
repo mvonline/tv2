@@ -5,6 +5,7 @@ import {
   ChevronRight,
   Home,
   LayoutGrid,
+  Lightbulb,
   List,
   Maximize2,
   Minimize2,
@@ -31,12 +32,59 @@ import {
   StreamPlayer,
   channelSupportsPictureInPicture,
 } from "@/components/StreamPlayer"
+import type { AmbilightSettings, AmbilightSide } from "@/components/VideoPlayer"
 import { useChannels } from "@/context/ChannelsContext"
 import { useRecentlyWatched } from "@/context/RecentlyWatchedContext"
 import { channelNumber } from "@/lib/channelNumber"
 import { useTvRemote, DIGIT_AUTO_SUBMIT_AFTER_MS } from "@/hooks/useTvRemote"
 import { channelFromRouteKey, watchUrlForChannel } from "@/lib/paths"
 import { channelLogoUrl } from "@/lib/publicUrl"
+
+const AMBILIGHT_KEY = "tv2-ambilight-settings"
+
+const DEFAULT_AMBILIGHT_SETTINGS: AmbilightSettings = {
+  enabled: true,
+  opacity: 0.9,
+  sides: {
+    top: true,
+    right: true,
+    bottom: true,
+    left: true,
+  },
+}
+
+const AMBILIGHT_SIDES: { id: AmbilightSide; label: string }[] = [
+  { id: "top", label: "Top" },
+  { id: "right", label: "Right" },
+  { id: "bottom", label: "Bottom" },
+  { id: "left", label: "Left" },
+]
+
+function readAmbilightSettings(): AmbilightSettings {
+  try {
+    const raw = localStorage.getItem(AMBILIGHT_KEY)
+    if (!raw) return DEFAULT_AMBILIGHT_SETTINGS
+    const parsed = JSON.parse(raw) as Partial<AmbilightSettings>
+    return {
+      enabled:
+        typeof parsed.enabled === "boolean"
+          ? parsed.enabled
+          : DEFAULT_AMBILIGHT_SETTINGS.enabled,
+      opacity:
+        typeof parsed.opacity === "number"
+          ? Math.max(0.2, Math.min(1, parsed.opacity))
+          : DEFAULT_AMBILIGHT_SETTINGS.opacity,
+      sides: {
+        top: parsed.sides?.top ?? DEFAULT_AMBILIGHT_SETTINGS.sides.top,
+        right: parsed.sides?.right ?? DEFAULT_AMBILIGHT_SETTINGS.sides.right,
+        bottom: parsed.sides?.bottom ?? DEFAULT_AMBILIGHT_SETTINGS.sides.bottom,
+        left: parsed.sides?.left ?? DEFAULT_AMBILIGHT_SETTINGS.sides.left,
+      },
+    }
+  } catch {
+    return DEFAULT_AMBILIGHT_SETTINGS
+  }
+}
 
 export function WatchPage() {
   const { channelKey } = useParams<{ channelKey: string }>()
@@ -51,6 +99,8 @@ export function WatchPage() {
   )
   const [pipVideoEl, setPipVideoEl] = useState<HTMLVideoElement | null>(null)
   const [pipSupported, setPipSupported] = useState(false)
+  const [ambilightOpen, setAmbilightOpen] = useState(false)
+  const [ambilight, setAmbilight] = useState(readAmbilightSettings)
 
   const setPipVideoRef = useCallback((el: HTMLVideoElement | null) => {
     setPipVideoEl(el)
@@ -77,6 +127,35 @@ export function WatchPage() {
       /* PiP unavailable */
     }
   }, [pipVideoEl])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(AMBILIGHT_KEY, JSON.stringify(ambilight))
+    } catch {
+      /* ignore */
+    }
+  }, [ambilight])
+
+  const toggleAmbilight = useCallback(() => {
+    setAmbilight((current) => ({ ...current, enabled: !current.enabled }))
+  }, [])
+
+  const toggleAmbilightSide = useCallback((side: AmbilightSide) => {
+    setAmbilight((current) => ({
+      ...current,
+      sides: {
+        ...current.sides,
+        [side]: !current.sides[side],
+      },
+    }))
+  }, [])
+
+  const setAmbilightOpacity = useCallback((value: number) => {
+    setAmbilight((current) => ({
+      ...current,
+      opacity: Math.max(0.2, Math.min(1, value)),
+    }))
+  }, [])
 
   const { recordVisit } = useRecentlyWatched()
 
@@ -376,6 +455,64 @@ export function WatchPage() {
                     <PictureInPicture2 size={20} strokeWidth={2} aria-hidden />
                   </button>
                 )}
+                <div className="watch-bar__menu">
+                  <button
+                    type="button"
+                    className={
+                      ambilight.enabled
+                        ? "watch-bar__pill watch-bar__pill--icon watch-bar__pill--active"
+                        : "watch-bar__pill watch-bar__pill--icon"
+                    }
+                    onClick={() => setAmbilightOpen((open) => !open)}
+                    aria-label="Ambilight settings"
+                    title="Ambilight settings"
+                    aria-expanded={ambilightOpen}
+                  >
+                    <Lightbulb size={20} strokeWidth={2} aria-hidden />
+                  </button>
+                  {ambilightOpen && (
+                    <div className="ambilight-menu">
+                      <label className="ambilight-menu__row">
+                        <input
+                          type="checkbox"
+                          checked={ambilight.enabled}
+                          onChange={toggleAmbilight}
+                        />
+                        <span>Enable Ambilight</span>
+                      </label>
+                      <div className="ambilight-menu__sides">
+                        {AMBILIGHT_SIDES.map((side) => (
+                          <button
+                            key={side.id}
+                            type="button"
+                            className={
+                              ambilight.sides[side.id]
+                                ? "ambilight-menu__side is-on"
+                                : "ambilight-menu__side"
+                            }
+                            onClick={() => toggleAmbilightSide(side.id)}
+                            aria-pressed={ambilight.sides[side.id]}
+                          >
+                            {side.label}
+                          </button>
+                        ))}
+                      </div>
+                      <label className="ambilight-menu__range">
+                        <span>Opacity {Math.round(ambilight.opacity * 100)}%</span>
+                        <input
+                          type="range"
+                          min="0.2"
+                          max="1"
+                          step="0.05"
+                          value={ambilight.opacity}
+                          onChange={(event) =>
+                            setAmbilightOpacity(Number(event.target.value))
+                          }
+                        />
+                      </label>
+                    </div>
+                  )}
+                </div>
                 <button
                   type="button"
                   className="watch-bar__pill watch-bar__pill--icon"
@@ -405,6 +542,7 @@ export function WatchPage() {
                   channel={channel}
                   className="watch-player"
                   onVideoRef={setPipVideoRef}
+                  ambilight={ambilight}
                 />
               ) : (
                 <p className="watch-stage__empty muted">

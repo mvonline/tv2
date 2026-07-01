@@ -1,13 +1,14 @@
 import { useLayoutEffect } from "react"
 import type { Channel } from "@/types/channel"
 import { RadioPlayer } from "@/components/RadioPlayer"
-import { VideoPlayer } from "@/components/VideoPlayer"
+import { VideoPlayer, type AmbilightSettings } from "@/components/VideoPlayer"
 
 type Props = {
   channel: Channel
   className?: string
   onVideoRef?: (el: HTMLVideoElement | null) => void
   muted?: boolean
+  ambilight?: AmbilightSettings
 }
 
 export function isRadioChannel(channel: Channel): boolean {
@@ -34,6 +35,7 @@ export function StreamPlayer({
   className,
   onVideoRef,
   muted,
+  ambilight,
 }: Props) {
   useLayoutEffect(() => {
     if (isRadioChannel(channel)) {
@@ -52,6 +54,7 @@ export function StreamPlayer({
       className={className}
       onVideoRef={onVideoRef}
       muted={muted}
+      ambilight={ambilight}
     />
   )
 }

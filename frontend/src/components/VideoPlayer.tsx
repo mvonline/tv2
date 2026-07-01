@@ -11,6 +11,26 @@ type Props = {
   onVideoRef?: (el: HTMLVideoElement | null) => void
   /** Multi-view: only one pane should be unmuted. */
   muted?: boolean
+  ambilight?: AmbilightSettings
+}
+
+export type AmbilightSide = "top" | "right" | "bottom" | "left"
+
+export type AmbilightSettings = {
+  enabled: boolean
+  sides: Record<AmbilightSide, boolean>
+  opacity: number
+}
+
+const DEFAULT_AMBILIGHT: AmbilightSettings = {
+  enabled: true,
+  sides: {
+    top: true,
+    right: true,
+    bottom: true,
+    left: true,
+  },
+  opacity: 0.9,
 }
 
 /** Embedded TV browsers (webOS, Tizen, …) often expose native HLS and choke on MSE workers. */
@@ -31,17 +51,60 @@ function crossOriginForPlaybackUrl(src: string): "anonymous" | undefined {
   }
 }
 
+function setAmbilightColor(
+  shell: HTMLDivElement,
+  side: "top" | "right" | "bottom" | "left",
+  r: number,
+  g: number,
+  b: number,
+) {
+  shell.style.setProperty(`--ambilight-${side}`, `rgba(${r}, ${g}, ${b}, 0.72)`)
+}
+
+function sampleRegion(
+  data: Uint8ClampedArray,
+  width: number,
+  x0: number,
+  y0: number,
+  x1: number,
+  y1: number,
+): [number, number, number] {
+  let r = 0
+  let g = 0
+  let b = 0
+  let count = 0
+
+  for (let y = y0; y < y1; y += 1) {
+    for (let x = x0; x < x1; x += 1) {
+      const i = (y * width + x) * 4
+      r += data[i]
+      g += data[i + 1]
+      b += data[i + 2]
+      count += 1
+    }
+  }
+
+  if (!count) return [48, 96, 160]
+  return [
+    Math.round(r / count),
+    Math.round(g / count),
+    Math.round(b / count),
+  ]
+}
+
 export function VideoPlayer({
   channel,
   className,
   onVideoRef,
   muted = false,
+  ambilight = DEFAULT_AMBILIGHT,
 }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const shellRef = useRef<HTMLDivElement>(null)
   const hlsRef = useRef<Hls | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [ambilightLive, setAmbilightLive] = useState(false)
 
   const enterFullscreen = useCallback(() => {
     const shell = shellRef.current
@@ -175,6 +238,124 @@ export function VideoPlayer({
     return undefined
   }, [channel, url, hlsUrl, isHls, isIframe, channel.requires_proxy])
 
+  useEffect(() => {
+    const video = videoRef.current
+    const shell = shellRef.current
+    if (!ambilight.enabled || !video || !shell || isIframe || !url) return
+
+    let raf = 0
+    let videoFrameHandle = 0
+    let stopped = false
+    let lastSample = 0
+    const canvas = document.createElement("canvas")
+    const ctx = canvas.getContext("2d", { willReadFrequently: true })
+    const sampleWidth = 40
+    const sampleHeight = 24
+    const edge = 5
+
+    if (!ctx) return
+
+    canvas.width = sampleWidth
+    canvas.height = sampleHeight
+
+    const sample = (now: number) => {
+      if (stopped) return
+      if (now - lastSample < 180) return
+      lastSample = now
+
+      if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA || video.paused) {
+        return
+      }
+
+      try {
+        ctx.drawImage(video, 0, 0, sampleWidth, sampleHeight)
+        const frame = ctx.getImageData(0, 0, sampleWidth, sampleHeight).data
+        const top = sampleRegion(frame, sampleWidth, 0, 0, sampleWidth, edge)
+        const right = sampleRegion(
+          frame,
+          sampleWidth,
+          sampleWidth - edge,
+          0,
+          sampleWidth,
+          sampleHeight,
+        )
+        const bottom = sampleRegion(
+          frame,
+          sampleWidth,
+          0,
+          sampleHeight - edge,
+          sampleWidth,
+          sampleHeight,
+        )
+        const left = sampleRegion(frame, sampleWidth, 0, 0, edge, sampleHeight)
+
+        if (ambilight.sides.top) setAmbilightColor(shell, "top", ...top)
+        if (ambilight.sides.right) setAmbilightColor(shell, "right", ...right)
+        if (ambilight.sides.bottom) setAmbilightColor(shell, "bottom", ...bottom)
+        if (ambilight.sides.left) setAmbilightColor(shell, "left", ...left)
+        setAmbilightLive(true)
+      } catch {
+        setAmbilightLive(false)
+        stopped = true
+      }
+    }
+
+    const scheduleAnimationFrame = () => {
+      raf = window.requestAnimationFrame((now) => {
+        sample(now)
+        scheduleAnimationFrame()
+      })
+    }
+
+    if ("requestVideoFrameCallback" in video) {
+      const scheduleVideoFrame = () => {
+        videoFrameHandle = (
+          video as HTMLVideoElement & {
+            requestVideoFrameCallback(
+              callback: (now: DOMHighResTimeStamp) => void,
+            ): number
+            cancelVideoFrameCallback(handle: number): void
+          }
+        ).requestVideoFrameCallback((now) => {
+          sample(now)
+          if (!stopped) scheduleVideoFrame()
+        })
+      }
+      scheduleVideoFrame()
+    } else {
+      scheduleAnimationFrame()
+    }
+
+    return () => {
+      stopped = true
+      if (raf) window.cancelAnimationFrame(raf)
+      if (videoFrameHandle && "cancelVideoFrameCallback" in video) {
+        (
+          video as HTMLVideoElement & {
+            cancelVideoFrameCallback(handle: number): void
+          }
+        ).cancelVideoFrameCallback(videoFrameHandle)
+      }
+      setAmbilightLive(false)
+    }
+  }, [ambilight.enabled, ambilight.sides, isIframe, url, source])
+
+  useEffect(() => {
+    const shell = shellRef.current
+    if (!shell) return
+
+    const opacity = Math.max(0, Math.min(1, ambilight.opacity))
+    shell.style.setProperty("--ambilight-opacity", String(opacity))
+    shell.style.setProperty("--ambilight-inner-opacity", String(opacity * 0.42))
+
+    const sides: AmbilightSide[] = ["top", "right", "bottom", "left"]
+    sides.forEach((side) => {
+      if (!ambilight.enabled || !ambilight.sides[side]) {
+        shell.style.setProperty(`--ambilight-${side}`, "rgba(0, 0, 0, 0)")
+      }
+    })
+  }, [ambilight])
+
   if (isIframe && url) {
     return (
       <div className={`video-shell ${className ?? ""}`}>
@@ -190,7 +371,12 @@ export function VideoPlayer({
   }
 
   return (
-    <div className={`video-shell ${className ?? ""}`} ref={shellRef}>
+    <div
+      className={`video-shell video-shell--ambilight ${
+        ambilight.enabled && ambilightLive ? "is-ambilight-live" : ""
+      } ${className ?? ""}`}
+      ref={shellRef}
+    >
       <video
         ref={videoRef}
         className="video-el"

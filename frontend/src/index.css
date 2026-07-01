@@ -1174,6 +1174,12 @@ body::before {
   color: #e8f4ff;
 }
 
+.watch-bar__pill--active {
+  border-color: rgba(255, 216, 92, 0.5);
+  background: rgba(255, 216, 92, 0.16);
+  color: #ffe992;
+}
+
 @media (hover: hover) {
   .watch-bar__pill--related-active:hover {
     background: rgba(100, 170, 255, 0.22);
@@ -1188,6 +1194,77 @@ body::before {
 .watch-bar__pill-icon {
   padding: 8px 12px;
   border-radius: 999px;
+}
+
+.watch-bar__menu {
+  position: relative;
+  display: inline-flex;
+}
+
+.ambilight-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 30;
+  width: min(280px, calc(100vw - 24px));
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(6, 10, 18, 0.94);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+.ambilight-menu__row,
+.ambilight-menu__range {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.ambilight-menu__row input {
+  width: 18px;
+  height: 18px;
+  accent-color: #ffd85c;
+}
+
+.ambilight-menu__sides {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin: 12px 0;
+}
+
+.ambilight-menu__side {
+  min-width: 0;
+  padding: 7px 6px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.ambilight-menu__side.is-on {
+  border-color: rgba(255, 216, 92, 0.45);
+  background: rgba(255, 216, 92, 0.15);
+  color: #ffe992;
+}
+
+.ambilight-menu__range {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.ambilight-menu__range input {
+  width: 100%;
+  accent-color: #ffd85c;
 }
 
 .favorite-btn.favorite-btn--bar {
@@ -1238,9 +1315,13 @@ body::before {
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
-  padding: 0;
+  padding: clamp(10px, 1.4vw, 22px);
   position: relative;
   overflow: hidden;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.08), transparent 34%),
+    radial-gradient(circle at 84% 72%, rgba(120, 190, 255, 0.08), transparent 36%),
+    rgba(8, 11, 18, 0.72);
 }
 
 .watch-stage__empty {
@@ -1355,8 +1436,62 @@ body::before {
   width: 100%;
   border-radius: var(--radius);
   overflow: hidden;
-  background: #000;
+  background: rgba(0, 0, 0, 0.58);
   border: 1px solid var(--border);
+}
+
+.video-shell--ambilight {
+  --ambilight-top: rgba(62, 147, 255, 0.52);
+  --ambilight-right: rgba(255, 89, 122, 0.48);
+  --ambilight-bottom: rgba(50, 213, 131, 0.42);
+  --ambilight-left: rgba(140, 99, 255, 0.46);
+  --ambilight-opacity: 0.9;
+  --ambilight-inner-opacity: 0.38;
+  isolation: isolate;
+  overflow: visible;
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.38);
+}
+
+.video-shell--ambilight::before,
+.video-shell--ambilight::after {
+  content: "";
+  position: absolute;
+  inset: -34px;
+  z-index: -1;
+  border-radius: calc(var(--radius) + 28px);
+  pointer-events: none;
+  opacity: calc(var(--ambilight-opacity) * 0.78);
+  transition:
+    background 0.18s ease,
+    opacity 0.22s ease;
+}
+
+.video-shell--ambilight::before {
+  background:
+    linear-gradient(90deg, var(--ambilight-left), transparent 22%, transparent 78%, var(--ambilight-right)),
+    linear-gradient(180deg, var(--ambilight-top), transparent 25%, transparent 75%, var(--ambilight-bottom));
+  filter: blur(26px) saturate(1.35);
+}
+
+.video-shell--ambilight::after {
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, var(--ambilight-left), transparent 12%, transparent 88%, var(--ambilight-right)),
+    linear-gradient(180deg, var(--ambilight-top), transparent 14%, transparent 86%, var(--ambilight-bottom));
+  filter: blur(16px) saturate(1.35);
+  mix-blend-mode: screen;
+  opacity: var(--ambilight-inner-opacity);
+}
+
+.video-shell--ambilight.is-ambilight-live::before {
+  opacity: var(--ambilight-opacity);
+}
+
+.video-shell--ambilight.is-ambilight-live::after {
+  opacity: var(--ambilight-inner-opacity);
 }
 
 .video-el {
@@ -1364,6 +1499,9 @@ body::before {
   max-height: min(72vh, 800px);
   display: block;
   background: #000;
+  position: relative;
+  z-index: 1;
+  border-radius: inherit;
 }
 
 .video-iframe {
@@ -1414,6 +1552,7 @@ body::before {
   bottom: 12px;
   left: 12px;
   right: 12px;
+  z-index: 6;
   margin: 0;
   padding: 10px 12px;
   background: rgba(180, 40, 40, 0.9);
