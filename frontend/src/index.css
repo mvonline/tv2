@@ -786,6 +786,13 @@ body::before {
   background: rgba(7, 9, 15, 0.96);
   min-height: 0;
   overflow: hidden;
+  transition:
+    width 0.22s ease,
+    min-width 0.22s ease,
+    max-width 0.22s ease,
+    opacity 0.18s ease,
+    transform 0.22s ease,
+    border-color 0.18s ease;
 }
 
 .watch-sidebar--end {
@@ -840,6 +847,16 @@ body::before {
   width: 52px;
   min-width: 52px;
   max-width: 52px;
+}
+
+.watch-page--chrome-hidden .watch-sidebar {
+  width: 0;
+  min-width: 0;
+  max-width: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(100%);
+  border-color: transparent;
 }
 
 .watch-sidebar__head {
@@ -1032,6 +1049,18 @@ body::before {
     max-width: none;
     box-shadow: -8px 0 40px rgba(0, 0, 0, 0.55);
   }
+
+  .watch-page--chrome-hidden .watch-sidebar,
+  .watch-page--chrome-hidden .watch-sidebar:not(.watch-sidebar--collapsed) {
+    width: 0;
+    min-width: 0;
+    max-width: 0;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(100%);
+    border-color: transparent;
+    box-shadow: none;
+  }
 }
 
 /* Glass bar over video (reference layout) */
@@ -1054,10 +1083,23 @@ body::before {
   -webkit-backdrop-filter: blur(14px);
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
   pointer-events: none;
+  transition:
+    opacity 0.18s ease,
+    transform 0.22s ease;
 }
 
 .watch-bar--overlay > * {
   pointer-events: auto;
+}
+
+.watch-page--chrome-hidden .watch-bar--overlay {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(calc(-100% - 8px));
+}
+
+.watch-page--chrome-hidden .watch-bar--overlay > * {
+  pointer-events: none;
 }
 
 .watch-bar__brand {
@@ -1214,6 +1256,12 @@ body::before {
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
+}
+
+.watch-main > .ambilight-menu {
+  top: 64px;
+  right: clamp(12px, 2.5vw, 20px);
+  z-index: 80;
 }
 
 .ambilight-menu__row,
@@ -2785,7 +2833,7 @@ body:has(.home-guide) {
     flex: 0 0 auto;
   }
 
-  .watch-bar__actions--pills .ambilight-menu {
+  .watch-main > .ambilight-menu {
     position: fixed;
     top: calc(max(10px, env(safe-area-inset-top)) + 104px);
     right: max(12px, env(safe-area-inset-right));

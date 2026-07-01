@@ -43,6 +43,7 @@ import { channelLogoUrl } from "@/lib/publicUrl"
 const AMBILIGHT_KEY = "tv2-ambilight-settings"
 const AMBILIGHT_MIN_OPACITY = 0.2
 const AMBILIGHT_MAX_OPACITY = 2
+const WATCH_CHROME_AUTOHIDE_MS = 3200
 
 const DEFAULT_AMBILIGHT_SETTINGS: AmbilightSettings = {
   enabled: true,
@@ -108,6 +109,8 @@ export function WatchPage() {
   const [pipSupported, setPipSupported] = useState(false)
   const [ambilightOpen, setAmbilightOpen] = useState(false)
   const [ambilight, setAmbilight] = useState(readAmbilightSettings)
+  const [chromeHidden, setChromeHidden] = useState(false)
+  const chromeHideTimer = useRef<number | null>(null)
 
   const setPipVideoRef = useCallback((el: HTMLVideoElement | null) => {
     setPipVideoEl(el)
@@ -247,6 +250,61 @@ export function WatchPage() {
     }
   }, [theaterMode, relatedDockOpen])
 
+  const keepChromeVisible = useCallback(() => {
+    setChromeHidden(false)
+    if (chromeHideTimer.current !== null) {
+      window.clearTimeout(chromeHideTimer.current)
+    }
+    chromeHideTimer.current = window.setTimeout(() => {
+      const activeEl = document.activeElement
+      if (
+        activeEl instanceof HTMLElement &&
+        activeEl.closest(".watch-bar, .watch-sidebar, .related-dock, .ambilight-menu")
+      ) {
+        keepChromeVisible()
+        return
+      }
+      setChromeHidden(true)
+    }, WATCH_CHROME_AUTOHIDE_MS)
+  }, [])
+
+  useEffect(() => {
+    if (ambilightOpen || relatedDockOpen) {
+      setChromeHidden(false)
+      if (chromeHideTimer.current !== null) {
+        window.clearTimeout(chromeHideTimer.current)
+        chromeHideTimer.current = null
+      }
+      return
+    }
+
+    keepChromeVisible()
+
+    const events = [
+      "mousemove",
+      "mousedown",
+      "touchstart",
+      "touchmove",
+      "wheel",
+      "keydown",
+      "focusin",
+    ] as const
+
+    events.forEach((eventName) => {
+      window.addEventListener(eventName, keepChromeVisible, { passive: true })
+    })
+
+    return () => {
+      if (chromeHideTimer.current !== null) {
+        window.clearTimeout(chromeHideTimer.current)
+        chromeHideTimer.current = null
+      }
+      events.forEach((eventName) => {
+        window.removeEventListener(eventName, keepChromeVisible)
+      })
+    }
+  }, [ambilightOpen, relatedDockOpen, keepChromeVisible])
+
   const toggleSidebar = useCallback(() => {
     setSidebarCollapsed((c) => {
       const next = !c
@@ -331,9 +389,63 @@ export function WatchPage() {
 
   const logoSrc = channelLogoUrl(channel.logo)
   const showRelatedUi = hasRelatedChannels(ordered, channel)
+  const ambilightMenu = (
+    <div className="ambilight-menu">
+      <label className="ambilight-menu__row">
+        <input
+          type="checkbox"
+          checked={ambilight.enabled}
+          onChange={toggleAmbilight}
+        />
+        <span>Enable Ambilight</span>
+      </label>
+      <label className="ambilight-menu__row">
+        <input
+          type="checkbox"
+          checked={ambilight.performanceMode}
+          onChange={toggleAmbilightPerformanceMode}
+        />
+        <span>Performance mode</span>
+      </label>
+      <div className="ambilight-menu__sides">
+        {AMBILIGHT_SIDES.map((side) => (
+          <button
+            key={side.id}
+            type="button"
+            className={
+              ambilight.sides[side.id]
+                ? "ambilight-menu__side is-on"
+                : "ambilight-menu__side"
+            }
+            onClick={() => toggleAmbilightSide(side.id)}
+            aria-pressed={ambilight.sides[side.id]}
+          >
+            {side.label}
+          </button>
+        ))}
+      </div>
+      <label className="ambilight-menu__range">
+        <span>Opacity {Math.round(ambilight.opacity * 100)}%</span>
+        <input
+          type="range"
+          min={AMBILIGHT_MIN_OPACITY}
+          max={AMBILIGHT_MAX_OPACITY}
+          step="0.05"
+          value={ambilight.opacity}
+          onChange={(event) =>
+            setAmbilightOpacity(Number(event.target.value))
+          }
+        />
+      </label>
+    </div>
+  )
 
   return (
-    <div className={`watch-page ${theaterMode ? "watch-page--theater" : ""}`}>
+    <div
+      className={`watch-page ${theaterMode ? "watch-page--theater" : ""} ${
+        chromeHidden ? "watch-page--chrome-hidden" : ""
+      }`}
+    >
       <DigitOverlay
         buffer={digitBuffer}
         hint={
@@ -346,6 +458,7 @@ export function WatchPage() {
       <div className="watch-shell">
         <div
           className="watch-body"
+          onMouseMove={keepChromeVisible}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
@@ -484,56 +597,6 @@ export function WatchPage() {
                   >
                     <Lightbulb size={20} strokeWidth={2} aria-hidden />
                   </button>
-                  {ambilightOpen && (
-                    <div className="ambilight-menu">
-                      <label className="ambilight-menu__row">
-                        <input
-                          type="checkbox"
-                          checked={ambilight.enabled}
-                          onChange={toggleAmbilight}
-                        />
-                        <span>Enable Ambilight</span>
-                      </label>
-                      <label className="ambilight-menu__row">
-                        <input
-                          type="checkbox"
-                          checked={ambilight.performanceMode}
-                          onChange={toggleAmbilightPerformanceMode}
-                        />
-                        <span>Performance mode</span>
-                      </label>
-                      <div className="ambilight-menu__sides">
-                        {AMBILIGHT_SIDES.map((side) => (
-                          <button
-                            key={side.id}
-                            type="button"
-                            className={
-                              ambilight.sides[side.id]
-                                ? "ambilight-menu__side is-on"
-                                : "ambilight-menu__side"
-                            }
-                            onClick={() => toggleAmbilightSide(side.id)}
-                            aria-pressed={ambilight.sides[side.id]}
-                          >
-                            {side.label}
-                          </button>
-                        ))}
-                      </div>
-                      <label className="ambilight-menu__range">
-                        <span>Opacity {Math.round(ambilight.opacity * 100)}%</span>
-                        <input
-                          type="range"
-                          min={AMBILIGHT_MIN_OPACITY}
-                          max={AMBILIGHT_MAX_OPACITY}
-                          step="0.05"
-                          value={ambilight.opacity}
-                          onChange={(event) =>
-                            setAmbilightOpacity(Number(event.target.value))
-                          }
-                        />
-                      </label>
-                    </div>
-                  )}
                 </div>
                 <button
                   type="button"
@@ -557,6 +620,7 @@ export function WatchPage() {
                 <LiveClock />
               </div>
             </header>
+            {ambilightOpen && ambilightMenu}
 
             <div className="watch-stage">
               {channel.stream_url || channel.raw_iframe_src ? (
