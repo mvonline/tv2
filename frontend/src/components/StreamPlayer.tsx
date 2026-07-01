@@ -45,12 +45,7 @@ export function StreamPlayer({
 
   if (isRadioChannel(channel)) {
     return (
-      <RadioPlayer
-        channel={channel}
-        className={className}
-        muted={muted}
-        ambilight={ambilight}
-      />
+      <RadioPlayer channel={channel} className={className} muted={muted} />
     )
   }
   return (

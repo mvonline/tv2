@@ -8,7 +8,6 @@ type Props = {
   /** Re-bind when stream changes. */
   streamKey: string
   className?: string
-  onLevels?: (levels: ArrayLike<number>) => void
 }
 
 const BAR_COUNT = 48
@@ -18,7 +17,6 @@ export function AudioVisualizer({
   decorative,
   streamKey,
   className,
-  onLevels,
 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const rafRef = useRef<number>(0)
@@ -116,7 +114,6 @@ export function AudioVisualizer({
         for (let i = 0; i < BAR_COUNT; i++) {
           out[i] = (dataArray[i * step] ?? 0) / 255
         }
-        onLevels?.(out)
         drawBars(out)
         return
       }
@@ -129,7 +126,6 @@ export function AudioVisualizer({
             (0.5 + 0.5 * Math.sin(phase)) *
             (0.5 + 0.5 * Math.sin(elapsed * 1.7 + i * 0.08))
       }
-      onLevels?.(out)
       drawBars(out)
     }
 
@@ -156,7 +152,7 @@ export function AudioVisualizer({
       if (c?.state !== "closed") void c?.close()
       ctxRef.current = null
     }
-  }, [audio, decorative, streamKey, onLevels])
+  }, [audio, decorative, streamKey])
 
   return (
     <canvas
