@@ -238,14 +238,6 @@ export function HomePage() {
             <Grid3X3 size={18} aria-hidden />
             Multi-view
           </Link>
-          <a
-            className="btn-ghost home-support-link"
-            href="https://buymeacoffee.com/vafaone"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Support
-          </a>
           {mobile && (
             <button
               type="button"

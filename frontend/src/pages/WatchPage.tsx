@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import {
+  ChevronLeft,
+  ChevronRight,
   Home,
   LayoutGrid,
   Lightbulb,
@@ -9,6 +11,7 @@ import {
   Minimize2,
   PanelBottom,
   PictureInPicture2,
+  Tv,
 } from "lucide-react"
 import { ChannelNumpad } from "@/components/ChannelNumpad"
 import { DigitOverlay } from "@/components/DigitOverlay"
@@ -34,12 +37,10 @@ import { useChannels } from "@/context/ChannelsContext"
 import { useRecentlyWatched } from "@/context/RecentlyWatchedContext"
 import { channelNumber } from "@/lib/channelNumber"
 import { useTvRemote, DIGIT_AUTO_SUBMIT_AFTER_MS } from "@/hooks/useTvRemote"
-import { useMobileViewport } from "@/hooks/useMobileViewport"
 import { channelFromRouteKey, watchUrlForChannel } from "@/lib/paths"
 import { channelLogoUrl } from "@/lib/publicUrl"
 
 const AMBILIGHT_KEY = "tv2-ambilight-settings"
-const CHANNEL_NUMBER_HINT_KEY = "tv2-channel-number-hint-dismissed"
 const AMBILIGHT_MIN_OPACITY = 0.2
 const AMBILIGHT_MAX_OPACITY = 2
 const WATCH_CHROME_AUTOHIDE_MS = 3200
@@ -94,7 +95,6 @@ function readAmbilightSettings(): AmbilightSettings {
 }
 
 export function WatchPage() {
-  const mobile = useMobileViewport()
   const { channelKey } = useParams<{ channelKey: string }>()
   const navigate = useNavigate()
   const { ordered, status } = useChannels()
@@ -110,14 +110,6 @@ export function WatchPage() {
   const [ambilightOpen, setAmbilightOpen] = useState(false)
   const [ambilight, setAmbilight] = useState(readAmbilightSettings)
   const [chromeHidden, setChromeHidden] = useState(false)
-  const [numpadOpen, setNumpadOpen] = useState(false)
-  const [channelHintVisible, setChannelHintVisible] = useState(() => {
-    try {
-      return localStorage.getItem(CHANNEL_NUMBER_HINT_KEY) !== "1"
-    } catch {
-      return true
-    }
-  })
   const chromeHideTimer = useRef<number | null>(null)
 
   const setPipVideoRef = useCallback((el: HTMLVideoElement | null) => {
@@ -206,7 +198,7 @@ export function WatchPage() {
 
   const {
     digitBuffer,
-    appendDigit: appendDigitRaw,
+    appendDigit,
     submitDigits,
     backspaceDigit,
   } = useTvRemote({
@@ -217,34 +209,6 @@ export function WatchPage() {
     onChannelUp: goPrev,
     onChannelDown: goNext,
   })
-
-  const appendDigit = useCallback(
-    (digit: string) => {
-      appendDigitRaw(digit)
-      if (mobile) setNumpadOpen(true)
-    },
-    [appendDigitRaw, mobile],
-  )
-
-  const submitDigitsFromNumpad = useCallback(() => {
-    submitDigits()
-    if (mobile) setNumpadOpen(false)
-  }, [mobile, submitDigits])
-
-  const dismissChannelHint = useCallback(() => {
-    setChannelHintVisible(false)
-    try {
-      localStorage.setItem(CHANNEL_NUMBER_HINT_KEY, "1")
-    } catch {
-      /* ignore */
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!channelHintVisible) return
-    const id = window.setTimeout(dismissChannelHint, 8000)
-    return () => window.clearTimeout(id)
-  }, [channelHintVisible, dismissChannelHint])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -468,7 +432,7 @@ export function WatchPage() {
         chromeHidden ? "watch-page--chrome-hidden" : ""
       }`}
     >
-            <DigitOverlay
+      <DigitOverlay
         buffer={digitBuffer}
         hint={
           ordered.length
@@ -565,6 +529,32 @@ export function WatchPage() {
                     Channels
                   </button>
                 )}
+                <button
+                  type="button"
+                  className="watch-bar__pill watch-bar__pill--icon"
+                  onClick={goPrev}
+                  aria-label="Previous channel"
+                  title="Previous channel"
+                >
+                  <ChevronLeft size={20} strokeWidth={2} aria-hidden />
+                </button>
+                <button
+                  type="button"
+                  className="watch-bar__pill watch-bar__pill--icon"
+                  onClick={goNext}
+                  aria-label="Next channel"
+                  title="Next channel"
+                >
+                  <ChevronRight size={20} strokeWidth={2} aria-hidden />
+                </button>
+                <Link
+                  to="/"
+                  className="watch-bar__pill watch-bar__pill--icon"
+                  title="TV guide"
+                  aria-label="TV guide"
+                >
+                  <Tv size={20} strokeWidth={2} aria-hidden />
+                </Link>
                 {pipSupported && channelSupportsPictureInPicture(channel) && (
                   <button
                     type="button"
@@ -641,40 +631,9 @@ export function WatchPage() {
 
             <ChannelNumpad
               appendDigit={appendDigit}
-              submitDigits={submitDigitsFromNumpad}
+              submitDigits={submitDigits}
               backspaceDigit={backspaceDigit}
-              className={mobile && numpadOpen ? "channel-numpad--watch" : "channel-numpad--watch-closed"}
             />
-            {mobile && (
-              <button
-                type="button"
-                className="channel-numpad-toggle"
-                onClick={() => {
-                  setNumpadOpen((open) => !open)
-                  dismissChannelHint()
-                }}
-                aria-expanded={numpadOpen}
-                aria-label={numpadOpen ? "Hide channel number pad" : "Show channel number pad"}
-              >
-                123
-              </button>
-            )}
-            {channelHintVisible && (
-              <div className="channel-number-hint" role="status">
-                <span>
-                  {mobile
-                    ? "Tap 123 to enter a channel number"
-                    : "Use number keys to jump channels"}
-                </span>
-                <button
-                  type="button"
-                  onClick={dismissChannelHint}
-                  aria-label="Dismiss channel number hint"
-                >
-                  x
-                </button>
-              </div>
-            )}
           </div>
 
           {!theaterMode && (
