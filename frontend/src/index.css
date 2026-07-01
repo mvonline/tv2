@@ -2706,9 +2706,51 @@ body:has(.home-guide) {
 
   /* Safe-area insets for the watch overlay bar */
   .watch-bar--overlay {
+    display: block;
     padding-top: max(10px, env(safe-area-inset-top));
     padding-left: max(12px, env(safe-area-inset-left));
     padding-right: max(12px, env(safe-area-inset-right));
+  }
+
+  .watch-bar__brand {
+    margin-bottom: 8px;
+  }
+
+  .watch-bar__actions--pills {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 8px;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .watch-bar__actions--pills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .watch-bar__actions--pills .watch-bar__pill,
+  .watch-bar__actions--pills .favorite-btn.favorite-btn--bar {
+    flex: 0 0 44px;
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    min-height: 44px;
+    padding: 0;
+    gap: 0;
+  }
+
+  .watch-bar__actions--pills .watch-bar__pill {
+    font-size: 0;
+  }
+
+  .watch-bar__actions--pills .watch-bar__pill svg,
+  .watch-bar__actions--pills .favorite-btn.favorite-btn--bar svg {
+    flex: 0 0 auto;
   }
 
   /* Give tappable rows more vertical breathing room */
