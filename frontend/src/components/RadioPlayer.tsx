@@ -142,12 +142,19 @@ export function RadioPlayer({
       const intensity = ambilight.performanceMode
         ? Math.min(1.25, settingOpacity * (0.65 + pulse * 0.45))
         : Math.min(2, settingOpacity * (0.75 + pulse * 0.65))
+      const topPulse = Math.min(1, high * 1.35 + mid * 0.28)
+      const rightPulse = Math.min(1, mid * 1.15 + high * 0.35)
+      const bottomPulse = Math.min(1, bass * 1.35 + mid * 0.2)
+      const leftPulse = Math.min(1, bass * 0.75 + high * 0.75 + mid * 0.2)
+      const sideAlpha = (side: "top" | "right" | "bottom" | "left", value: number) =>
+        ambilight.sides[side] ? Math.max(0.22, value * 0.78) : 0
 
       shell.style.setProperty("--radio-ambilight-opacity", String(opacity))
       shell.style.setProperty("--radio-ambilight-intensity", String(intensity))
-      shell.style.setProperty("--radio-ambilight-left", `rgba(${Math.round(70 + bass * 120)}, ${Math.round(120 + mid * 80)}, 255, 0.72)`)
-      shell.style.setProperty("--radio-ambilight-right", `rgba(255, ${Math.round(76 + high * 120)}, ${Math.round(120 + mid * 90)}, 0.68)`)
-      shell.style.setProperty("--radio-ambilight-bottom", `rgba(${Math.round(38 + mid * 110)}, ${Math.round(190 + bass * 55)}, ${Math.round(135 + high * 80)}, 0.66)`)
+      shell.style.setProperty("--radio-ambilight-top", `rgba(${Math.round(120 + high * 110)}, ${Math.round(90 + mid * 120)}, 255, ${sideAlpha("top", topPulse)})`)
+      shell.style.setProperty("--radio-ambilight-right", `rgba(255, ${Math.round(76 + high * 120)}, ${Math.round(120 + mid * 90)}, ${sideAlpha("right", rightPulse)})`)
+      shell.style.setProperty("--radio-ambilight-bottom", `rgba(${Math.round(38 + mid * 110)}, ${Math.round(190 + bass * 55)}, ${Math.round(135 + high * 80)}, ${sideAlpha("bottom", bottomPulse)})`)
+      shell.style.setProperty("--radio-ambilight-left", `rgba(${Math.round(70 + bass * 120)}, ${Math.round(120 + mid * 80)}, 255, ${sideAlpha("left", leftPulse)})`)
     },
     [ambilight],
   )
