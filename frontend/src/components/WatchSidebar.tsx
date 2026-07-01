@@ -196,16 +196,10 @@ export function readSidebarCollapsed(): boolean {
   }
 }
 
-/** Desktop: stored preference. Mobile: collapsed unless user explicitly expanded (`"0"`). */
+/** Desktop: stored preference. Mobile: always start collapsed for small screens. */
 export function readSidebarCollapsedForViewport(): boolean {
   if (!isMobileViewport()) return readSidebarCollapsed()
-  try {
-    const v = localStorage.getItem(WATCH_SIDEBAR_COLLAPSED_KEY)
-    if (v === "0") return false
-    return true
-  } catch {
-    return true
-  }
+  return true
 }
 
 export function writeSidebarCollapsed(collapsed: boolean) {

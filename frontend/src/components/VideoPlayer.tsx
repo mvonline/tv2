@@ -94,6 +94,16 @@ function sampleRegion(
   ]
 }
 
+function tryPlay(media: HTMLMediaElement | null) {
+  if (!media) return
+  const result = media.play()
+  if (result && typeof result.catch === "function") {
+    result.catch(() => {
+      /* Browser policy may block unmuted autoplay. */
+    })
+  }
+}
+
 export function VideoPlayer({
   channel,
   className,
@@ -185,7 +195,11 @@ export function VideoPlayer({
     // Prefer native HLS when the stack advertises support (common on LG/Samsung/AppleTV Safari).
     if (isHls && nativeHlsLikely(video)) {
       video.src = playbackSrc
+      const onCanPlay = () => tryPlay(video)
+      video.addEventListener("canplay", onCanPlay)
+      tryPlay(video)
       return () => {
+        video.removeEventListener("canplay", onCanPlay)
         video.removeAttribute("src")
         video.load()
       }
@@ -210,6 +224,9 @@ export function VideoPlayer({
       hlsRef.current = hls
       hls.loadSource(playbackSrc)
       hls.attachMedia(video)
+      const onCanPlay = () => tryPlay(video)
+      video.addEventListener("canplay", onCanPlay)
+      hls.on(Hls.Events.MANIFEST_PARSED, () => tryPlay(video))
       hls.on(Hls.Events.ERROR, (_, data) => {
         if (!data.fatal) return
         if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
@@ -223,6 +240,7 @@ export function VideoPlayer({
         }
       })
       return () => {
+        video.removeEventListener("canplay", onCanPlay)
         hls.destroy()
         hlsRef.current = null
       }
@@ -230,7 +248,11 @@ export function VideoPlayer({
 
     if (!isHls) {
       video.src = url
+      const onCanPlay = () => tryPlay(video)
+      video.addEventListener("canplay", onCanPlay)
+      tryPlay(video)
       return () => {
+        video.removeEventListener("canplay", onCanPlay)
         video.removeAttribute("src")
         video.load()
       }

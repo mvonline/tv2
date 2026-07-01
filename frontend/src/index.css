@@ -1417,6 +1417,46 @@ body::before {
   border: 1px solid var(--border);
 }
 
+.radio-shell--ambilight {
+  --radio-ambilight-left: rgba(70, 140, 255, 0.72);
+  --radio-ambilight-right: rgba(255, 92, 150, 0.68);
+  --radio-ambilight-bottom: rgba(58, 220, 155, 0.66);
+  --radio-ambilight-opacity: 0.6;
+  --radio-ambilight-intensity: 1;
+  isolation: isolate;
+}
+
+.radio-shell--ambilight::before {
+  content: "";
+  position: absolute;
+  inset: -20px;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 52% at 18% 62%, var(--radio-ambilight-left), transparent 68%),
+    radial-gradient(ellipse 68% 52% at 84% 48%, var(--radio-ambilight-right), transparent 68%),
+    radial-gradient(ellipse 82% 38% at 50% 102%, var(--radio-ambilight-bottom), transparent 72%);
+  opacity: var(--radio-ambilight-opacity);
+  filter:
+    blur(calc(16px + (var(--radio-ambilight-intensity) * 5px)))
+    saturate(calc(1.05 + (var(--radio-ambilight-intensity) * 0.24)))
+    brightness(calc(0.9 + (var(--radio-ambilight-intensity) * 0.18)));
+  transition: opacity 0.12s linear;
+}
+
+.radio-shell--ambilight-performance::before {
+  inset: -12px;
+  filter:
+    blur(calc(10px + (var(--radio-ambilight-intensity) * 3px)))
+    saturate(calc(1 + (var(--radio-ambilight-intensity) * 0.12)))
+    brightness(calc(0.88 + (var(--radio-ambilight-intensity) * 0.1)));
+}
+
+.radio-shell--ambilight > * {
+  position: relative;
+  z-index: 1;
+}
+
 .radio-shell__viz {
   width: 100%;
   min-height: 140px;
