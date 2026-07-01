@@ -329,6 +329,7 @@ export function RadioPlayer({
           key={streamKey}
           ref={setAudioEl}
           className="radio-audio-el"
+          controls
           autoPlay
           muted={muted}
           crossOrigin="anonymous"
