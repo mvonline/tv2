@@ -99,10 +99,8 @@ export function AudioVisualizer({
     }
 
     let dataArray: Uint8Array | null = null
-    let timeArray: Uint8Array | null = null
     let analyser: AnalyserNode | null = null
     let sourceNode: MediaElementAudioSourceNode | null = null
-    let actx: AudioContext | null = null
     let t0 = performance.now()
     let lastLevelsEmit = 0
     let onPlay: (() => void) | null = null
@@ -114,13 +112,9 @@ export function AudioVisualizer({
       onLevelsRef.current(levels)
     }
 
-    const ensureAudioGraph = () => {
-      if (decorative || !audio || analyser) {
-        if (actx?.state === "suspended") void actx.resume()
-        return
-      }
+    if (!decorative && audio) {
       try {
-        actx = createAudioContext()
+        const actx = createAudioContext()
         ctxRef.current = actx
         const source = actx.createMediaElementSource(audio)
         sourceNode = source
@@ -129,23 +123,17 @@ export function AudioVisualizer({
         source.connect(analyser)
         analyser.connect(actx.destination)
         dataArray = new Uint8Array(analyser.frequencyBinCount)
-        timeArray = new Uint8Array(analyser.fftSize)
-        void actx.resume()
+        const resumeAudioContext = () => {
+          void actx.resume()
+        }
+        onPlay = resumeAudioContext
+        audio.addEventListener("play", onPlay)
+        window.addEventListener(RESUME_AUDIO_VISUALIZER_EVENT, resumeAudioContext)
+        resumeCleanup = () => {
+          window.removeEventListener(RESUME_AUDIO_VISUALIZER_EVENT, resumeAudioContext)
+        }
       } catch {
         /* CORS or duplicate source — use fake spectrum */
-      }
-    }
-
-    if (!decorative && audio) {
-      onPlay = ensureAudioGraph
-      audio.addEventListener("play", onPlay)
-      window.addEventListener(RESUME_AUDIO_VISUALIZER_EVENT, ensureAudioGraph)
-      window.addEventListener("touchstart", ensureAudioGraph, { passive: true })
-      window.addEventListener("pointerdown", ensureAudioGraph, { passive: true })
-      resumeCleanup = () => {
-        window.removeEventListener(RESUME_AUDIO_VISUALIZER_EVENT, ensureAudioGraph)
-        window.removeEventListener("touchstart", ensureAudioGraph)
-        window.removeEventListener("pointerdown", ensureAudioGraph)
       }
     }
 
@@ -156,31 +144,8 @@ export function AudioVisualizer({
           dataArray as Parameters<AnalyserNode["getByteFrequencyData"]>[0],
         )
         const step = Math.max(1, Math.floor(dataArray.length / BAR_COUNT))
-        let peak = 0
         for (let i = 0; i < BAR_COUNT; i++) {
-          const value = dataArray[i * step] ?? 0
-          if (value > peak) peak = value
-          out[i] = value / 255
-        }
-
-        if (peak <= 2 && timeArray) {
-          analyser.getByteTimeDomainData(
-            timeArray as Parameters<AnalyserNode["getByteTimeDomainData"]>[0],
-          )
-          const samplesPerBar = Math.max(1, Math.floor(timeArray.length / BAR_COUNT))
-          for (let i = 0; i < BAR_COUNT; i++) {
-            let total = 0
-            let count = 0
-            const start = i * samplesPerBar
-            const end = Math.min(timeArray.length, start + samplesPerBar)
-            for (let j = start; j < end; j += 1) {
-              const centered = ((timeArray[j] ?? 128) - 128) / 128
-              total += centered * centered
-              count += 1
-            }
-            const rms = count ? Math.sqrt(total / count) : 0
-            out[i] = Math.min(1, rms * 5)
-          }
+          out[i] = (dataArray[i * step] ?? 0) / 255
         }
         emitLevels(out, t)
         drawBars(out)
