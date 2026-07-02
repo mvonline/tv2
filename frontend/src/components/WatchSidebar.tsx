@@ -1,12 +1,14 @@
 import {
   useEffect,
   useMemo,
+  useCallback,
   useRef,
   useState,
+  type KeyboardEvent,
   type RefObject,
 } from "react"
 import { isMobileViewport } from "@/lib/mobileLayout"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { ChevronLeft, ChevronRight, Star } from "lucide-react"
 import { SearchBar } from "@/components/SearchBar"
 import { channelNumber } from "@/lib/channelNumber"
@@ -16,6 +18,7 @@ import { watchUrlForChannel } from "@/lib/paths"
 import { channelLogoUrl } from "@/lib/publicUrl"
 
 export const WATCH_SIDEBAR_COLLAPSED_KEY = "tv2-watch-sidebar-collapsed"
+const WATCH_SEARCH_AUTO_SUBMIT_MS = 900
 
 function SidebarChannelLink({
   ch,
@@ -59,6 +62,7 @@ type Props = {
   currentPageUrl: string
   collapsed: boolean
   onToggleCollapsed: () => void
+  onSearchFocusChange?: (focused: boolean) => void
 }
 
 export function WatchSidebar({
@@ -66,7 +70,9 @@ export function WatchSidebar({
   currentPageUrl,
   collapsed,
   onToggleCollapsed,
+  onSearchFocusChange,
 }: Props) {
+  const navigate = useNavigate()
   const activeRef = useRef<HTMLAnchorElement | null>(null)
   const [query, setQuery] = useState("")
   const { favoriteChannelsInOrder } = useFavorites()
@@ -98,9 +104,54 @@ export function WatchSidebar({
     return { favoriteRows: fav, restRows: rest }
   }, [ordered, favoritesOrdered, matchesFilter])
 
+  const visibleRows = useMemo(
+    () => [...favoriteRows, ...restRows],
+    [favoriteRows, restRows],
+  )
+
+  const autoSubmitTarget = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    if (!q) return null
+    const exactNumber = ordered.find(
+      (ch) => String(channelNumber(ordered, ch)) === q,
+    )
+    if (exactNumber) return exactNumber
+    return visibleRows.length === 1 ? visibleRows[0] : null
+  }, [ordered, query, visibleRows])
+
   useEffect(() => {
     activeRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" })
   }, [currentPageUrl])
+
+  useEffect(() => {
+    if (!autoSubmitTarget || autoSubmitTarget.page_url === currentPageUrl) return
+    const timer = window.setTimeout(() => {
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur()
+      }
+      navigate(watchUrlForChannel(autoSubmitTarget))
+    }, WATCH_SEARCH_AUTO_SUBMIT_MS)
+    return () => window.clearTimeout(timer)
+  }, [autoSubmitTarget, currentPageUrl, navigate])
+
+  const submitFirstMatch = useCallback(() => {
+    const first = autoSubmitTarget ?? visibleRows[0]
+    if (!first || first.page_url === currentPageUrl) return
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur()
+    }
+    navigate(watchUrlForChannel(first))
+  }, [autoSubmitTarget, currentPageUrl, navigate, visibleRows])
+
+  const handleSearchKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") {
+        e.preventDefault()
+        submitFirstMatch()
+      }
+    },
+    [submitFirstMatch],
+  )
 
   return (
     <aside
@@ -130,6 +181,9 @@ export function WatchSidebar({
               id="watch-sidebar-search"
               value={query}
               onChange={setQuery}
+              onFocus={() => onSearchFocusChange?.(true)}
+              onBlur={() => onSearchFocusChange?.(false)}
+              onKeyDown={handleSearchKeyDown}
               placeholder="Filter channels…"
             />
           </div>

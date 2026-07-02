@@ -56,6 +56,38 @@ const DEFAULT_AMBILIGHT_SETTINGS: AmbilightSettings = {
   },
 }
 
+type DeviceCapabilityNavigator = Navigator & {
+  deviceMemory?: number
+}
+
+function shouldDisableAmbilightByDefault(): boolean {
+  if (typeof navigator === "undefined") return false
+  const nav = navigator as DeviceCapabilityNavigator
+  const memoryGb = nav.deviceMemory
+  const cores = nav.hardwareConcurrency
+
+  if (typeof memoryGb === "number" && memoryGb <= 2) return true
+  if (typeof cores === "number" && cores <= 2) return true
+  if (
+    typeof memoryGb === "number" &&
+    typeof cores === "number" &&
+    memoryGb <= 4 &&
+    cores <= 4
+  ) {
+    return true
+  }
+  return false
+}
+
+function defaultAmbilightSettings(): AmbilightSettings {
+  if (!shouldDisableAmbilightByDefault()) return DEFAULT_AMBILIGHT_SETTINGS
+  return {
+    ...DEFAULT_AMBILIGHT_SETTINGS,
+    enabled: false,
+    performanceMode: true,
+  }
+}
+
 const AMBILIGHT_SIDES: { id: AmbilightSide; label: string }[] = [
   { id: "top", label: "Top" },
   { id: "right", label: "Right" },
@@ -66,30 +98,31 @@ const AMBILIGHT_SIDES: { id: AmbilightSide; label: string }[] = [
 function readAmbilightSettings(): AmbilightSettings {
   try {
     const raw = localStorage.getItem(AMBILIGHT_KEY)
-    if (!raw) return DEFAULT_AMBILIGHT_SETTINGS
+    const defaults = defaultAmbilightSettings()
+    if (!raw) return defaults
     const parsed = JSON.parse(raw) as Partial<AmbilightSettings>
     return {
       enabled:
         typeof parsed.enabled === "boolean"
           ? parsed.enabled
-          : DEFAULT_AMBILIGHT_SETTINGS.enabled,
+          : defaults.enabled,
       opacity:
         typeof parsed.opacity === "number"
           ? Math.max(AMBILIGHT_MIN_OPACITY, Math.min(AMBILIGHT_MAX_OPACITY, parsed.opacity))
-          : DEFAULT_AMBILIGHT_SETTINGS.opacity,
+          : defaults.opacity,
       performanceMode:
         typeof parsed.performanceMode === "boolean"
           ? parsed.performanceMode
-          : DEFAULT_AMBILIGHT_SETTINGS.performanceMode,
+          : defaults.performanceMode,
       sides: {
-        top: parsed.sides?.top ?? DEFAULT_AMBILIGHT_SETTINGS.sides.top,
-        right: parsed.sides?.right ?? DEFAULT_AMBILIGHT_SETTINGS.sides.right,
-        bottom: parsed.sides?.bottom ?? DEFAULT_AMBILIGHT_SETTINGS.sides.bottom,
-        left: parsed.sides?.left ?? DEFAULT_AMBILIGHT_SETTINGS.sides.left,
+        top: parsed.sides?.top ?? defaults.sides.top,
+        right: parsed.sides?.right ?? defaults.sides.right,
+        bottom: parsed.sides?.bottom ?? defaults.sides.bottom,
+        left: parsed.sides?.left ?? defaults.sides.left,
       },
     }
   } catch {
-    return DEFAULT_AMBILIGHT_SETTINGS
+    return defaultAmbilightSettings()
   }
 }
 
@@ -111,6 +144,7 @@ export function WatchPage() {
   const [ambilight, setAmbilight] = useState(readAmbilightSettings)
   const [chromeHidden, setChromeHidden] = useState(false)
   const [numpadOpen, setNumpadOpen] = useState(false)
+  const [sidebarSearchFocused, setSidebarSearchFocused] = useState(false)
   const [channelHintVisible, setChannelHintVisible] = useState(() => {
     try {
       return localStorage.getItem(CHANNEL_NUMBER_HINT_KEY) !== "1"
@@ -291,13 +325,17 @@ export function WatchPage() {
     if (chromeHideTimer.current !== null) {
       window.clearTimeout(chromeHideTimer.current)
     }
+    if (sidebarSearchFocused) {
+      chromeHideTimer.current = null
+      return
+    }
     chromeHideTimer.current = window.setTimeout(() => {
       setAmbilightOpen(false)
       setRelatedDockOpen(false)
       writeRelatedDockOpenToStorage(false)
       setChromeHidden(true)
     }, WATCH_CHROME_AUTOHIDE_MS)
-  }, [])
+  }, [sidebarSearchFocused])
 
   useEffect(() => {
     keepChromeVisible()
@@ -683,6 +721,7 @@ export function WatchPage() {
               currentPageUrl={channel.page_url}
               collapsed={sidebarCollapsed}
               onToggleCollapsed={toggleSidebar}
+              onSearchFocusChange={setSidebarSearchFocused}
             />
           )}
         </div>
