@@ -14,32 +14,14 @@ type Props = {
 const BAR_COUNT = 48
 export const RESUME_AUDIO_VISUALIZER_EVENT = "tv2:resume-audio-visualizer"
 
-type MediaElementGraph = {
-  context: AudioContext
-  source: MediaElementAudioSourceNode
-}
-
 type CaptureAudioElement = HTMLAudioElement & {
   captureStream?: () => MediaStream
   mozCaptureStream?: () => MediaStream
 }
 
-const mediaElementGraphs = new WeakMap<HTMLAudioElement, MediaElementGraph>()
-
 function captureAudioStream(audio: HTMLAudioElement): MediaStream | null {
   const capturable = audio as CaptureAudioElement
   return capturable.captureStream?.() ?? capturable.mozCaptureStream?.() ?? null
-}
-
-function getMediaElementGraph(audio: HTMLAudioElement): MediaElementGraph {
-  const existing = mediaElementGraphs.get(audio)
-  if (existing && existing.context.state !== "closed") return existing
-
-  const context = new AudioContext()
-  const source = context.createMediaElementSource(audio)
-  const graph = { context, source }
-  mediaElementGraphs.set(audio, graph)
-  return graph
 }
 
 export function AudioVisualizer({
@@ -124,7 +106,7 @@ export function AudioVisualizer({
     let lastLevelsEmit = 0
     let onPlay: (() => void) | null = null
     let onResumeRequest: (() => void) | null = null
-    let useDecorativeSpectrum = Boolean(decorative)
+    let useDecorativeSpectrum = decorative || !audio
 
     const resumeAudioContext = () => {
       const c = ctxRef.current
@@ -139,14 +121,16 @@ export function AudioVisualizer({
 
     if (!decorative && audio) {
       try {
-        const graph = getMediaElementGraph(audio)
-        const actx = graph.context
+        const actx = new AudioContext()
         ctxRef.current = actx
         const captured = captureAudioStream(audio)
-        sourceNode = captured ? actx.createMediaStreamSource(captured) : graph.source
+        const source = captured
+          ? actx.createMediaStreamSource(captured)
+          : actx.createMediaElementSource(audio)
+        sourceNode = source
         analyser = actx.createAnalyser()
         analyser.fftSize = 256
-        sourceNode.connect(analyser)
+        source.connect(analyser)
         if (!captured) analyser.connect(actx.destination)
         frequencyData = new Uint8Array(analyser.frequencyBinCount)
         timeData = new Uint8Array(analyser.fftSize)
@@ -155,8 +139,8 @@ export function AudioVisualizer({
         onResumeRequest = resumeAudioContext
         audio.addEventListener("play", onPlay)
         window.addEventListener(RESUME_AUDIO_VISUALIZER_EVENT, onResumeRequest)
-      } catch (error) {
-        console.warn("Audio visualizer could not attach to real audio", error)
+      } catch {
+        /* CORS or duplicate source — use fake spectrum */
       }
     }
 
@@ -218,11 +202,7 @@ export function AudioVisualizer({
         drawBars(out)
         return
       }
-      if (useDecorativeSpectrum) {
-        fillDecorativeLevels(t)
-      } else {
-        out.fill(0)
-      }
+      fillDecorativeLevels(t)
       emitLevels(out, t)
       drawBars(out)
     }
@@ -254,6 +234,8 @@ export function AudioVisualizer({
       }
       sourceNode?.disconnect()
       analyser?.disconnect()
+      const c = ctxRef.current
+      if (c?.state !== "closed") void c?.close()
       ctxRef.current = null
     }
   }, [audio, decorative, streamKey])
