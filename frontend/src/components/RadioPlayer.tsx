@@ -308,7 +308,7 @@ export function RadioPlayer({
           audio={audioEl}
           decorative={false}
           streamKey={streamKey}
-          streamUrl={!isHls && url ? url : undefined}
+          streamUrl={isHls ? (hlsUrl ?? url ?? undefined) : (url ?? undefined)}
           onLevels={syncAmbilightLevels}
         />
       </div>

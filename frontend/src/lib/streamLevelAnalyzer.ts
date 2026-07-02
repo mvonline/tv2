@@ -6,8 +6,8 @@
  * decodes it off the playback path and serves levels indexed by the
  * element's currentTime.
  *
- * Supports raw MPEG audio (mp3, layer II/III) and ADTS AAC — the formats
- * used by icecast/shoutcast radio streams.
+ * Supports raw MPEG audio (mp3, layer II/III), ADTS AAC and decodable HLS
+ * media segments — the formats used by icecast/shoutcast radio streams.
  */
 
 export type StreamAnalyzerState = "connecting" | "analyzing" | "failed"
@@ -30,6 +30,8 @@ const EDGE_CLAMP_SEC = 2
 /** Bytes tolerated before the first valid audio frame (error pages, garbage). */
 const MAX_UNSYNCED_BYTES = 256 * 1024
 const MAX_PENDING_BYTES = 8 * 1024 * 1024
+const HLS_PLAYLIST_POLL_FLOOR_MS = 1000
+const HLS_SEGMENT_HISTORY = 24
 
 const MPEG_SAMPLE_RATES: Record<number, number[]> = {
   3: [44100, 48000, 32000], // MPEG1
@@ -91,6 +93,64 @@ function parseAdtsFrame(b: Uint8Array, off: number): FrameInfo | null {
 
 function parseFrame(b: Uint8Array, off: number): FrameInfo | null {
   return parseAdtsFrame(b, off) ?? parseMpegFrame(b, off)
+}
+
+function isHlsUrl(url: string) {
+  const lower = url.toLowerCase()
+  return lower.includes(".m3u8") || lower.includes("playlist.m3u")
+}
+
+function sleep(ms: number, signal: AbortSignal) {
+  return new Promise<void>((resolve, reject) => {
+    const timer = window.setTimeout(resolve, ms)
+    signal.addEventListener(
+      "abort",
+      () => {
+        window.clearTimeout(timer)
+        reject(new DOMException("Aborted", "AbortError"))
+      },
+      { once: true },
+    )
+  })
+}
+
+type HlsPlaylist = {
+  segments: string[]
+  variants: string[]
+  targetDuration: number
+}
+
+function parseHlsPlaylist(text: string, playlistUrl: string): HlsPlaylist {
+  const lines = text.split(/\r?\n/)
+  const segments: string[] = []
+  const variants: string[] = []
+  let targetDuration = 2
+  let nextUriIsVariant = false
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim()
+    if (!line) continue
+    if (line.startsWith("#EXT-X-TARGETDURATION:")) {
+      const parsed = Number(line.slice("#EXT-X-TARGETDURATION:".length))
+      if (Number.isFinite(parsed) && parsed > 0) targetDuration = parsed
+      continue
+    }
+    if (line.startsWith("#EXT-X-STREAM-INF")) {
+      nextUriIsVariant = true
+      continue
+    }
+    if (line.startsWith("#")) continue
+
+    const absolute = new URL(line, playlistUrl).toString()
+    if (nextUriIsVariant) {
+      variants.push(absolute)
+      nextUriIsVariant = false
+    } else {
+      segments.push(absolute)
+    }
+  }
+
+  return { segments, variants, targetDuration }
 }
 
 /** Find the next offset that parses as a frame AND is confirmed by the next header. */
@@ -286,6 +346,27 @@ export function createStreamLevelAnalyzer(
     })
   }
 
+  const enqueueDecodedSegment = (bytes: ArrayBuffer) => {
+    decodeChain = decodeChain.then(async () => {
+      if (disposed) return
+      try {
+        decodeCtx ??= new AudioContext()
+        const buf = await decodeCtx.decodeAudioData(bytes.slice(0))
+        if (!sampleRate) {
+          sampleRate = buf.sampleRate
+          hopSec = FFT_SIZE / sampleRate
+          bandEdges = computeBandEdges(barCount, sampleRate)
+        }
+        const chunkStart = totalSamples
+        totalSamples += buf.length
+        analyzeBuffer(buf, chunkStart, buf.length)
+        if (state === "connecting") state = "analyzing"
+      } catch {
+        /* Some HLS segment containers/codecs are not decodable by Web Audio. */
+      }
+    })
+  }
+
   const extractChunks = () => {
     for (;;) {
       const sync = findVerifiedSync(pending, 0)
@@ -350,7 +431,14 @@ export function createStreamLevelAnalyzer(
     extractChunks()
   }
 
-  const run = async () => {
+  const fetchNoStore = (resourceUrl: string) =>
+    fetch(resourceUrl, {
+      signal: abort.signal,
+      cache: "no-store",
+      credentials: "omit",
+    })
+
+  const runRawStream = async () => {
     const res = await fetch(url, {
       signal: abort.signal,
       cache: "no-store",
@@ -365,6 +453,45 @@ export function createStreamLevelAnalyzer(
     }
     throw new Error("stream ended")
   }
+
+  const runHlsStream = async () => {
+    let playlistUrl = url
+    const seenSegments: string[] = []
+
+    for (;;) {
+      const playlistRes = await fetchNoStore(playlistUrl)
+      if (!playlistRes.ok) throw new Error(`HTTP ${playlistRes.status}`)
+      const playlist = parseHlsPlaylist(await playlistRes.text(), playlistUrl)
+
+      if (playlist.variants.length) {
+        playlistUrl = playlist.variants[playlist.variants.length - 1] as string
+        continue
+      }
+
+      for (const segmentUrl of playlist.segments) {
+        if (disposed) return
+        if (seenSegments.includes(segmentUrl)) continue
+        seenSegments.push(segmentUrl)
+        while (seenSegments.length > HLS_SEGMENT_HISTORY) seenSegments.shift()
+
+        try {
+          const segmentRes = await fetchNoStore(segmentUrl)
+          if (!segmentRes.ok) continue
+          enqueueDecodedSegment(await segmentRes.arrayBuffer())
+        } catch {
+          if (disposed) return
+        }
+      }
+
+      const pollMs = Math.max(
+        HLS_PLAYLIST_POLL_FLOOR_MS,
+        (playlist.targetDuration * 1000) / 2,
+      )
+      await sleep(pollMs, abort.signal)
+    }
+  }
+
+  const run = isHlsUrl(url) ? runHlsStream : runRawStream
 
   run().catch(() => {
     if (!disposed) state = "failed"
