@@ -13,16 +13,8 @@ type Props = {
 
 const BAR_COUNT = 48
 export const RESUME_AUDIO_VISUALIZER_EVENT = "tv2:resume-audio-visualizer"
-
-type CaptureAudioElement = HTMLAudioElement & {
-  captureStream?: () => MediaStream
-  mozCaptureStream?: () => MediaStream
-}
-
-function captureAudioStream(audio: HTMLAudioElement): MediaStream | null {
-  const capturable = audio as CaptureAudioElement
-  return capturable.captureStream?.() ?? capturable.mozCaptureStream?.() ?? null
-}
+const SILENT_ANALYSER_GRACE_MS = 2500
+const SILENT_ANALYSER_PEAK = 3
 
 export function AudioVisualizer({
   audio,
@@ -98,15 +90,15 @@ export function AudioVisualizer({
       }
     }
 
-    let frequencyData: Uint8Array | null = null
-    let timeData: Uint8Array | null = null
+    let dataArray: Uint8Array | null = null
     let analyser: AnalyserNode | null = null
-    let sourceNode: AudioNode | null = null
+    let sourceNode: MediaElementAudioSourceNode | null = null
     let t0 = performance.now()
     let lastLevelsEmit = 0
     let onPlay: (() => void) | null = null
     let onResumeRequest: (() => void) | null = null
     let useDecorativeSpectrum = decorative || !audio
+    let analyserSilentSince = 0
 
     const resumeAudioContext = () => {
       const c = ctxRef.current
@@ -123,17 +115,13 @@ export function AudioVisualizer({
       try {
         const actx = new AudioContext()
         ctxRef.current = actx
-        const captured = captureAudioStream(audio)
-        const source = captured
-          ? actx.createMediaStreamSource(captured)
-          : actx.createMediaElementSource(audio)
+        const source = actx.createMediaElementSource(audio)
         sourceNode = source
         analyser = actx.createAnalyser()
         analyser.fftSize = 256
         source.connect(analyser)
-        if (!captured) analyser.connect(actx.destination)
-        frequencyData = new Uint8Array(analyser.frequencyBinCount)
-        timeData = new Uint8Array(analyser.fftSize)
+        analyser.connect(actx.destination)
+        dataArray = new Uint8Array(analyser.frequencyBinCount)
         useDecorativeSpectrum = false
         onPlay = resumeAudioContext
         onResumeRequest = resumeAudioContext
@@ -142,34 +130,6 @@ export function AudioVisualizer({
       } catch {
         /* CORS or duplicate source — use fake spectrum */
       }
-    }
-
-    const fillFrequencyLevels = (data: Uint8Array) => {
-      let peak = 0
-      const step = Math.max(1, Math.floor(data.length / BAR_COUNT))
-      for (let i = 0; i < BAR_COUNT; i++) {
-        const value = data[i * step] ?? 0
-        peak = Math.max(peak, value)
-        out[i] = value / 255
-      }
-      return peak
-    }
-
-    const fillTimeDomainLevels = (data: Uint8Array) => {
-      let peak = 0
-      const step = Math.max(1, Math.floor(data.length / BAR_COUNT))
-      for (let i = 0; i < BAR_COUNT; i++) {
-        let total = 0
-        let count = 0
-        for (let j = 0; j < step && i * step + j < data.length; j++) {
-          const centered = Math.abs((data[i * step + j] ?? 128) - 128)
-          peak = Math.max(peak, centered)
-          total += centered
-          count += 1
-        }
-        out[i] = count ? Math.min(1, (total / count / 128) * 2.4) : 0
-      }
-      return peak
     }
 
     const fillDecorativeLevels = (t: number) => {
@@ -186,16 +146,31 @@ export function AudioVisualizer({
 
     const loop = (t: number) => {
       rafRef.current = requestAnimationFrame(loop)
-      if (frequencyData && timeData && analyser && !useDecorativeSpectrum) {
+      if (dataArray && analyser && !useDecorativeSpectrum) {
         analyser.getByteFrequencyData(
-          frequencyData as Parameters<AnalyserNode["getByteFrequencyData"]>[0],
+          dataArray as Parameters<AnalyserNode["getByteFrequencyData"]>[0],
         )
-        const frequencyPeak = fillFrequencyLevels(frequencyData)
-        if (frequencyPeak === 0) {
-          analyser.getByteTimeDomainData(
-            timeData as Parameters<AnalyserNode["getByteTimeDomainData"]>[0],
-          )
-          fillTimeDomainLevels(timeData)
+        let peak = 0
+        const step = Math.max(1, Math.floor(dataArray.length / BAR_COUNT))
+        for (let i = 0; i < BAR_COUNT; i++) {
+          const value = dataArray[i * step] ?? 0
+          peak = Math.max(peak, value)
+          out[i] = value / 255
+        }
+
+        const isPlaying = Boolean(audio && !audio.paused && !audio.ended)
+        if (isPlaying && peak <= SILENT_ANALYSER_PEAK) {
+          analyserSilentSince ||= t
+          if (t - analyserSilentSince >= SILENT_ANALYSER_GRACE_MS) {
+            useDecorativeSpectrum = true
+            t0 = t
+            fillDecorativeLevels(t)
+            emitLevels(out, t)
+            drawBars(out)
+            return
+          }
+        } else {
+          analyserSilentSince = 0
         }
 
         emitLevels(out, t)
