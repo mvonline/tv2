@@ -99,6 +99,7 @@ export function AudioVisualizer({
     let onResumeRequest: (() => void) | null = null
     let useDecorativeSpectrum = decorative || !audio
     let analyserSilentSince = 0
+    let graphFailed = false
 
     const resumeAudioContext = () => {
       const c = ctxRef.current
@@ -111,25 +112,42 @@ export function AudioVisualizer({
       onLevelsRef.current(levels)
     }
 
-    if (!decorative && audio) {
+    // iOS only unlocks Web Audio inside a user gesture, so the graph is built
+    // on the first play/resume (unmuted autoplay is blocked there, making the
+    // play event gesture-driven) instead of at mount.
+    const attachGraph = () => {
+      if (analyser || graphFailed || decorative || !audio) return
       try {
-        const actx = new AudioContext()
+        const actx = ctxRef.current ?? new AudioContext()
         ctxRef.current = actx
+        if (actx.state === "suspended") void actx.resume()
         const source = actx.createMediaElementSource(audio)
         sourceNode = source
-        analyser = actx.createAnalyser()
-        analyser.fftSize = 256
-        source.connect(analyser)
-        analyser.connect(actx.destination)
-        dataArray = new Uint8Array(analyser.frequencyBinCount)
+        const node = actx.createAnalyser()
+        node.fftSize = 256
+        source.connect(node)
+        node.connect(actx.destination)
+        dataArray = new Uint8Array(node.frequencyBinCount)
+        analyser = node
+        analyserSilentSince = 0
         useDecorativeSpectrum = false
-        onPlay = resumeAudioContext
-        onResumeRequest = resumeAudioContext
-        audio.addEventListener("play", onPlay)
-        window.addEventListener(RESUME_AUDIO_VISUALIZER_EVENT, onResumeRequest)
       } catch {
         /* CORS or duplicate source — use fake spectrum */
+        graphFailed = true
+        useDecorativeSpectrum = true
+        t0 = performance.now()
       }
+    }
+
+    if (!decorative && audio) {
+      onPlay = () => {
+        attachGraph()
+        resumeAudioContext()
+      }
+      onResumeRequest = onPlay
+      audio.addEventListener("play", onPlay)
+      window.addEventListener(RESUME_AUDIO_VISUALIZER_EVENT, onResumeRequest)
+      if (!audio.paused) attachGraph()
     }
 
     const fillDecorativeLevels = (t: number) => {
@@ -146,7 +164,7 @@ export function AudioVisualizer({
 
     const loop = (t: number) => {
       rafRef.current = requestAnimationFrame(loop)
-      if (dataArray && analyser && !useDecorativeSpectrum) {
+      if (dataArray && analyser) {
         analyser.getByteFrequencyData(
           dataArray as Parameters<AnalyserNode["getByteFrequencyData"]>[0],
         )
@@ -159,25 +177,35 @@ export function AudioVisualizer({
         }
 
         const isPlaying = Boolean(audio && !audio.paused && !audio.ended)
-        if (isPlaying && peak <= SILENT_ANALYSER_PEAK) {
+        if (peak > SILENT_ANALYSER_PEAK) {
+          // Self-heal: real data arrived (e.g. context resumed late on iOS).
+          analyserSilentSince = 0
+          useDecorativeSpectrum = false
+        } else if (isPlaying) {
           analyserSilentSince ||= t
-          if (t - analyserSilentSince >= SILENT_ANALYSER_GRACE_MS) {
+          if (
+            !useDecorativeSpectrum &&
+            t - analyserSilentSince >= SILENT_ANALYSER_GRACE_MS
+          ) {
             useDecorativeSpectrum = true
             t0 = t
-            fillDecorativeLevels(t)
-            emitLevels(out, t)
-            drawBars(out)
-            return
           }
         } else {
           analyserSilentSince = 0
         }
 
-        emitLevels(out, t)
-        drawBars(out)
-        return
+        if (!useDecorativeSpectrum) {
+          emitLevels(out, t)
+          drawBars(out)
+          return
+        }
       }
-      fillDecorativeLevels(t)
+      if (useDecorativeSpectrum) {
+        fillDecorativeLevels(t)
+      } else {
+        // Graph not attached yet (waiting for first play) — silent flat bars.
+        out.fill(0)
+      }
       emitLevels(out, t)
       drawBars(out)
     }
