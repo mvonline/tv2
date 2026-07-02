@@ -1,4 +1,8 @@
 import { useEffect, useRef } from "react"
+import {
+  createStreamLevelAnalyzer,
+  type StreamLevelAnalyzer,
+} from "@/lib/streamLevelAnalyzer"
 
 type Props = {
   /** When set (and not decorative), spectrum follows playback (CORS may be required). */
@@ -7,6 +11,11 @@ type Props = {
   decorative?: boolean
   /** Re-bind when stream changes. */
   streamKey: string
+  /**
+   * Direct (non-HLS) stream URL. On iOS the media element can't be tapped
+   * for live streams, so the spectrum is computed from a parallel fetch.
+   */
+  streamUrl?: string
   className?: string
   onLevels?: (levels: ArrayLike<number>) => void
 }
@@ -16,10 +25,17 @@ export const RESUME_AUDIO_VISUALIZER_EVENT = "tv2:resume-audio-visualizer"
 const SILENT_ANALYSER_GRACE_MS = 2500
 const SILENT_ANALYSER_PEAK = 3
 
+// iPadOS 13+ reports as MacIntel — the touch-point check catches it.
+const IS_IOS =
+  typeof navigator !== "undefined" &&
+  (/iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1))
+
 export function AudioVisualizer({
   audio,
   decorative,
   streamKey,
+  streamUrl,
   className,
   onLevels,
 }: Props) {
@@ -100,6 +116,8 @@ export function AudioVisualizer({
     let useDecorativeSpectrum = decorative || !audio
     let analyserSilentSince = 0
     let graphFailed = false
+    let streamAnalyzer: StreamLevelAnalyzer | null = null
+    let streamAnalyzerBase = 0
 
     const resumeAudioContext = () => {
       const c = ctxRef.current
@@ -139,15 +157,28 @@ export function AudioVisualizer({
       }
     }
 
+    // iOS never feeds live-stream samples into MediaElementAudioSourceNode
+    // (WebKit 180696/211394), so for direct streams the spectrum comes from a
+    // parallel fetch decoded off the playback path instead of a graph tap.
+    const useStreamAnalyzer = IS_IOS && !decorative && !!audio && !!streamUrl
+
     if (!decorative && audio) {
       onPlay = () => {
+        if (useStreamAnalyzer) {
+          if (!streamAnalyzer && streamUrl) {
+            streamAnalyzer = createStreamLevelAnalyzer(streamUrl, BAR_COUNT)
+            streamAnalyzerBase = audio.currentTime
+            useDecorativeSpectrum = false
+          }
+          return
+        }
         attachGraph()
         resumeAudioContext()
       }
       onResumeRequest = onPlay
       audio.addEventListener("play", onPlay)
       window.addEventListener(RESUME_AUDIO_VISUALIZER_EVENT, onResumeRequest)
-      if (!audio.paused) attachGraph()
+      if (!audio.paused) onPlay()
     }
 
     const fillDecorativeLevels = (t: number) => {
@@ -164,6 +195,26 @@ export function AudioVisualizer({
 
     const loop = (t: number) => {
       rafRef.current = requestAnimationFrame(loop)
+      if (streamAnalyzer && audio) {
+        if (streamAnalyzer.state === "failed") {
+          streamAnalyzer.dispose()
+          streamAnalyzer = null
+          useDecorativeSpectrum = true
+          t0 = t
+        } else {
+          const playing = !audio.paused && !audio.ended
+          const hasData =
+            playing &&
+            streamAnalyzer.read(audio.currentTime - streamAnalyzerBase, out)
+          if (!hasData) {
+            // Paused, or decode still warming up — decay to silence.
+            for (let i = 0; i < BAR_COUNT; i++) out[i] = (out[i] ?? 0) * 0.88
+          }
+          emitLevels(out, t)
+          drawBars(out)
+          return
+        }
+      }
       if (dataArray && analyser) {
         analyser.getByteFrequencyData(
           dataArray as Parameters<AnalyserNode["getByteFrequencyData"]>[0],
@@ -235,13 +286,15 @@ export function AudioVisualizer({
           onResumeRequest,
         )
       }
+      streamAnalyzer?.dispose()
+      streamAnalyzer = null
       sourceNode?.disconnect()
       analyser?.disconnect()
       const c = ctxRef.current
       if (c?.state !== "closed") void c?.close()
       ctxRef.current = null
     }
-  }, [audio, decorative, streamKey])
+  }, [audio, decorative, streamKey, streamUrl])
 
   return (
     <canvas
