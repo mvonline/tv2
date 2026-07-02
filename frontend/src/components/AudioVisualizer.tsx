@@ -12,6 +12,9 @@ type Props = {
 }
 
 const BAR_COUNT = 48
+export const RESUME_AUDIO_VISUALIZER_EVENT = "tv2:resume-audio-visualizer"
+const SILENT_ANALYSER_GRACE_MS = 2500
+const SILENT_ANALYSER_PEAK = 3
 
 export function AudioVisualizer({
   audio,
@@ -93,6 +96,14 @@ export function AudioVisualizer({
     let t0 = performance.now()
     let lastLevelsEmit = 0
     let onPlay: (() => void) | null = null
+    let onResumeRequest: (() => void) | null = null
+    let useDecorativeSpectrum = decorative || !audio
+    let analyserSilentSince = 0
+
+    const resumeAudioContext = () => {
+      const c = ctxRef.current
+      if (c?.state === "suspended") void c.resume()
+    }
 
     const emitLevels = (levels: ArrayLike<number>, t: number) => {
       if (!onLevelsRef.current || t - lastLevelsEmit < 50) return
@@ -111,29 +122,17 @@ export function AudioVisualizer({
         source.connect(analyser)
         analyser.connect(actx.destination)
         dataArray = new Uint8Array(analyser.frequencyBinCount)
-        onPlay = () => {
-          void actx.resume()
-        }
+        useDecorativeSpectrum = false
+        onPlay = resumeAudioContext
+        onResumeRequest = resumeAudioContext
         audio.addEventListener("play", onPlay)
+        window.addEventListener(RESUME_AUDIO_VISUALIZER_EVENT, onResumeRequest)
       } catch {
         /* CORS or duplicate source — use fake spectrum */
       }
     }
 
-    const loop = (t: number) => {
-      rafRef.current = requestAnimationFrame(loop)
-      if (dataArray && analyser) {
-        analyser.getByteFrequencyData(
-          dataArray as Parameters<AnalyserNode["getByteFrequencyData"]>[0],
-        )
-        const step = Math.max(1, Math.floor(dataArray.length / BAR_COUNT))
-        for (let i = 0; i < BAR_COUNT; i++) {
-          out[i] = (dataArray[i * step] ?? 0) / 255
-        }
-        emitLevels(out, t)
-        drawBars(out)
-        return
-      }
+    const fillDecorativeLevels = (t: number) => {
       const elapsed = (t - t0) / 1000
       for (let i = 0; i < BAR_COUNT; i++) {
         const phase = elapsed * 2.2 + i * 0.15
@@ -143,6 +142,42 @@ export function AudioVisualizer({
             (0.5 + 0.5 * Math.sin(phase)) *
             (0.5 + 0.5 * Math.sin(elapsed * 1.7 + i * 0.08))
       }
+    }
+
+    const loop = (t: number) => {
+      rafRef.current = requestAnimationFrame(loop)
+      if (dataArray && analyser && !useDecorativeSpectrum) {
+        analyser.getByteFrequencyData(
+          dataArray as Parameters<AnalyserNode["getByteFrequencyData"]>[0],
+        )
+        let peak = 0
+        const step = Math.max(1, Math.floor(dataArray.length / BAR_COUNT))
+        for (let i = 0; i < BAR_COUNT; i++) {
+          const value = dataArray[i * step] ?? 0
+          peak = Math.max(peak, value)
+          out[i] = value / 255
+        }
+
+        const isPlaying = Boolean(audio && !audio.paused && !audio.ended)
+        if (isPlaying && peak <= SILENT_ANALYSER_PEAK) {
+          analyserSilentSince ||= t
+          if (t - analyserSilentSince >= SILENT_ANALYSER_GRACE_MS) {
+            useDecorativeSpectrum = true
+            t0 = t
+            fillDecorativeLevels(t)
+            emitLevels(out, t)
+            drawBars(out)
+            return
+          }
+        } else {
+          analyserSilentSince = 0
+        }
+
+        emitLevels(out, t)
+        drawBars(out)
+        return
+      }
+      fillDecorativeLevels(t)
       emitLevels(out, t)
       drawBars(out)
     }
@@ -166,6 +201,12 @@ export function AudioVisualizer({
       document.removeEventListener("visibilitychange", onVisibilityChange)
       roCleanup()
       if (audio && onPlay) audio.removeEventListener("play", onPlay)
+      if (onResumeRequest) {
+        window.removeEventListener(
+          RESUME_AUDIO_VISUALIZER_EVENT,
+          onResumeRequest,
+        )
+      }
       sourceNode?.disconnect()
       analyser?.disconnect()
       const c = ctxRef.current

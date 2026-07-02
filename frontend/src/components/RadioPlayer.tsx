@@ -2,7 +2,10 @@ import Hls from "hls.js"
 import { Pause, Play, Radio } from "lucide-react"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import type { Channel } from "@/types/channel"
-import { AudioVisualizer } from "@/components/AudioVisualizer"
+import {
+  AudioVisualizer,
+  RESUME_AUDIO_VISUALIZER_EVENT,
+} from "@/components/AudioVisualizer"
 import { RadioNameArt } from "@/components/RadioNameArt"
 import { hlsPlaybackUrl } from "@/lib/hlsProxyUrl"
 import type { AmbilightSettings } from "@/components/VideoPlayer"
@@ -188,6 +191,7 @@ export function RadioPlayer({
     const audio = audioEl
     if (!audio) return
     if (audio.paused) {
+      window.dispatchEvent(new Event(RESUME_AUDIO_VISUALIZER_EVENT))
       tryPlay(audio)
     } else {
       audio.pause()
