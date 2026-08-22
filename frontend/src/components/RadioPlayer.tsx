@@ -8,6 +8,7 @@ import {
 } from "@/components/AudioVisualizer"
 import { RadioNameArt } from "@/components/RadioNameArt"
 import { hlsPlaybackUrl } from "@/lib/hlsProxyUrl"
+import { createAutoplayKeeper, type AutoplayKeeper } from "@/lib/autoplay"
 import type { AmbilightSettings } from "@/components/VideoPlayer"
 
 type Props = {
@@ -16,51 +17,6 @@ type Props = {
   /** Multi-view: only one pane unmuted. */
   muted?: boolean
   ambilight?: AmbilightSettings
-}
-
-function tryPlay(media: HTMLMediaElement | null, onFailed?: () => void) {
-  if (!media) return
-  const result = media.play()
-  if (result && typeof result.catch === "function") {
-    result.catch(() => {
-      /* Browser policy may block unmuted autoplay. */
-      onFailed?.()
-    })
-  }
-}
-
-function createPlayRetrier(media: HTMLMediaElement) {
-  let retryTimer = 0
-  let stopped = false
-
-  const clearRetry = () => {
-    if (retryTimer) {
-      window.clearTimeout(retryTimer)
-      retryTimer = 0
-    }
-  }
-
-  const attempt = () => {
-    if (stopped || !media.paused || media.ended) return
-    tryPlay(media, () => {
-      if (stopped || retryTimer || !media.paused) return
-      retryTimer = window.setTimeout(() => {
-        retryTimer = 0
-        attempt()
-      }, 1000)
-    })
-  }
-
-  media.addEventListener("playing", clearRetry)
-
-  return {
-    attempt,
-    stop() {
-      stopped = true
-      clearRetry()
-      media.removeEventListener("playing", clearRetry)
-    },
-  }
 }
 
 function resetMedia(media: HTMLMediaElement) {
@@ -81,6 +37,7 @@ export function RadioPlayer({
   const levelsRef = useRef<Float32Array | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
+  const keeperRef = useRef<AutoplayKeeper | null>(null)
 
   const url = channel.stream_url
   const isHls =
@@ -107,8 +64,14 @@ export function RadioPlayer({
 
     const source = isHls ? (hlsUrl ?? url) : url
 
+    const detachSyncListeners = () => {
+      audio.removeEventListener("play", syncPlaying)
+      audio.removeEventListener("playing", syncPlaying)
+      audio.removeEventListener("pause", syncPlaying)
+      audio.removeEventListener("ended", syncPlaying)
+    }
+
     if (isHls && Hls.isSupported()) {
-      const playRetrier = createPlayRetrier(audio)
       // Workers unreliable on TV Chromium builds; buffer limits prevent OOM.
       const hls = new Hls({
         enableWorker: false,
@@ -117,28 +80,49 @@ export function RadioPlayer({
         maxMaxBufferLength: 20,
         maxBufferSize: 8 * 1024 * 1024,
       })
+      const keeper = createAutoplayKeeper(audio, {
+        onStalled: () => {
+          hls.startLoad(-1)
+        },
+      })
+      keeperRef.current = keeper
       hlsRef.current = hls
       hls.loadSource(source)
       hls.attachMedia(audio)
-      const onCanPlay = () => playRetrier.attempt()
-      audio.addEventListener("canplay", onCanPlay)
-      hls.on(Hls.Events.MANIFEST_PARSED, () => playRetrier.attempt())
+      hls.on(Hls.Events.MANIFEST_PARSED, () => keeper.attempt())
+      hls.on(Hls.Events.MEDIA_ATTACHED, () => keeper.attempt())
+      let networkRetryTimer = 0
+      let networkRetries = 0
       hls.on(Hls.Events.ERROR, (_, data) => {
-        if (data.fatal) {
-          setError(
-            channel.requires_proxy
-              ? "Stream blocked (proxy required). This host may not allow playback outside the original site."
-              : "Playback error. Try again later.",
-          )
+        if (!data.fatal) return
+        if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+          hls.recoverMediaError()
+          keeper.attempt()
+          return
         }
+        if (data.type === Hls.ErrorTypes.NETWORK_ERROR && networkRetries < 5) {
+          const delay = Math.min(8000, 1000 * 2 ** networkRetries)
+          networkRetries += 1
+          window.clearTimeout(networkRetryTimer)
+          networkRetryTimer = window.setTimeout(() => {
+            hls.loadSource(source)
+            hls.startLoad(-1)
+            keeper.attempt()
+          }, delay)
+          return
+        }
+        setError(
+          channel.requires_proxy
+            ? "Stream blocked (proxy required). This host may not allow playback outside the original site."
+            : "Playback error. Try again later.",
+        )
       })
+      keeper.attempt()
       return () => {
-        playRetrier.stop()
-        audio.removeEventListener("play", syncPlaying)
-        audio.removeEventListener("playing", syncPlaying)
-        audio.removeEventListener("pause", syncPlaying)
-        audio.removeEventListener("ended", syncPlaying)
-        audio.removeEventListener("canplay", onCanPlay)
+        window.clearTimeout(networkRetryTimer)
+        keeper.stop()
+        keeperRef.current = null
+        detachSyncListeners()
         hls.detachMedia()
         hls.destroy()
         hlsRef.current = null
@@ -147,35 +131,31 @@ export function RadioPlayer({
     }
 
     if (isHls && audio.canPlayType("application/vnd.apple.mpegurl")) {
-      const playRetrier = createPlayRetrier(audio)
+      const keeper = createAutoplayKeeper(audio, {
+        onStalled: () => audio.load(),
+      })
+      keeperRef.current = keeper
       audio.src = source
-      const onCanPlay = () => playRetrier.attempt()
-      audio.addEventListener("canplay", onCanPlay)
-      playRetrier.attempt()
+      keeper.attempt()
       return () => {
-        playRetrier.stop()
-        audio.removeEventListener("play", syncPlaying)
-        audio.removeEventListener("playing", syncPlaying)
-        audio.removeEventListener("pause", syncPlaying)
-        audio.removeEventListener("ended", syncPlaying)
-        audio.removeEventListener("canplay", onCanPlay)
+        keeper.stop()
+        keeperRef.current = null
+        detachSyncListeners()
         resetMedia(audio)
       }
     }
 
     if (!isHls) {
-      const playRetrier = createPlayRetrier(audio)
+      const keeper = createAutoplayKeeper(audio, {
+        onStalled: () => audio.load(),
+      })
+      keeperRef.current = keeper
       audio.src = url
-      const onCanPlay = () => playRetrier.attempt()
-      audio.addEventListener("canplay", onCanPlay)
-      playRetrier.attempt()
+      keeper.attempt()
       return () => {
-        playRetrier.stop()
-        audio.removeEventListener("play", syncPlaying)
-        audio.removeEventListener("playing", syncPlaying)
-        audio.removeEventListener("pause", syncPlaying)
-        audio.removeEventListener("ended", syncPlaying)
-        audio.removeEventListener("canplay", onCanPlay)
+        keeper.stop()
+        keeperRef.current = null
+        detachSyncListeners()
         resetMedia(audio)
       }
     }
@@ -192,8 +172,15 @@ export function RadioPlayer({
     if (!audio) return
     if (audio.paused) {
       window.dispatchEvent(new Event(RESUME_AUDIO_VISUALIZER_EVENT))
-      tryPlay(audio)
+      keeperRef.current?.setUserPaused(false)
+      const started = audio.play()
+      if (started && typeof started.catch === "function") {
+        started.catch(() => {
+          /* Browser policy may block unmuted playback. */
+        })
+      }
     } else {
+      keeperRef.current?.setUserPaused(true)
       audio.pause()
     }
   }, [audioEl])

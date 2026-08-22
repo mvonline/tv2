@@ -1,8 +1,9 @@
 import Hls from "hls.js"
-import { Maximize2, Minimize2 } from "lucide-react"
+import { Maximize2, Minimize2, VolumeX } from "lucide-react"
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import type { Channel } from "@/types/channel"
 import { hlsPlaybackUrl } from "@/lib/hlsProxyUrl"
+import { createAutoplayKeeper, seekToLiveEdge } from "@/lib/autoplay"
 
 type Props = {
   channel: Channel
@@ -94,51 +95,6 @@ function sampleRegion(
   ]
 }
 
-function tryPlay(media: HTMLMediaElement | null, onFailed?: () => void) {
-  if (!media) return
-  const result = media.play()
-  if (result && typeof result.catch === "function") {
-    result.catch(() => {
-      /* Browser policy may block unmuted autoplay. */
-      onFailed?.()
-    })
-  }
-}
-
-function createPlayRetrier(media: HTMLMediaElement) {
-  let retryTimer = 0
-  let stopped = false
-
-  const clearRetry = () => {
-    if (retryTimer) {
-      window.clearTimeout(retryTimer)
-      retryTimer = 0
-    }
-  }
-
-  const attempt = () => {
-    if (stopped || !media.paused || media.ended) return
-    tryPlay(media, () => {
-      if (stopped || retryTimer || !media.paused) return
-      retryTimer = window.setTimeout(() => {
-        retryTimer = 0
-        attempt()
-      }, 1000)
-    })
-  }
-
-  media.addEventListener("playing", clearRetry)
-
-  return {
-    attempt,
-    stop() {
-      stopped = true
-      clearRetry()
-      media.removeEventListener("playing", clearRetry)
-    },
-  }
-}
-
 export function VideoPlayer({
   channel,
   className,
@@ -152,6 +108,8 @@ export function VideoPlayer({
   const [error, setError] = useState<string | null>(null)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [ambilightLive, setAmbilightLive] = useState(false)
+  /** Set when the autoplay policy forced us to drop sound to get picture. */
+  const [autoMuted, setAutoMuted] = useState(false)
 
   const fullscreenTarget = useCallback(() => {
     const doc = document as Document & { webkitFullscreenElement?: Element | null }
@@ -192,6 +150,21 @@ export function VideoPlayer({
       (document as Document & { webkitExitFullscreen(): void }).webkitExitFullscreen()
     }
   }, [fullscreenTarget])
+
+  const unmute = useCallback(() => {
+    const video = videoRef.current
+    setAutoMuted(false)
+    if (!video) return
+    video.muted = false
+    // The click is a user gesture, so an unmuted play() is allowed now.
+    const started = video.play()
+    if (started && typeof started.catch === "function") {
+      started.catch(() => {
+        video.muted = true
+        setAutoMuted(true)
+      })
+    }
+  }, [])
 
   const toggleFullscreen = useCallback(() => {
     if (isFullscreen) exitFullscreen()
@@ -254,13 +227,13 @@ export function VideoPlayer({
 
   useEffect(() => {
     setError(null)
+    setAutoMuted(false)
     const video = videoRef.current
     if (!video || !url || isIframe) return
 
     const playbackSrc = isHls ? (hlsUrl ?? url) : url
 
     if (isHls && Hls.isSupported()) {
-      const playRetrier = createPlayRetrier(video)
       // Workers unreliable on TV Chromium; LL-HLS stresses weak demuxers.
       // Buffer limits prevent OOM on TVs that have 256-512 MB available to the web app.
       const hls = new Hls({
@@ -276,55 +249,87 @@ export function VideoPlayer({
         fragLoadingTimeOut: 20_000,
         manifestLoadingTimeOut: 15_000,
       })
+      const keeper = createAutoplayKeeper(video, {
+        onMutedFallback: () => setAutoMuted(true),
+        onStalled: () => {
+          // Resume the fetch loop and rejoin live rather than sitting on a
+          // buffer that stopped filling.
+          hls.startLoad(-1)
+          seekToLiveEdge(video)
+        },
+      })
       hlsRef.current = hls
       hls.loadSource(playbackSrc)
       hls.attachMedia(video)
-      const onCanPlay = () => playRetrier.attempt()
-      video.addEventListener("canplay", onCanPlay)
-      hls.on(Hls.Events.MANIFEST_PARSED, () => playRetrier.attempt())
+      hls.on(Hls.Events.MANIFEST_PARSED, () => keeper.attempt())
+      hls.on(Hls.Events.MEDIA_ATTACHED, () => keeper.attempt())
+      hls.on(Hls.Events.LEVEL_LOADED, () => keeper.attempt())
+      let networkRetryTimer = 0
+      let networkRetries = 0
       hls.on(Hls.Events.ERROR, (_, data) => {
         if (!data.fatal) return
         if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
           hls.recoverMediaError()
-        } else {
-          setError(
-            channel.requires_proxy
-              ? "Stream unavailable. The channel may be geo-restricted or temporarily offline."
-              : "Playback error. The stream may be temporarily unavailable.",
-          )
+          keeper.attempt()
+          return
         }
+        if (data.type === Hls.ErrorTypes.NETWORK_ERROR && networkRetries < 5) {
+          // A fatal network error is usually the manifest or the proxy blipping;
+          // reload with backoff instead of leaving a stopped player behind.
+          const delay = Math.min(8000, 1000 * 2 ** networkRetries)
+          networkRetries += 1
+          window.clearTimeout(networkRetryTimer)
+          networkRetryTimer = window.setTimeout(() => {
+            hls.loadSource(playbackSrc)
+            hls.startLoad(-1)
+            keeper.attempt()
+          }, delay)
+          return
+        }
+        setError(
+          channel.requires_proxy
+            ? "Stream unavailable. The channel may be geo-restricted or temporarily offline."
+            : "Playback error. The stream may be temporarily unavailable.",
+        )
       })
+      keeper.attempt()
       return () => {
-        playRetrier.stop()
-        video.removeEventListener("canplay", onCanPlay)
+        window.clearTimeout(networkRetryTimer)
+        keeper.stop()
         hls.destroy()
         hlsRef.current = null
       }
     }
 
     if (isHls && nativeHlsLikely(video)) {
-      const playRetrier = createPlayRetrier(video)
+      const keeper = createAutoplayKeeper(video, {
+        onMutedFallback: () => setAutoMuted(true),
+        onStalled: () => {
+          video.load()
+          keeper.attempt()
+        },
+      })
       video.src = playbackSrc
-      const onCanPlay = () => playRetrier.attempt()
-      video.addEventListener("canplay", onCanPlay)
-      playRetrier.attempt()
+      keeper.attempt()
       return () => {
-        playRetrier.stop()
-        video.removeEventListener("canplay", onCanPlay)
+        keeper.stop()
         video.removeAttribute("src")
         video.load()
       }
     }
 
     if (!isHls) {
-      const playRetrier = createPlayRetrier(video)
+      const keeper = createAutoplayKeeper(video, {
+        onMutedFallback: () => setAutoMuted(true),
+        onStalled: () => {
+          video.load()
+          keeper.attempt()
+        },
+      })
       video.src = url
-      const onCanPlay = () => playRetrier.attempt()
-      video.addEventListener("canplay", onCanPlay)
-      playRetrier.attempt()
+      keeper.attempt()
       return () => {
-        playRetrier.stop()
-        video.removeEventListener("canplay", onCanPlay)
+        keeper.stop()
         video.removeAttribute("src")
         video.load()
       }
@@ -483,9 +488,19 @@ export function VideoPlayer({
         controls
         playsInline
         autoPlay
-        muted={muted}
+        muted={muted || autoMuted}
         crossOrigin={crossOrigin}
       />
+      {autoMuted && !muted && (
+        <button
+          type="button"
+          className="video-unmute-btn"
+          onClick={unmute}
+        >
+          <VolumeX size={18} strokeWidth={2} aria-hidden />
+          Tap to unmute
+        </button>
+      )}
       <button
         type="button"
         className="video-fullscreen-btn"
