@@ -32,6 +32,16 @@ def _iter_ld_json_objects(soup: BeautifulSoup):
             yield data
 
 
+_SITE_SUFFIX_RE = re.compile(r"\s*[-|–—]\s*Aparatchi+\b.*$", re.IGNORECASE)
+
+
+def _strip_site_suffix(name: str | None) -> str | None:
+    """New site appends " - Aparatchi Live Iranian TV" to every JSON-LD/og title."""
+    if not name:
+        return name
+    return _SITE_SUFFIX_RE.sub("", name).strip() or name
+
+
 def extract_channel_page(html: str, page_url: str) -> dict[str, Any]:
     soup = BeautifulSoup(html, "lxml")
     out: dict[str, Any] = {
@@ -70,6 +80,8 @@ def extract_channel_page(html: str, page_url: str) -> dict[str, Any]:
 
     if not out["name"] and soup.title and soup.title.string:
         out["name"] = soup.title.string.split("-")[0].strip()
+
+    out["name"] = _strip_site_suffix(out["name"])
 
     # Fallback: first channel logo in main column only
     if not out["logo_url"]:

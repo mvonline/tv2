@@ -8,19 +8,20 @@ USER_AGENT = (
 )
 REQUEST_TIMEOUT_S = 30
 
-# Seed category paths (level 1). Extend or replace after inspecting the homepage menu.
+# Seed pages crawled for channel links (level 1). The homepage lists most channels.
 CATEGORY_PATHS = [
-    "/iran-live-tv",
-    "/afghan-live-tv",
-    "/kurdish-live-tv",
-    "/english-live-tv",
-    "/arabic-live-tv",
-    "/korean-live-tv",
-    "/turkish-live-tv",
-    "/indian-live-tv",
-    "/spanish-live-tv",
-    "/french-live-tv",
-    "/azerbaijan-live-tv",
+    "/",
+    "/chanells/iran-live-tv/",
+    "/chanells/afghan-live-tv/",
+    "/chanells/kurdish-live-tv/",
+    "/chanells/arabic-live-tv/",
+    "/chanells/azerbaijan-live-tv/",
+    "/chanells/turkish-live-tv/",
+    "/chanells/indian-live-tv/",
+    "/chanells/korean-live-tv/",
+    "/chanells/spanish-live-tv/",
+    "/chanells/french-live-tv/",
+    "/chanells/english-religion-tv/",
     "/news-live-tv",
     "/entertainment-live-tv",
     "/sport-live-tv",
@@ -29,22 +30,46 @@ CATEGORY_PATHS = [
     "/kids-live-tv",
     "/music-live-tv",
     "/scientific-live-tv",
+    "/politics-live-tv",
+    "/religion-live-tv",
     "/irib-live-tv",
     "/irib-ostani-live-tv",
-    "/politics-live-tv",
     "/iranian-live-radio",
-    "/religion-live-tv",
 ]
 
-# Channel pages: /{region}-live-tv/{group}/{slug} or /iranian-live-radio/{group}/{slug}
+# Channel pages are now two segments: /{group}/{slug} (e.g. /farsi-news-tv/voa-persian,
+# /irib-live-tv/irib1-live, /iranian-radio/radio-donya, /tajik/varzish-tv).
+# The group slug is not predictable, so exclude the site's non-channel sections instead.
+_NON_CHANNEL_SEGMENTS = (
+    "articles",
+    "other-pages",
+    "chanells",
+    "images",
+    "media",
+    "templates",
+    "modules",
+    "component",
+    "index.php",
+    "api",
+    "log-in",
+    "create-an-account",
+    "lost-password",
+    "lost-user-name",
+    "contact-us",
+    "add-tv-channel",
+)
+_NON_CHANNEL_LEAVES = ("feed", "rss", "atom")
+
 CHANNEL_PATH_RE = re.compile(
-    r"^/(?:[a-z0-9]+-live-tv|iranian-live-radio)/[a-z0-9-]+/[a-z0-9-]+/?$",
+    r"^/(?!(?:" + "|".join(re.escape(x) for x in _NON_CHANNEL_SEGMENTS) + r")/)"
+    r"[a-z0-9][a-z0-9-]*/(?!(?:" + "|".join(_NON_CHANNEL_LEAVES) + r")/?$)"
+    r"[a-z0-9][a-z0-9-]*/?$",
     re.IGNORECASE,
 )
 
-# Top-level category index pages (single path segment), e.g. /sport-live-tv, /iranian-live-radio
+# Category index pages: /sport-live-tv, /irib-live-tv, /chanells/iran-live-tv/
 CATEGORY_INDEX_RE = re.compile(
-    r"^/(?:[a-z0-9-]+-live-tv|iranian-live-radio)/?$",
+    r"^(?:/chanells)?/(?:[a-z0-9-]+-live-tv|[a-z0-9-]+-live-radio|iranian-live-radio)/?$",
     re.IGNORECASE,
 )
 
