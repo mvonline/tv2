@@ -22,6 +22,14 @@ type Props = {
 /** Upstream statuses that will never succeed on retry. */
 const PERMANENT_UPSTREAM_STATUSES = new Set([400, 401, 403, 404, 410, 451])
 
+/** hls.js error details that mean the playlist itself could not be loaded. */
+const PLAYLIST_ERROR_DETAILS = new Set<string>([
+  "manifestLoadError",
+  "manifestParsingError",
+  "levelLoadError",
+  "levelEmptyError",
+])
+
 
 function resetMedia(media: HTMLMediaElement) {
   media.pause()
@@ -107,7 +115,8 @@ export function RadioPlayer({
         const upstreamStatus = data.response?.code
         if (
           typeof upstreamStatus === "number" &&
-          PERMANENT_UPSTREAM_STATUSES.has(upstreamStatus)
+          PERMANENT_UPSTREAM_STATUSES.has(upstreamStatus) &&
+          PLAYLIST_ERROR_DETAILS.has(data.details as string)
         ) {
           setError("This station is offline (the source is no longer available).")
           return

@@ -39,6 +39,14 @@ const DEFAULT_AMBILIGHT: AmbilightSettings = {
 /** Upstream statuses that will never succeed on retry. */
 const PERMANENT_UPSTREAM_STATUSES = new Set([400, 401, 403, 404, 410, 451])
 
+/** hls.js error details that mean the playlist itself could not be loaded. */
+const PLAYLIST_ERROR_DETAILS = new Set<string>([
+  "manifestLoadError",
+  "manifestParsingError",
+  "levelLoadError",
+  "levelEmptyError",
+])
+
 /** Embedded TV browsers (webOS, Tizen, …) often expose native HLS and choke on MSE workers. */
 function nativeHlsLikely(video: HTMLVideoElement): boolean {
   return (
@@ -282,12 +290,14 @@ export function VideoPlayer({
           keeper.attempt()
           return
         }
-        // A 404/403/410 from the CDN means the channel is gone, not blipping —
-        // retrying just delays telling the viewer.
+        // A 404/403/410 on the *playlist* means the channel is gone, so say so
+        // instead of retrying. The same status on a fragment is usually just an
+        // aged session id in a cached playlist, which the next reload fixes.
         const upstreamStatus = data.response?.code
         const permanent =
           typeof upstreamStatus === "number" &&
-          PERMANENT_UPSTREAM_STATUSES.has(upstreamStatus)
+          PERMANENT_UPSTREAM_STATUSES.has(upstreamStatus) &&
+          PLAYLIST_ERROR_DETAILS.has(data.details as string)
         if (permanent) {
           setError("This channel is offline (the source is no longer available).")
           return

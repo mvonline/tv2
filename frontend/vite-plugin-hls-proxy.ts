@@ -44,11 +44,44 @@ function upstreamHeaders(hostname: string): Record<string, string> {
  * immutable. Without this, every dev reload pays full upstream latency.
  */
 const MANIFEST_TTL_MS = 1500
+/** Past the fresh window, serve the old body and refresh behind the response. */
+const MANIFEST_STALE_MS = 5000
+/** hls.js buffers liveSyncDurationCount segments before playing. */
+const PREFETCH_SEGMENTS = 2
+/** Keep recently watched channels' sockets and playlists warm. */
+const WARM_INTERVAL_MS = 45_000
+const WARM_IDLE_EVICT_MS = 300_000
+const WARM_MAX_CHANNELS = 8
 const SEGMENT_TTL_MS = 60_000
 const SEGMENT_MAX_BYTES = 8 * 1024 * 1024
 const SEGMENT_CACHE_MAX_BYTES = 192 * 1024 * 1024
 
-type ManifestEntry = { expires: number; body: string }
+/**
+ * Nimble mints a fresh ?nimblesessionid= per master fetch and embeds it in every
+ * media-playlist and segment URL, while the bytes behind them are identical
+ * between sessions. Keying on the raw URL therefore produced a key unique per
+ * viewer per reload — the cache never hit for anyone but whoever filled it.
+ * Keys drop these params; upstream still gets the original URL for segments,
+ * which 404 without a session id.
+ */
+const VOLATILE_QUERY_PARAMS = new Set(["nimblesessionid"])
+
+/** Upstream said the resource is not there; retrying cannot help. */
+const PERMANENT_STATUSES = new Set([400, 401, 403, 404, 410, 451])
+
+function cacheKey(url: string): string {
+  try {
+    const u = new URL(url)
+    for (const name of [...u.searchParams.keys()]) {
+      if (VOLATILE_QUERY_PARAMS.has(name.toLowerCase())) u.searchParams.delete(name)
+    }
+    return u.href
+  } catch {
+    return url
+  }
+}
+
+type ManifestEntry = { fresh: number; stale: number; body: string; resolved: string }
 type SegmentEntry = { expires: number; contentType: string; body: Buffer }
 
 const manifestCache = new Map<string, ManifestEntry>()
@@ -57,17 +90,94 @@ const segmentCache = new Map<string, SegmentEntry>()
 const segmentPrefetching = new Set<string>()
 let segmentCacheBytes = 0
 
-function manifestCached(key: string): string | null {
+function manifestCached(key: string): { entry: ManifestEntry; fresh: boolean } | null {
   const hit = manifestCache.get(key)
   if (!hit) return null
-  if (hit.expires < Date.now()) {
-    manifestCache.delete(key)
-    return null
-  }
-  return hit.body
+  const now = Date.now()
+  if (now <= hit.fresh) return { entry: hit, fresh: true }
+  if (now <= hit.stale) return { entry: hit, fresh: false }
+  manifestCache.delete(key)
+  return null
 }
 
-function segmentCached(url: string): SegmentEntry | null {
+function manifestStore(url: string, body: string, resolved: string): void {
+  const now = Date.now()
+  manifestCache.set(cacheKey(url), {
+    fresh: now + MANIFEST_TTL_MS,
+    stale: now + MANIFEST_STALE_MS,
+    body,
+    resolved,
+  })
+}
+
+/**
+ * A segment 404 usually means the session id baked into the playlist we served
+ * has aged out. Drop that directory's playlists so the next request mints a
+ * fresh one instead of handing out the same dead URLs.
+ */
+function invalidateManifestsFor(segmentUrl: string): void {
+  const prefix = cacheKey(segmentUrl).replace(/\/[^/]*$/, "")
+  for (const key of [...manifestCache.keys()]) {
+    if (key.startsWith(prefix)) manifestCache.delete(key)
+  }
+}
+
+/**
+ * Fetch a playlist and cache it. Session params are dropped on the way out:
+ * chunks.m3u8 serves fine without one, so all viewers share one canonical fetch.
+ */
+async function fetchUpstreamManifest(url: string): Promise<ManifestEntry> {
+  const canonical = cacheKey(url)
+  const r = await fetch(canonical, {
+    headers: upstreamHeaders(new URL(url).hostname),
+  })
+  if (!r.ok) {
+    const err = new Error(String(r.status)) as Error & { status?: number }
+    err.status = r.status
+    throw err
+  }
+  const body = await r.text()
+  manifestStore(url, body, canonical)
+  scheduleLiveEdgePrefetch(body, canonical)
+  return { fresh: 0, stale: 0, body, resolved: canonical }
+}
+
+// ── keeping recently watched channels warm ──────────────────────────────────
+// A cold TLS handshake to the CDN measured 170-2800 ms versus ~100 ms pooled, so
+// recently requested playlists are re-fetched periodically to hold the socket.
+const warmTargets = new Map<string, number>()
+let warmTimer: ReturnType<typeof setInterval> | null = null
+
+function noteWarmTarget(url: string): void {
+  const key = cacheKey(url)
+  warmTargets.delete(key)
+  warmTargets.set(key, Date.now())
+  while (warmTargets.size > WARM_MAX_CHANNELS) {
+    const oldest = warmTargets.keys().next()
+    if (oldest.done) break
+    warmTargets.delete(oldest.value)
+  }
+  if (warmTimer) return
+  warmTimer = setInterval(() => {
+    const now = Date.now()
+    for (const [target, lastSeen] of [...warmTargets]) {
+      if (now - lastSeen > WARM_IDLE_EVICT_MS) {
+        warmTargets.delete(target)
+        continue
+      }
+      void fetchUpstreamManifest(target).catch(() => {})
+    }
+    if (warmTargets.size === 0 && warmTimer) {
+      clearInterval(warmTimer)
+      warmTimer = null
+    }
+  }, WARM_INTERVAL_MS)
+  // Do not hold the dev server open on this timer.
+  warmTimer.unref?.()
+}
+
+function segmentCached(rawUrl: string): SegmentEntry | null {
+  const url = cacheKey(rawUrl)
   const hit = segmentCache.get(url)
   if (!hit) return null
   if (hit.expires < Date.now()) {
@@ -81,8 +191,9 @@ function segmentCached(url: string): SegmentEntry | null {
   return hit
 }
 
-function segmentStore(url: string, contentType: string, body: Buffer): void {
+function segmentStore(rawUrl: string, contentType: string, body: Buffer): void {
   if (body.length > SEGMENT_MAX_BYTES) return
+  const url = cacheKey(rawUrl)
   const existing = segmentCache.get(url)
   if (existing) segmentCacheBytes -= existing.body.length
   segmentCache.set(url, { expires: Date.now() + SEGMENT_TTL_MS, contentType, body })
@@ -119,25 +230,39 @@ function playlistEntries(body: string, playlistUrl: string): string[] {
  */
 function scheduleLiveEdgePrefetch(body: string, playlistUrl: string): void {
   const entries = playlistEntries(body, playlistUrl)
-  const target = entries[entries.length - 1]
-  if (!target || target.toLowerCase().includes(".m3u")) return
-  if (segmentPrefetching.has(target) || segmentCached(target)) return
-  segmentPrefetching.add(target)
-  void (async () => {
-    try {
-      const r = await fetch(target, {
-        headers: upstreamHeaders(new URL(target).hostname),
-      })
-      if (r.ok) {
-        const buf = Buffer.from(await r.arrayBuffer())
-        segmentStore(target, r.headers.get("content-type") ?? "application/octet-stream", buf)
-      }
-    } catch {
-      /* Best effort; the real request will fetch it. */
-    } finally {
-      segmentPrefetching.delete(target)
+  const last = entries[entries.length - 1]
+  if (!last) return
+
+  if (last.toLowerCase().includes(".m3u")) {
+    // Master playlist: entries are playlists. Fetching the variant now turns the
+    // player's next request — an unavoidable round trip before any media
+    // arrives — into a cache hit.
+    if (!manifestCached(cacheKey(last))) {
+      void fetchUpstreamManifest(last).catch(() => {})
     }
-  })()
+    return
+  }
+
+  for (const target of entries.slice(-PREFETCH_SEGMENTS)) {
+    const key = cacheKey(target)
+    if (segmentPrefetching.has(key) || segmentCached(target)) continue
+    segmentPrefetching.add(key)
+    void (async () => {
+      try {
+        const r = await fetch(target, {
+          headers: upstreamHeaders(new URL(target).hostname),
+        })
+        if (r.ok) {
+          const buf = Buffer.from(await r.arrayBuffer())
+          segmentStore(target, r.headers.get("content-type") ?? "application/octet-stream", buf)
+        }
+      } catch {
+        /* Best effort; the real request will fetch it. */
+      } finally {
+        segmentPrefetching.delete(key)
+      }
+    })()
+  }
 }
 
 function normalizeProxyPath(viteBase: string): string {
@@ -268,49 +393,40 @@ function installHlsProxy(
       }
     }
 
+    if (looksLikeManifest) noteWarmTarget(target)
+
     void (async () => {
       try {
         if (looksLikeManifest) {
-          const key = `${proxySelfOrigin}|${target}`
-          const fresh = manifestCached(key)
-          if (fresh !== null) {
+          const key = cacheKey(target)
+          const hit = manifestCached(key)
+          if (hit) {
+            if (!hit.fresh && !manifestInflight.has(key)) {
+              // Serve now, refresh behind the response.
+              const refresh = fetchUpstreamManifest(target).then((e) => e.body)
+              manifestInflight.set(key, refresh)
+              void refresh.catch(() => {}).finally(() => manifestInflight.delete(key))
+            }
             res.statusCode = 200
             res.setHeader("Content-Type", "application/vnd.apple.mpegurl")
             res.setHeader("Access-Control-Allow-Origin", "*")
             res.setHeader("Cache-Control", "no-cache")
-            res.end(fresh)
+            res.end(rewritePlaylist(hit.entry.body, hit.entry.resolved, proxySelfOrigin))
             return
           }
           // Single-flight: concurrent requests for one playlist share a fetch.
           let pending = manifestInflight.get(key)
           if (!pending) {
-            pending = (async () => {
-              const r = await fetch(target, {
-                headers: upstreamHeaders(targetUrl.hostname),
-              })
-              if (!r.ok) {
-                const err = new Error(String(r.status)) as Error & { status?: number }
-                err.status = r.status
-                throw err
-              }
-              const text = await r.text()
-              scheduleLiveEdgePrefetch(text, target)
-              const rewritten = rewritePlaylist(text, target, proxySelfOrigin)
-              manifestCache.set(key, {
-                expires: Date.now() + MANIFEST_TTL_MS,
-                body: rewritten,
-              })
-              return rewritten
-            })()
+            pending = fetchUpstreamManifest(target).then((e) => e.body)
             manifestInflight.set(key, pending)
             void pending.catch(() => {}).finally(() => manifestInflight.delete(key))
           }
-          const rewritten = await pending
+          const body = await pending
           res.statusCode = 200
           res.setHeader("Content-Type", "application/vnd.apple.mpegurl")
           res.setHeader("Access-Control-Allow-Origin", "*")
           res.setHeader("Cache-Control", "no-cache")
-          res.end(rewritten)
+          res.end(rewritePlaylist(body, cacheKey(target), proxySelfOrigin))
           return
         }
 
@@ -320,6 +436,7 @@ function installHlsProxy(
         const ct = r.headers.get("content-type") ?? ""
 
         if (!r.ok) {
+          if (PERMANENT_STATUSES.has(r.status)) invalidateManifestsFor(target)
           res.statusCode = r.status
           res.setHeader("Content-Type", "text/plain; charset=utf-8")
           res.setHeader("Access-Control-Allow-Origin", "*")
