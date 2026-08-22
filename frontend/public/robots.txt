@@ -2,6 +2,6 @@ User-agent: *
 Allow: /
 
 # The HLS proxy is not content; crawling it would pull video segments.
-Disallow: /tv2/proxy/
+Disallow: /proxy/
 
-Sitemap: https://mvonline.github.io/tv2/sitemap.xml
+Sitemap: https://tv2.vafa.one/sitemap.xml

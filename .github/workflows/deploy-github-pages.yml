@@ -34,7 +34,12 @@ jobs:
         shell: bash
         run: |
           NAME="${{ github.event.repository.name }}"
-          if [[ "$NAME" == *.github.io ]]; then
+          if [[ -f frontend/public/CNAME ]]; then
+            # A custom domain serves from the domain root, so the project-name
+            # sub-path must not be applied — asset URLs would 404.
+            echo "Vite base: / (custom domain $(cat frontend/public/CNAME))"
+            echo "vite_base=/" >> "$GITHUB_OUTPUT"
+          elif [[ "$NAME" == *.github.io ]]; then
             echo "Vite base: / (user or org site)"
             echo "vite_base=/" >> "$GITHUB_OUTPUT"
           else

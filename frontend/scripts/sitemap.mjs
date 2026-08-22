@@ -45,13 +45,21 @@ mkdirSync(outDir, { recursive: true })
 const [ghOwner = "", ghRepo = ""] = (process.env.GITHUB_REPOSITORY || "").split("/")
 const isUserSite = ghRepo.toLowerCase().endsWith(".github.io")
 
+const cnamePath = join(frontend, "public", "CNAME")
+const customDomain = existsSync(cnamePath)
+  ? readFileSync(cnamePath, "utf-8").trim()
+  : ""
+
 /**
- * Base path, matching the deploy workflow: a project site lives under /<repo>/,
- * a user/org site at the root.
+ * Base path, matching the deploy workflow: a custom domain and a user/org site
+ * serve from the root, a project site from /<repo>/. The CNAME check must come
+ * first — the scrape workflow runs this without VITE_BASE, and deriving /<repo>/
+ * there would emit https://custom.domain/<repo>/... URLs.
  */
 function resolveBase() {
   const explicit = (process.env.VITE_BASE || "").trim()
   if (explicit) return explicit.endsWith("/") ? explicit : `${explicit}/`
+  if (customDomain) return "/"
   if (ghRepo && !isUserSite) return `/${ghRepo}/`
   return "/"
 }
@@ -69,11 +77,7 @@ function resolveSite() {
   const explicit = (process.env.SITE_URL || "").trim()
   if (explicit) return withBase(explicit)
 
-  const cname = join(frontend, "public", "CNAME")
-  if (existsSync(cname)) {
-    const host = readFileSync(cname, "utf-8").trim()
-    if (host) return withBase(host)
-  }
+  if (customDomain) return withBase(customDomain)
 
   if (ghOwner && ghRepo) {
     // Pages hostnames are lowercase regardless of how the owner is spelled.
@@ -95,10 +99,17 @@ function withBase(raw) {
 
 const root = resolveSite()
 if (!root) {
-  console.warn(
-    "sitemap: no SITE_URL, CNAME or GITHUB_REPOSITORY — emitting root-relative " +
-      "URLs. Search engines require absolute ones.",
-  )
+  // Search Console rejects every entry of a relative sitemap ("Invalid URL"), and
+  // a warning here already shipped one. In CI that is a build failure; locally it
+  // stays a warning so `npm run build` works without configuration.
+  const message =
+    "sitemap: cannot resolve the site URL. Set SITE_URL, add frontend/public/CNAME, " +
+    "or run inside GitHub Actions. Sitemaps require absolute URLs."
+  if (process.env.CI || process.env.GITHUB_ACTIONS) {
+    console.error(message)
+    process.exit(1)
+  }
+  console.warn(`${message} Emitting root-relative URLs for local inspection only.`)
 }
 
 /** Absolute (or root-relative) URL for an in-app route like "watch/foo". */
