@@ -1,51 +1,103 @@
 /**
- * Generate dist/sitemap.xml and dist/robots.txt after a build.
+ * Generate sitemap.xml and robots.txt from the channel list.
  *
- * Runs at build time, from the very channels.json that was just copied into
- * dist/, so the sitemap can never disagree with the channel list that shipped
- * with it. The GitHub Pages deploy is triggered by changes to
- * backend/data/channels.json, so a scrape that adds or drops channels produces a
- * matching sitemap on the next deploy without a separate step.
+ * Two callers, one generator:
+ *   - the scrape workflow, right after channels.json changes, writing into
+ *     frontend/public/ so the sitemap is committed in the same commit as the
+ *     channels it describes (`--channels ../backend/data/channels.json
+ *     --out public`);
+ *   - `npm run build`, from the channels.json already copied into dist/, so the
+ *     deployed sitemap always matches the deployed channel list. Vite copies
+ *     public/ into dist/ first and this overwrites it, so the build output is
+ *     authoritative and the committed copy is the reviewable record.
+ *
+ * Usage:
+ *   node scripts/sitemap.mjs [--channels <path>] [--out <dir>]
  *
  * Env:
- *   SITE_URL  Absolute origin (+ optional sub-path) the site is served from,
- *             e.g. https://user.github.io/tv2/. Falls back to VITE_BASE only,
- *             which yields a relative-rooted sitemap — valid for inspection but
- *             search engines want absolute URLs, so set SITE_URL in CI.
+ *   SITE_URL   Absolute origin (+ optional sub-path) the site is served from,
+ *              e.g. https://user.github.io/tv2/. Optional; see resolveSite().
+ *   VITE_BASE  Base path the app is served under. Optional; derived from the
+ *              repository name on GitHub Actions.
  */
-import { readFileSync, writeFileSync, existsSync } from "fs"
-import { dirname, join } from "path"
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs"
+import { dirname, join, resolve } from "path"
 import { fileURLToPath } from "url"
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const dist = join(__dirname, "..", "dist")
-const channelsJson = join(dist, "data", "channels.json")
+const frontend = join(__dirname, "..")
 
-if (!existsSync(channelsJson)) {
-  console.error(`sitemap: ${channelsJson} not found. Run vite build first.`)
-  process.exit(1)
+function flag(name, fallback) {
+  const i = process.argv.indexOf(`--${name}`)
+  return i !== -1 && process.argv[i + 1] ? process.argv[i + 1] : fallback
 }
 
-const rawBase = process.env.VITE_BASE || "/"
-const basePath = rawBase.endsWith("/") ? rawBase : `${rawBase}/`
+const channelsJson = resolve(frontend, flag("channels", join("dist", "data", "channels.json")))
+const outDir = resolve(frontend, flag("out", "dist"))
 
-/** Origin + base path, with exactly one trailing slash, or "" when unknown. */
-function siteRoot() {
-  const raw = (process.env.SITE_URL || "").trim()
-  if (!raw) return ""
+if (!existsSync(channelsJson)) {
+  console.error(`sitemap: ${channelsJson} not found.`)
+  process.exit(1)
+}
+mkdirSync(outDir, { recursive: true })
+
+/** Repo name / owner, available in every GitHub Actions run. */
+const [ghOwner = "", ghRepo = ""] = (process.env.GITHUB_REPOSITORY || "").split("/")
+const isUserSite = ghRepo.toLowerCase().endsWith(".github.io")
+
+/**
+ * Base path, matching the deploy workflow: a project site lives under /<repo>/,
+ * a user/org site at the root.
+ */
+function resolveBase() {
+  const explicit = (process.env.VITE_BASE || "").trim()
+  if (explicit) return explicit.endsWith("/") ? explicit : `${explicit}/`
+  if (ghRepo && !isUserSite) return `/${ghRepo}/`
+  return "/"
+}
+
+const basePath = resolveBase()
+
+/**
+ * Site root, in precedence order:
+ *   1. SITE_URL (a repository variable lets you pin a custom domain)
+ *   2. public/CNAME, if a custom domain is configured
+ *   3. the GitHub Pages hostname derived from GITHUB_REPOSITORY
+ *   4. "" — root-relative output, for a local run outside CI
+ */
+function resolveSite() {
+  const explicit = (process.env.SITE_URL || "").trim()
+  if (explicit) return withBase(explicit)
+
+  const cname = join(frontend, "public", "CNAME")
+  if (existsSync(cname)) {
+    const host = readFileSync(cname, "utf-8").trim()
+    if (host) return withBase(host)
+  }
+
+  if (ghOwner && ghRepo) {
+    // Pages hostnames are lowercase regardless of how the owner is spelled.
+    const host = isUserSite ? ghRepo.toLowerCase() : `${ghOwner.toLowerCase()}.github.io`
+    return withBase(`https://${host}`)
+  }
+  return ""
+}
+
+/** Origin + base path, with exactly one trailing slash. */
+function withBase(raw) {
   const withScheme = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`
   const u = new URL(withScheme)
-  // A SITE_URL that already carries the base path must not get it twice.
+  // A URL that already carries the base path must not get it twice.
   const path = u.pathname.endsWith("/") ? u.pathname : `${u.pathname}/`
   const merged = path === "/" ? basePath : path
   return `${u.origin}${merged}`
 }
 
-const root = siteRoot()
+const root = resolveSite()
 if (!root) {
   console.warn(
-    "sitemap: SITE_URL is unset — emitting root-relative URLs. Search engines " +
-      "require absolute ones; set SITE_URL in the deploy workflow.",
+    "sitemap: no SITE_URL, CNAME or GITHUB_REPOSITORY — emitting root-relative " +
+      "URLs. Search engines require absolute ones.",
   )
 }
 
@@ -86,6 +138,8 @@ const playable = channels.filter(
   (c) => c && c.page_url && (c.stream_url || c.raw_iframe_src),
 )
 
+// Date only: a full timestamp would rewrite every <lastmod> on each scrape and
+// make the committed sitemap churn even when no channel changed.
 const lastmod = new Date().toISOString().slice(0, 10)
 
 const entries = [
@@ -124,7 +178,21 @@ const xml =
   `${body}\n` +
   `</urlset>\n`
 
-writeFileSync(join(dist, "sitemap.xml"), xml, "utf-8")
+const sitemapPath = join(outDir, "sitemap.xml")
+
+/**
+ * Keep the existing file when only <lastmod> would change. The scrape workflow
+ * commits this file, and a date-only rewrite would otherwise produce a commit —
+ * and a deploy — every day even when no channel changed.
+ */
+function unchangedApartFromLastmod(next, path) {
+  if (!existsSync(path)) return false
+  const strip = (t) => t.replace(/<lastmod>[^<]*<\/lastmod>/g, "<lastmod/>")
+  return strip(readFileSync(path, "utf-8")) === strip(next)
+}
+
+const kept = unchangedApartFromLastmod(xml, sitemapPath)
+if (!kept) writeFileSync(sitemapPath, xml, "utf-8")
 
 const robots =
   `User-agent: *\n` +
@@ -135,11 +203,12 @@ const robots =
   `\n` +
   `Sitemap: ${loc("sitemap.xml")}\n`
 
-writeFileSync(join(dist, "robots.txt"), robots, "utf-8")
+writeFileSync(join(outDir, "robots.txt"), robots, "utf-8")
 
 const skipped = channels.length - playable.length
+const where = outDir.replace(`${frontend}/`, "")
 console.log(
-  `sitemap: wrote dist/sitemap.xml (${unique.length} urls` +
+  `sitemap: ${kept ? "kept" : "wrote"} ${where}/sitemap.xml (${unique.length} urls` +
     `${skipped > 0 ? `, ${skipped} channels skipped as unplayable` : ""}) ` +
-    `and dist/robots.txt${root ? "" : " [relative]"}`,
+    `and ${where}/robots.txt${root ? ` at ${root}` : " [relative]"}`,
 )

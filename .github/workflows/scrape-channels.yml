@@ -39,15 +39,32 @@ jobs:
       - name: Sync categories into SQLite
         run: python backend/sync_categories.py
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Regenerate from the channels.json just written, so the sitemap is
+      # committed in the same commit as the channel list it describes. Writes into
+      # frontend/public/, which Vite copies verbatim into the build output.
+      # SITE_URL is optional: the script derives the Pages URL from
+      # GITHUB_REPOSITORY, and a repository variable or public/CNAME overrides it.
+      - name: Update sitemap
+        working-directory: frontend
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: node scripts/sitemap.mjs --channels ../backend/data/channels.json --out public
+
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add backend/data/channels.json backend/data/categories.db logo/
+          git add backend/data/channels.json backend/data/categories.db logo/ \
+                  frontend/public/sitemap.xml frontend/public/robots.txt
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "chore: update channels and logos"
+            git commit -m "chore: update channels, logos and sitemap"
             git push
             echo "Pushed; the Pages deploy runs on backend/data/channels.json and regenerates sitemap.xml."
           fi
