@@ -41,7 +41,7 @@ from channels_fetch import maybe_fetch_channels_json
 from epg_routes import admin_router as epg_admin_router
 from epg_routes import refresh_all_configured_sources
 from epg_routes import router as epg_router
-from hls_proxy import router as hls_router
+from hls_proxy import aclose_client as aclose_hls_client, router as hls_router
 from scraper_routes import router as scraper_router
 
 
@@ -89,6 +89,7 @@ async def lifespan(_app: FastAPI):
             await cleanup_task
         except asyncio.CancelledError:
             pass
+        await aclose_hls_client()
 
 
 app = FastAPI(title="TV2", description="HLS proxy + categories", lifespan=lifespan)

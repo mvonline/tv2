@@ -36,6 +36,9 @@ const DEFAULT_AMBILIGHT: AmbilightSettings = {
   performanceMode: false,
 }
 
+/** Upstream statuses that will never succeed on retry. */
+const PERMANENT_UPSTREAM_STATUSES = new Set([400, 401, 403, 404, 410, 451])
+
 /** Embedded TV browsers (webOS, Tizen, …) often expose native HLS and choke on MSE workers. */
 function nativeHlsLikely(video: HTMLVideoElement): boolean {
   return (
@@ -248,6 +251,12 @@ export function VideoPlayer({
         // Give the proxy extra time to relay the first segment on slow uplinks.
         fragLoadingTimeOut: 20_000,
         manifestLoadingTimeOut: 15_000,
+        // Upstream packages 10 s segments, so the default 3-segment live sync
+        // costs ~30 s of buffering before playback and leaves us that far
+        // behind live. Two segments still absorbs a hiccup at half the wait.
+        liveSyncDurationCount: 2,
+        // Fetch the first segment while the playlist is still being processed.
+        startFragPrefetch: true,
       })
       const keeper = createAutoplayKeeper(video, {
         onMutedFallback: () => setAutoMuted(true),
@@ -271,6 +280,16 @@ export function VideoPlayer({
         if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
           hls.recoverMediaError()
           keeper.attempt()
+          return
+        }
+        // A 404/403/410 from the CDN means the channel is gone, not blipping —
+        // retrying just delays telling the viewer.
+        const upstreamStatus = data.response?.code
+        const permanent =
+          typeof upstreamStatus === "number" &&
+          PERMANENT_UPSTREAM_STATUSES.has(upstreamStatus)
+        if (permanent) {
+          setError("This channel is offline (the source is no longer available).")
           return
         }
         if (data.type === Hls.ErrorTypes.NETWORK_ERROR && networkRetries < 5) {

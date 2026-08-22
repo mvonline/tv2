@@ -19,6 +19,10 @@ type Props = {
   ambilight?: AmbilightSettings
 }
 
+/** Upstream statuses that will never succeed on retry. */
+const PERMANENT_UPSTREAM_STATUSES = new Set([400, 401, 403, 404, 410, 451])
+
+
 function resetMedia(media: HTMLMediaElement) {
   media.pause()
   media.removeAttribute("src")
@@ -98,6 +102,14 @@ export function RadioPlayer({
         if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
           hls.recoverMediaError()
           keeper.attempt()
+          return
+        }
+        const upstreamStatus = data.response?.code
+        if (
+          typeof upstreamStatus === "number" &&
+          PERMANENT_UPSTREAM_STATUSES.has(upstreamStatus)
+        ) {
+          setError("This station is offline (the source is no longer available).")
           return
         }
         if (data.type === Hls.ErrorTypes.NETWORK_ERROR && networkRetries < 5) {

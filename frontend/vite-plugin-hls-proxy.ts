@@ -1,3 +1,4 @@
+import { Readable } from "node:stream"
 import type { Connect, PreviewServer, ViteDevServer } from "vite"
 
 /** Same allowlist as backend `hls_proxy.allowed_host` / `config.stream_requires_proxy`. */
@@ -34,6 +35,109 @@ function upstreamHeaders(hostname: string): Record<string, string> {
   return h.endsWith(".telewebion.ir") || h === "telewebion.ir"
     ? TELEWEBION_HEADERS
     : UPSTREAM_HEADERS
+}
+
+/**
+ * Same caching strategy as `backend/hls_proxy.py`, for the same reason: a cold
+ * TLS handshake to the CDN costs 170-2800 ms vs ~100 ms pooled, media playlists
+ * are identical between viewers within a target duration, and segments are
+ * immutable. Without this, every dev reload pays full upstream latency.
+ */
+const MANIFEST_TTL_MS = 1500
+const SEGMENT_TTL_MS = 60_000
+const SEGMENT_MAX_BYTES = 8 * 1024 * 1024
+const SEGMENT_CACHE_MAX_BYTES = 192 * 1024 * 1024
+
+type ManifestEntry = { expires: number; body: string }
+type SegmentEntry = { expires: number; contentType: string; body: Buffer }
+
+const manifestCache = new Map<string, ManifestEntry>()
+const manifestInflight = new Map<string, Promise<string>>()
+const segmentCache = new Map<string, SegmentEntry>()
+const segmentPrefetching = new Set<string>()
+let segmentCacheBytes = 0
+
+function manifestCached(key: string): string | null {
+  const hit = manifestCache.get(key)
+  if (!hit) return null
+  if (hit.expires < Date.now()) {
+    manifestCache.delete(key)
+    return null
+  }
+  return hit.body
+}
+
+function segmentCached(url: string): SegmentEntry | null {
+  const hit = segmentCache.get(url)
+  if (!hit) return null
+  if (hit.expires < Date.now()) {
+    segmentCache.delete(url)
+    segmentCacheBytes -= hit.body.length
+    return null
+  }
+  // Map preserves insertion order, so re-inserting marks this most recent.
+  segmentCache.delete(url)
+  segmentCache.set(url, hit)
+  return hit
+}
+
+function segmentStore(url: string, contentType: string, body: Buffer): void {
+  if (body.length > SEGMENT_MAX_BYTES) return
+  const existing = segmentCache.get(url)
+  if (existing) segmentCacheBytes -= existing.body.length
+  segmentCache.set(url, { expires: Date.now() + SEGMENT_TTL_MS, contentType, body })
+  segmentCacheBytes += body.length
+  while (segmentCacheBytes > SEGMENT_CACHE_MAX_BYTES) {
+    const oldest = segmentCache.keys().next()
+    if (oldest.done) break
+    const entry = segmentCache.get(oldest.value)
+    segmentCache.delete(oldest.value)
+    if (entry) segmentCacheBytes -= entry.body.length
+  }
+}
+
+/** Absolute proxyable media URLs listed in a playlist, in playlist order. */
+function playlistEntries(body: string, playlistUrl: string): string[] {
+  const base = new URL(playlistUrl)
+  const out: string[] = []
+  for (const line of body.split(/\r?\n/)) {
+    const trimmed = line.trim()
+    if (!trimmed || trimmed.startsWith("#")) continue
+    try {
+      const u = new URL(trimmed, base)
+      if (allowedHost(u.hostname)) out.push(u.href)
+    } catch {
+      /* ignore */
+    }
+  }
+  return out
+}
+
+/**
+ * hls.js starts at the live edge, so after serving a media playlist begin
+ * fetching its last segment — by the time the player asks, it is in memory.
+ */
+function scheduleLiveEdgePrefetch(body: string, playlistUrl: string): void {
+  const entries = playlistEntries(body, playlistUrl)
+  const target = entries[entries.length - 1]
+  if (!target || target.toLowerCase().includes(".m3u")) return
+  if (segmentPrefetching.has(target) || segmentCached(target)) return
+  segmentPrefetching.add(target)
+  void (async () => {
+    try {
+      const r = await fetch(target, {
+        headers: upstreamHeaders(new URL(target).hostname),
+      })
+      if (r.ok) {
+        const buf = Buffer.from(await r.arrayBuffer())
+        segmentStore(target, r.headers.get("content-type") ?? "application/octet-stream", buf)
+      }
+    } catch {
+      /* Best effort; the real request will fetch it. */
+    } finally {
+      segmentPrefetching.delete(target)
+    }
+  })()
 }
 
 function normalizeProxyPath(viteBase: string): string {
@@ -148,29 +252,60 @@ function installHlsProxy(
     const host = req.headers.host ?? "localhost"
     const proxySelfOrigin = `${proto}://${host}${basePath}`
 
+    const lowerTarget = target.toLowerCase()
+    const looksLikeManifest =
+      lowerTarget.includes(".m3u8") || lowerTarget.includes(".m3u")
+
+    if (!looksLikeManifest) {
+      const cached = segmentCached(target)
+      if (cached) {
+        res.statusCode = 200
+        res.setHeader("Content-Type", cached.contentType)
+        res.setHeader("Access-Control-Allow-Origin", "*")
+        res.setHeader("Cache-Control", "public, max-age=30")
+        res.end(cached.body)
+        return
+      }
+    }
+
     void (async () => {
       try {
-        const r = await fetch(target, {
-          headers: upstreamHeaders(targetUrl.hostname),
-        })
-        const ct = r.headers.get("content-type") ?? ""
-        const lowerTarget = target.toLowerCase()
-        const isM3u8 =
-          lowerTarget.includes(".m3u8") ||
-          ct.includes("mpegurl") ||
-          ct.includes("m3u")
-
-        if (!r.ok) {
-          res.statusCode = r.status
-          res.setHeader("Access-Control-Allow-Origin", "*")
-          const t = await r.text()
-          res.end(t)
-          return
-        }
-
-        if (isM3u8) {
-          const text = await r.text()
-          const rewritten = rewritePlaylist(text, target, proxySelfOrigin)
+        if (looksLikeManifest) {
+          const key = `${proxySelfOrigin}|${target}`
+          const fresh = manifestCached(key)
+          if (fresh !== null) {
+            res.statusCode = 200
+            res.setHeader("Content-Type", "application/vnd.apple.mpegurl")
+            res.setHeader("Access-Control-Allow-Origin", "*")
+            res.setHeader("Cache-Control", "no-cache")
+            res.end(fresh)
+            return
+          }
+          // Single-flight: concurrent requests for one playlist share a fetch.
+          let pending = manifestInflight.get(key)
+          if (!pending) {
+            pending = (async () => {
+              const r = await fetch(target, {
+                headers: upstreamHeaders(targetUrl.hostname),
+              })
+              if (!r.ok) {
+                const err = new Error(String(r.status)) as Error & { status?: number }
+                err.status = r.status
+                throw err
+              }
+              const text = await r.text()
+              scheduleLiveEdgePrefetch(text, target)
+              const rewritten = rewritePlaylist(text, target, proxySelfOrigin)
+              manifestCache.set(key, {
+                expires: Date.now() + MANIFEST_TTL_MS,
+                body: rewritten,
+              })
+              return rewritten
+            })()
+            manifestInflight.set(key, pending)
+            void pending.catch(() => {}).finally(() => manifestInflight.delete(key))
+          }
+          const rewritten = await pending
           res.statusCode = 200
           res.setHeader("Content-Type", "application/vnd.apple.mpegurl")
           res.setHeader("Access-Control-Allow-Origin", "*")
@@ -179,20 +314,68 @@ function installHlsProxy(
           return
         }
 
-        const buf = await r.arrayBuffer()
+        const r = await fetch(target, {
+          headers: upstreamHeaders(targetUrl.hostname),
+        })
+        const ct = r.headers.get("content-type") ?? ""
+
+        if (!r.ok) {
+          res.statusCode = r.status
+          res.setHeader("Content-Type", "text/plain; charset=utf-8")
+          res.setHeader("Access-Control-Allow-Origin", "*")
+          res.end(`Upstream error (${r.status})`)
+          return
+        }
+
         res.statusCode = 200
-        res.setHeader(
-          "Content-Type",
-          ct || "application/octet-stream",
-        )
+        res.setHeader("Content-Type", ct || "application/octet-stream")
         res.setHeader("Access-Control-Allow-Origin", "*")
         res.setHeader("Cache-Control", "public, max-age=30")
-        res.end(Buffer.from(buf))
+
+        if (!r.body) {
+          res.end()
+          return
+        }
+
+        // Stream the segment through instead of buffering it whole: a 4 MB
+        // segment otherwise adds its entire download time to time-to-first-byte.
+        // Chunks are accumulated on the side so the next request is a cache hit.
+        const chunks: Buffer[] = []
+        let total = 0
+        let cacheable = true
+        const source = Readable.fromWeb(r.body as Parameters<typeof Readable.fromWeb>[0])
+        source.on("data", (chunk: Buffer) => {
+          if (!cacheable) return
+          total += chunk.length
+          if (total > SEGMENT_MAX_BYTES) {
+            cacheable = false
+            chunks.length = 0
+            return
+          }
+          chunks.push(chunk)
+        })
+        source.on("end", () => {
+          if (cacheable && chunks.length) {
+            segmentStore(target, ct || "application/octet-stream", Buffer.concat(chunks))
+          }
+        })
+        source.on("error", () => {
+          cacheable = false
+          res.destroy()
+        })
+        source.pipe(res)
       } catch (e) {
-        res.statusCode = 502
+        const status = (e as { status?: number }).status
+        res.statusCode = typeof status === "number" ? status : 502
         res.setHeader("Content-Type", "text/plain; charset=utf-8")
         res.setHeader("Access-Control-Allow-Origin", "*")
-        res.end(e instanceof Error ? e.message : String(e))
+        res.end(
+          typeof status === "number"
+            ? `Upstream error (${status})`
+            : e instanceof Error
+              ? e.message
+              : String(e),
+        )
       }
     })()
   })
