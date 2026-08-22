@@ -153,42 +153,74 @@ export function VideoPlayer({
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [ambilightLive, setAmbilightLive] = useState(false)
 
+  const fullscreenTarget = useCallback(() => {
+    const doc = document as Document & { webkitFullscreenElement?: Element | null }
+    return document.fullscreenElement ?? doc.webkitFullscreenElement ?? null
+  }, [])
+
   const enterFullscreen = useCallback(() => {
     const shell = shellRef.current
     const video = videoRef.current
-    if (shell?.requestFullscreen) {
-      shell.requestFullscreen().catch(() => {
-        // iOS Safari: requestFullscreen on a div isn't supported — use webkitEnterFullscreen on the video
-        if (video && "webkitEnterFullscreen" in video) {
-          (video as HTMLVideoElement & { webkitEnterFullscreen(): void }).webkitEnterFullscreen()
-        }
-      })
-    } else if (video && "webkitEnterFullscreen" in video) {
-      (video as HTMLVideoElement & { webkitEnterFullscreen(): void }).webkitEnterFullscreen()
+    if (fullscreenTarget()) return
+    const nativeVideoFallback = () => {
+      if (video && "webkitEnterFullscreen" in video) {
+        (video as HTMLVideoElement & { webkitEnterFullscreen(): void }).webkitEnterFullscreen()
+        setIsFullscreen(true)
+      }
     }
-  }, [])
+    if (shell?.requestFullscreen) {
+      // iOS Safari: requestFullscreen on a div isn't supported — fall back to the video element.
+      shell.requestFullscreen().catch(nativeVideoFallback)
+    } else {
+      nativeVideoFallback()
+    }
+  }, [fullscreenTarget])
 
   const exitFullscreen = useCallback(() => {
+    const video = videoRef.current
+    if (!fullscreenTarget()) {
+      // iOS video-element fullscreen isn't reflected in document.fullscreenElement.
+      if (video && "webkitExitFullscreen" in video) {
+        (video as HTMLVideoElement & { webkitExitFullscreen(): void }).webkitExitFullscreen()
+      }
+      setIsFullscreen(false)
+      return
+    }
     if (document.exitFullscreen) {
       document.exitFullscreen().catch(() => {})
     } else if ("webkitExitFullscreen" in document) {
       (document as Document & { webkitExitFullscreen(): void }).webkitExitFullscreen()
     }
-  }, [])
+  }, [fullscreenTarget])
 
+  const toggleFullscreen = useCallback(() => {
+    if (isFullscreen) exitFullscreen()
+    else enterFullscreen()
+  }, [enterFullscreen, exitFullscreen, isFullscreen])
+
+  // Only reflect fullscreen that belongs to THIS player: a sibling pane in
+  // multi-view (or any other element) going fullscreen must not flip our icon.
   useEffect(() => {
-    const sync = () =>
-      setIsFullscreen(
-        !!document.fullscreenElement ||
-          !!(document as Document & { webkitFullscreenElement?: Element }).webkitFullscreenElement,
-      )
+    const sync = () => {
+      const el = fullscreenTarget()
+      const shell = shellRef.current
+      setIsFullscreen(Boolean(el && shell && (el === shell || shell.contains(el))))
+    }
+    const video = videoRef.current
+    const onVideoBegin = () => setIsFullscreen(true)
+    const onVideoEnd = () => setIsFullscreen(false)
+    sync()
     document.addEventListener("fullscreenchange", sync)
     document.addEventListener("webkitfullscreenchange", sync)
+    video?.addEventListener("webkitbeginfullscreen", onVideoBegin)
+    video?.addEventListener("webkitendfullscreen", onVideoEnd)
     return () => {
       document.removeEventListener("fullscreenchange", sync)
       document.removeEventListener("webkitfullscreenchange", sync)
+      video?.removeEventListener("webkitbeginfullscreen", onVideoBegin)
+      video?.removeEventListener("webkitendfullscreen", onVideoEnd)
     }
-  }, [])
+  }, [fullscreenTarget])
 
   const url = channel.stream_url
   const isHls =
@@ -443,6 +475,7 @@ export function VideoPlayer({
         ambilight.enabled && ambilightLive ? "is-ambilight-live" : ""
       } ${ambilight.performanceMode ? "video-shell--ambilight-performance" : ""} ${className ?? ""}`}
       ref={shellRef}
+      data-fullscreen={isFullscreen ? "true" : undefined}
     >
       <video
         ref={videoRef}
@@ -456,8 +489,10 @@ export function VideoPlayer({
       <button
         type="button"
         className="video-fullscreen-btn"
-        onClick={isFullscreen ? exitFullscreen : enterFullscreen}
+        onClick={toggleFullscreen}
         aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+        title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+        aria-pressed={isFullscreen}
       >
         {isFullscreen
           ? <Minimize2 size={20} strokeWidth={2} aria-hidden />

@@ -1002,6 +1002,60 @@ body::before {
   gap: 8px;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+  scroll-behavior: smooth;
+}
+
+.watch-sidebar__list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.watch-sidebar__list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.watch-sidebar__list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+@media (hover: hover) {
+  .watch-sidebar__list::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+    background-clip: content-box;
+  }
+}
+
+.watch-sidebar__count {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 4px 0;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.watch-sidebar__clear {
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: var(--muted);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.watch-sidebar__clear:hover,
+.watch-sidebar__clear:focus-visible {
+  color: var(--text, #fff);
 }
 
 .watch-sidebar__block {
@@ -1021,7 +1075,13 @@ body::before {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #e8c840;
-  padding: 4px 6px 2px;
+  padding: 6px;
+  position: sticky;
+  top: -8px; /* cancels the list's 8px top padding */
+  z-index: 1;
+  background: rgba(7, 9, 15, 0.97);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 }
 
 .watch-sidebar__subhead--muted {
@@ -1085,6 +1145,12 @@ body::before {
 .watch-sidebar__item.is-active {
   background: rgba(61, 139, 253, 0.15);
   border-color: rgba(61, 139, 253, 0.35);
+  box-shadow: inset 3px 0 0 rgba(61, 139, 253, 0.85);
+}
+
+.watch-sidebar__item.is-active .watch-sidebar__ch,
+.watch-sidebar__item.is-active .watch-sidebar__name {
+  color: #fff;
 }
 
 .watch-sidebar__ch {

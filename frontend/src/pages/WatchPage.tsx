@@ -5,10 +5,10 @@ import {
   LayoutGrid,
   Lightbulb,
   List,
-  Maximize2,
-  Minimize2,
+  Expand,
   PanelBottom,
   PictureInPicture2,
+  Shrink,
 } from "lucide-react"
 import { ChannelNumpad } from "@/components/ChannelNumpad"
 import { DigitOverlay } from "@/components/DigitOverlay"
@@ -283,6 +283,21 @@ export function WatchPage() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "Escape") return
+      // Native fullscreen / PiP swallow Escape for their own exit — navigating
+      // home as well would drop the viewer out of the channel entirely.
+      const doc = document as Document & { webkitFullscreenElement?: Element | null }
+      if (
+        doc.fullscreenElement ||
+        doc.webkitFullscreenElement ||
+        doc.pictureInPictureElement
+      ) {
+        return
+      }
+      if (ambilightOpen) {
+        e.preventDefault()
+        setAmbilightOpen(false)
+        return
+      }
       if (theaterMode) {
         e.preventDefault()
         setTheaterMode(false)
@@ -293,7 +308,7 @@ export function WatchPage() {
     }
     window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
-  }, [navigate, theaterMode])
+  }, [navigate, theaterMode, ambilightOpen])
 
   useEffect(() => {
     setTheaterMode(false)
@@ -332,7 +347,6 @@ export function WatchPage() {
     chromeHideTimer.current = window.setTimeout(() => {
       setAmbilightOpen(false)
       setRelatedDockOpen(false)
-      writeRelatedDockOpenToStorage(false)
       setChromeHidden(true)
     }, WATCH_CHROME_AUTOHIDE_MS)
   }, [sidebarSearchFocused])
@@ -636,8 +650,9 @@ export function WatchPage() {
                   className="watch-bar__pill watch-bar__pill--icon"
                   onClick={toggleTheater}
                   aria-label={
-                    theaterMode ? "Show channel list" : "Expand player in window"
+                    theaterMode ? "Restore layout" : "Expand player in window"
                   }
+                  aria-pressed={theaterMode}
                   title={
                     theaterMode
                       ? "Restore layout"
@@ -645,9 +660,9 @@ export function WatchPage() {
                   }
                 >
                   {theaterMode ? (
-                    <Minimize2 size={20} strokeWidth={2} aria-hidden />
+                    <Shrink size={20} strokeWidth={2} aria-hidden />
                   ) : (
-                    <Maximize2 size={20} strokeWidth={2} aria-hidden />
+                    <Expand size={20} strokeWidth={2} aria-hidden />
                   )}
                 </button>
                 <LiveClock />

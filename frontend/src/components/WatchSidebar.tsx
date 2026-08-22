@@ -74,6 +74,7 @@ export function WatchSidebar({
 }: Props) {
   const navigate = useNavigate()
   const activeRef = useRef<HTMLAnchorElement | null>(null)
+  const listRef = useRef<HTMLElement | null>(null)
   const [query, setQuery] = useState("")
   const { favoriteChannelsInOrder } = useFavorites()
 
@@ -119,9 +120,18 @@ export function WatchSidebar({
     return visibleRows.length === 1 ? visibleRows[0] : null
   }, [ordered, query, visibleRows])
 
+  const filtering = query.trim().length > 0
+
+  // A filtered list is a new list: show it from the top instead of leaving the
+  // reader parked at whatever offset the unfiltered list was scrolled to.
   useEffect(() => {
+    listRef.current?.scrollTo({ top: 0, behavior: "auto" })
+  }, [query])
+
+  useEffect(() => {
+    if (filtering) return
     activeRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" })
-  }, [currentPageUrl])
+  }, [currentPageUrl, filtering])
 
   useEffect(() => {
     if (!autoSubmitTarget || autoSubmitTarget.page_url === currentPageUrl) return
@@ -186,8 +196,27 @@ export function WatchSidebar({
               onKeyDown={handleSearchKeyDown}
               placeholder="Filter channels…"
             />
+            {filtering && (
+              <div className="watch-sidebar__count" role="status">
+                <span>
+                  {visibleRows.length}{" "}
+                  {visibleRows.length === 1 ? "match" : "matches"}
+                </span>
+                <button
+                  type="button"
+                  className="watch-sidebar__clear"
+                  onClick={() => setQuery("")}
+                >
+                  Clear
+                </button>
+              </div>
+            )}
           </div>
-          <nav className="watch-sidebar__list" aria-label="Channel list">
+          <nav
+            className="watch-sidebar__list"
+            aria-label="Channel list"
+            ref={listRef}
+          >
             {favoriteRows.length === 0 && restRows.length === 0 ? (
               <p className="watch-sidebar__empty muted">No matches</p>
             ) : (
