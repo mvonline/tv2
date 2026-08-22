@@ -13,7 +13,9 @@
       "logo": "logo/afghan-education-tv_noor-tv.svg",
       "category_path": "/afghan-education-tv",
       "slug": "noor-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "religious",
+      "ai_labeled_at": "2026-08-22T18:29:25.733529Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-entertainment-tv/afghan-theatre",
@@ -26,7 +28,9 @@
       "logo": "logo/afghan-entertainment-tv_afghan-theatre.svg",
       "category_path": "/afghan-entertainment-tv",
       "slug": "afghan-theatre",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.733580Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-entertainment-tv/amu-tv",
@@ -39,7 +43,9 @@
       "logo": "logo/afghan-entertainment-tv_amu-tv.svg",
       "category_path": "/afghan-entertainment-tv",
       "slug": "amu-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.733604Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-entertainment-tv/ariana-television",
@@ -52,7 +58,9 @@
       "logo": "logo/afghan-entertainment-tv_ariana-television.svg",
       "category_path": "/afghan-entertainment-tv",
       "slug": "ariana-television",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.733628Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-entertainment-tv/dunya-naw-tv",
@@ -65,7 +73,9 @@
       "logo": "logo/afghan-entertainment-tv_dunya-naw-tv.svg",
       "category_path": "/afghan-entertainment-tv",
       "slug": "dunya-naw-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.733649Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-entertainment-tv/eslah-tv",
@@ -78,7 +88,9 @@
       "logo": "logo/afghan-entertainment-tv_eslah-tv.svg",
       "category_path": "/afghan-entertainment-tv",
       "slug": "eslah-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.733667Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-entertainment-tv/iman-tv",
@@ -91,7 +103,9 @@
       "logo": "logo/afghan-entertainment-tv_iman-tv.svg",
       "category_path": "/afghan-entertainment-tv",
       "slug": "iman-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.733684Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-entertainment-tv/lemar-tv",
@@ -104,7 +118,9 @@
       "logo": "logo/afghan-entertainment-tv_lemar-tv.svg",
       "category_path": "/afghan-entertainment-tv",
       "slug": "lemar-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.733700Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-entertainment-tv/maawj-tv",
@@ -117,7 +133,9 @@
       "logo": "logo/afghan-entertainment-tv_maawj-tv.svg",
       "category_path": "/afghan-entertainment-tv",
       "slug": "maawj-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.733715Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-entertainment-tv/payame-afghan-tv",
@@ -130,7 +148,9 @@
       "logo": "logo/afghan-entertainment-tv_payame-afghan-tv.svg",
       "category_path": "/afghan-entertainment-tv",
       "slug": "payame-afghan-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.733730Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-entertainment-tv/shamshad-tv",
@@ -143,7 +163,9 @@
       "logo": "logo/afghan-entertainment-tv_shamshad-tv.svg",
       "category_path": "/afghan-entertainment-tv",
       "slug": "shamshad-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.733748Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-entertainment-tv/tolo-tv",
@@ -156,7 +178,9 @@
       "logo": "logo/afghan-entertainment-tv_tolo-tv.svg",
       "category_path": "/afghan-entertainment-tv",
       "slug": "tolo-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.733765Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-music-live-tv/asia-music-channel",
@@ -169,7 +193,9 @@
       "logo": "logo/afghan-music-live-tv_asia-music-channel.svg",
       "category_path": "/afghan-music-live-tv",
       "slug": "asia-music-channel",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "music",
+      "ai_labeled_at": "2026-08-22T18:29:25.733779Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-music-live-tv/kayhan-tv",
@@ -182,7 +208,9 @@
       "logo": "logo/afghan-music-live-tv_kayhan-tv.svg",
       "category_path": "/afghan-music-live-tv",
       "slug": "kayhan-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.733809Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-music-live-tv/pamir-tv",
@@ -195,7 +223,9 @@
       "logo": "logo/afghan-music-live-tv_pamir-tv.svg",
       "category_path": "/afghan-music-live-tv",
       "slug": "pamir-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.733826Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-news-tv/1-tv-news",
@@ -208,7 +238,9 @@
       "logo": "logo/afghan-news-tv_1-tv-news.svg",
       "category_path": "/afghan-news-tv",
       "slug": "1-tv-news",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.733839Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-news-tv/afghanistan-international-live-tv",
@@ -221,7 +253,9 @@
       "logo": "logo/afghan-news-tv_afghanistan-international-live-tv.svg",
       "category_path": "/afghan-news-tv",
       "slug": "afghanistan-international-live-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "international",
+      "ai_labeled_at": "2026-08-22T18:29:25.733872Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-news-tv/afghanistan-national-television",
@@ -234,7 +268,9 @@
       "logo": "logo/afghan-news-tv_afghanistan-national-television.svg",
       "category_path": "/afghan-news-tv",
       "slug": "afghanistan-national-television",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.733893Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-news-tv/ariana-news",
@@ -247,7 +283,9 @@
       "logo": "logo/afghan-news-tv_ariana-news.svg",
       "category_path": "/afghan-news-tv",
       "slug": "ariana-news",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.733904Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-news-tv/tolo-news",
@@ -260,7 +298,9 @@
       "logo": "logo/afghan-news-tv_tolo-news.svg",
       "category_path": "/afghan-news-tv",
       "slug": "tolo-news",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.733914Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-news-tv/voa-dari",
@@ -273,7 +313,9 @@
       "logo": "logo/afghan-news-tv_voa-dari.svg",
       "category_path": "/afghan-news-tv",
       "slug": "voa-dari",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.733931Z"
     },
     {
       "page_url": "https://www.aparatchii.com/afghan-religion-tv/tamadon-tv",
@@ -286,7 +328,9 @@
       "logo": "logo/afghan-religion-tv_tamadon-tv.svg",
       "category_path": "/afghan-religion-tv",
       "slug": "tamadon-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.733948Z"
     },
     {
       "page_url": "https://www.aparatchii.com/arabic-entertainment-tv/mbc-mood",
@@ -299,7 +343,9 @@
       "logo": "logo/arabic-entertainment-tv_mbc-mood.svg",
       "category_path": "/arabic-entertainment-tv",
       "slug": "mbc-mood",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.733963Z"
     },
     {
       "page_url": "https://www.aparatchii.com/arabic-news-tv/al-alam-news-network",
@@ -312,7 +358,9 @@
       "logo": "logo/arabic-news-tv_al-alam-news-network.svg",
       "category_path": "/arabic-news-tv",
       "slug": "al-alam-news-network",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.733974Z"
     },
     {
       "page_url": "https://www.aparatchii.com/arabic-news-tv/al-kawthar-tv",
@@ -325,7 +373,9 @@
       "logo": "logo/arabic-news-tv_al-kawthar-tv.svg",
       "category_path": "/arabic-news-tv",
       "slug": "al-kawthar-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.733992Z"
     },
     {
       "page_url": "https://www.aparatchii.com/arabic-news-tv/al-manar",
@@ -338,7 +388,9 @@
       "logo": "logo/arabic-news-tv_al-manar.svg",
       "category_path": "/arabic-news-tv",
       "slug": "al-manar",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734008Z"
     },
     {
       "page_url": "https://www.aparatchii.com/arabic-news-tv/arabi-now",
@@ -351,7 +403,9 @@
       "logo": "logo/arabic-news-tv_arabi-now.svg",
       "category_path": "/arabic-news-tv",
       "slug": "arabi-now",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734030Z"
     },
     {
       "page_url": "https://www.aparatchii.com/arabic-scientific-tv/national-geographic-abu-dhabi",
@@ -364,7 +418,9 @@
       "logo": "logo/arabic-scientific-tv_national-geographic-abu-dhabi.png",
       "category_path": "/arabic-scientific-tv",
       "slug": "national-geographic-abu-dhabi",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "documentary",
+      "ai_labeled_at": "2026-08-22T18:29:25.734046Z"
     },
     {
       "page_url": "https://www.aparatchii.com/azerbaijan-music-tv/ayaz-tv",
@@ -377,7 +433,9 @@
       "logo": "logo/azerbaijan-music-tv_ayaz-tv.svg",
       "category_path": "/azerbaijan-music-tv",
       "slug": "ayaz-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734061Z"
     },
     {
       "page_url": "https://www.aparatchii.com/azerbaijan-music-tv/az-star-tv",
@@ -390,7 +448,9 @@
       "logo": "logo/azerbaijan-music-tv_az-star-tv.svg",
       "category_path": "/azerbaijan-music-tv",
       "slug": "az-star-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734078Z"
     },
     {
       "page_url": "https://www.aparatchii.com/azerbaijan-music-tv/gem-az",
@@ -403,7 +463,9 @@
       "logo": "logo/azerbaijan-music-tv_gem-az.svg",
       "category_path": "/azerbaijan-music-tv",
       "slug": "gem-az",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734093Z"
     },
     {
       "page_url": "https://www.aparatchii.com/azerbaijan-news-tv/araz-news",
@@ -416,7 +478,9 @@
       "logo": "logo/azerbaijan-news-tv_araz-news.svg",
       "category_path": "/azerbaijan-news-tv",
       "slug": "araz-news",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.734107Z"
     },
     {
       "page_url": "https://www.aparatchii.com/azerbaijan-news-tv/itb-tv",
@@ -429,7 +493,9 @@
       "logo": "logo/azerbaijan-news-tv_itb-tv.svg",
       "category_path": "/azerbaijan-news-tv",
       "slug": "itb-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734121Z"
     },
     {
       "page_url": "https://www.aparatchii.com/english-entertainment-tv/go2-travel",
@@ -442,7 +508,9 @@
       "logo": "logo/english-entertainment-tv_go2-travel.svg",
       "category_path": "/english-entertainment-tv",
       "slug": "go2-travel",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "lifestyle",
+      "ai_labeled_at": "2026-08-22T18:29:25.734136Z"
     },
     {
       "page_url": "https://www.aparatchii.com/english-entertainment-tv/superyacht-tv",
@@ -455,7 +523,9 @@
       "logo": "logo/english-entertainment-tv_superyacht-tv.svg",
       "category_path": "/english-entertainment-tv",
       "slug": "superyacht-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734155Z"
     },
     {
       "page_url": "https://www.aparatchii.com/english-film-tv/ifilm-english",
@@ -468,7 +538,9 @@
       "logo": "logo/english-film-tv_ifilm-english.svg",
       "category_path": "/english-film-tv",
       "slug": "ifilm-english",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "movie",
+      "ai_labeled_at": "2026-08-22T18:29:25.734167Z"
     },
     {
       "page_url": "https://www.aparatchii.com/english-news-tv/anewz-tv",
@@ -481,7 +553,9 @@
       "logo": "logo/english-news-tv_anewz-tv.svg",
       "category_path": "/english-news-tv",
       "slug": "anewz-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734182Z"
     },
     {
       "page_url": "https://www.aparatchii.com/english-news-tv/bbc-news",
@@ -494,7 +568,9 @@
       "logo": "logo/english-news-tv_bbc-news.svg",
       "category_path": "/english-news-tv",
       "slug": "bbc-news",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.734191Z"
     },
     {
       "page_url": "https://www.aparatchii.com/english-news-tv/euronews-english",
@@ -507,7 +583,9 @@
       "logo": "logo/english-news-tv_euronews-english.svg",
       "category_path": "/english-news-tv",
       "slug": "euronews-english",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.734202Z"
     },
     {
       "page_url": "https://www.aparatchii.com/english-news-tv/fox-news",
@@ -520,7 +598,9 @@
       "logo": "logo/english-news-tv_fox-news.svg",
       "category_path": "/english-news-tv",
       "slug": "fox-news",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.734214Z"
     },
     {
       "page_url": "https://www.aparatchii.com/english-news-tv/news-of-the-world",
@@ -533,7 +613,9 @@
       "logo": "logo/english-news-tv_news-of-the-world.svg",
       "category_path": "/english-news-tv",
       "slug": "news-of-the-world",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.734224Z"
     },
     {
       "page_url": "https://www.aparatchii.com/english-news-tv/now-usa",
@@ -546,7 +628,9 @@
       "logo": "logo/english-news-tv_now-usa.svg",
       "category_path": "/english-news-tv",
       "slug": "now-usa",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734239Z"
     },
     {
       "page_url": "https://www.aparatchii.com/english-news-tv/press-tv",
@@ -559,7 +643,9 @@
       "logo": "logo/english-news-tv_press-tv.svg",
       "category_path": "/english-news-tv",
       "slug": "press-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.734251Z"
     },
     {
       "page_url": "https://www.aparatchii.com/english-news-tv/russia-today-new",
@@ -572,7 +658,9 @@
       "logo": "logo/english-news-tv_russia-today-new.svg",
       "category_path": "/english-news-tv",
       "slug": "russia-today-new",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.734261Z"
     },
     {
       "page_url": "https://www.aparatchii.com/english-news-tv/trt-world-hd",
@@ -585,7 +673,9 @@
       "logo": "logo/english-news-tv_trt-world-hd.svg",
       "category_path": "/english-news-tv",
       "slug": "trt-world-hd",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "international",
+      "ai_labeled_at": "2026-08-22T18:29:25.734277Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/4-u",
@@ -598,7 +688,9 @@
       "logo": "logo/farsi-entertainment-tv_4-u.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "4-u",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734292Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/4u-family-farsi-tv",
@@ -611,7 +703,9 @@
       "logo": "logo/farsi-entertainment-tv_4u-family-farsi-tv.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "4u-family-farsi-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734310Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/didaniha",
@@ -624,7 +718,9 @@
       "logo": "logo/farsi-entertainment-tv_didaniha.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "didaniha",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734326Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/faratar-tv-irib-uhd",
@@ -637,7 +733,9 @@
       "logo": "logo/farsi-entertainment-tv_faratar-tv-irib-uhd.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "faratar-tv-irib-uhd",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.734338Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/gem-entertainment",
@@ -650,7 +748,9 @@
       "logo": "logo/farsi-entertainment-tv_gem-entertainment.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "gem-entertainment",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "entertainment",
+      "ai_labeled_at": "2026-08-22T18:29:25.734356Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/gem-fit",
@@ -663,7 +763,9 @@
       "logo": "logo/farsi-entertainment-tv_gem-fit.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "gem-fit",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734371Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/gem-food",
@@ -676,7 +778,9 @@
       "logo": "logo/farsi-entertainment-tv_gem-food.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "gem-food",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734389Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/gem-life",
@@ -689,7 +793,9 @@
       "logo": "logo/farsi-entertainment-tv_gem-life.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "gem-life",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734404Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/gem-sport-live",
@@ -702,7 +808,9 @@
       "logo": "logo/farsi-entertainment-tv_gem-sport-live.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "gem-sport-live",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "sport",
+      "ai_labeled_at": "2026-08-22T18:29:25.734413Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/grand-sport",
@@ -715,7 +823,9 @@
       "logo": "logo/farsi-entertainment-tv_grand-sport.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "grand-sport",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "sport",
+      "ai_labeled_at": "2026-08-22T18:29:25.734424Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/iran-independent",
@@ -728,7 +838,9 @@
       "logo": "logo/farsi-entertainment-tv_iran-independent.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "iran-independent",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734443Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/itc-tv",
@@ -741,7 +853,9 @@
       "logo": "logo/farsi-entertainment-tv_itc-tv.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "itc-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734457Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/itn-tv",
@@ -754,7 +868,9 @@
       "logo": "logo/farsi-entertainment-tv_itn-tv.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "itn-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734473Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/omid-e-iran",
@@ -767,7 +883,9 @@
       "logo": "logo/farsi-entertainment-tv_omid-e-iran.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "omid-e-iran",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734494Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/payam-javan",
@@ -780,7 +898,9 @@
       "logo": "logo/farsi-entertainment-tv_payam-javan.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "payam-javan",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.734505Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/persiana-fight",
@@ -793,7 +913,9 @@
       "logo": "logo/farsi-entertainment-tv_persiana-fight.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "persiana-fight",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734523Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/persiana-reality",
@@ -806,7 +928,9 @@
       "logo": "logo/farsi-entertainment-tv_persiana-reality.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "persiana-reality",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "entertainment",
+      "ai_labeled_at": "2026-08-22T18:29:25.734540Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/persiana-sports",
@@ -819,7 +943,9 @@
       "logo": "logo/farsi-entertainment-tv_persiana-sports.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "persiana-sports",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "sport",
+      "ai_labeled_at": "2026-08-22T18:29:25.734549Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/persiana-sports-3",
@@ -832,7 +958,9 @@
       "logo": "logo/farsi-entertainment-tv_persiana-sports-3.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "persiana-sports-3",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "sport",
+      "ai_labeled_at": "2026-08-22T18:29:25.734558Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/persiana-sports-4",
@@ -845,7 +973,9 @@
       "logo": "logo/farsi-entertainment-tv_persiana-sports-4.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "persiana-sports-4",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "sport",
+      "ai_labeled_at": "2026-08-22T18:29:25.734566Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/persiana-sports2",
@@ -858,7 +988,9 @@
       "logo": "logo/farsi-entertainment-tv_persiana-sports2.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "persiana-sports2",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "sport",
+      "ai_labeled_at": "2026-08-22T18:29:25.734575Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/persiana-travel",
@@ -871,7 +1003,9 @@
       "logo": "logo/farsi-entertainment-tv_persiana-travel.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "persiana-travel",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "lifestyle",
+      "ai_labeled_at": "2026-08-22T18:29:25.734590Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/setareh-tv",
@@ -884,7 +1018,9 @@
       "logo": "logo/farsi-entertainment-tv_setareh-tv.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "setareh-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734607Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/tapesh-tv",
@@ -897,7 +1033,9 @@
       "logo": "logo/farsi-entertainment-tv_tapesh-tv.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "tapesh-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734623Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/tasvir-e-iran",
@@ -910,7 +1048,9 @@
       "logo": "logo/farsi-entertainment-tv_tasvir-e-iran.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "tasvir-e-iran",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734646Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-entertainment-tv/your-time-tv",
@@ -923,7 +1063,9 @@
       "logo": "logo/farsi-entertainment-tv_your-time-tv.svg",
       "category_path": "/farsi-entertainment-tv",
       "slug": "your-time-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734663Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/247-box-tv",
@@ -936,7 +1078,9 @@
       "logo": "logo/farsi-film-tv_247-box-tv.svg",
       "category_path": "/farsi-film-tv",
       "slug": "247-box-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734678Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/afra-film",
@@ -949,7 +1093,9 @@
       "logo": "logo/farsi-film-tv_afra-film.svg",
       "category_path": "/farsi-film-tv",
       "slug": "afra-film",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "movie",
+      "ai_labeled_at": "2026-08-22T18:29:25.734689Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/arko-tv",
@@ -962,7 +1108,9 @@
       "logo": "logo/farsi-film-tv_arko-tv.svg",
       "category_path": "/farsi-film-tv",
       "slug": "arko-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734708Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/arvan-tv",
@@ -975,7 +1123,9 @@
       "logo": "logo/farsi-film-tv_arvan-tv.svg",
       "category_path": "/farsi-film-tv",
       "slug": "arvan-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734724Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/ava-family",
@@ -988,7 +1138,9 @@
       "logo": "logo/farsi-film-tv_ava-family.svg",
       "category_path": "/farsi-film-tv",
       "slug": "ava-family",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734740Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/cafe-film",
@@ -1001,7 +1153,9 @@
       "logo": "logo/farsi-film-tv_cafe-film.svg",
       "category_path": "/farsi-film-tv",
       "slug": "cafe-film",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "movie",
+      "ai_labeled_at": "2026-08-22T18:29:25.734750Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/cinex-tv",
@@ -1014,7 +1168,9 @@
       "logo": "logo/farsi-film-tv_cinex-tv.svg",
       "category_path": "/farsi-film-tv",
       "slug": "cinex-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "movie",
+      "ai_labeled_at": "2026-08-22T18:29:25.734760Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/classic-tv",
@@ -1027,7 +1183,9 @@
       "logo": "logo/farsi-film-tv_classic-tv.svg",
       "category_path": "/farsi-film-tv",
       "slug": "classic-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734776Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/datis-tv",
@@ -1040,7 +1198,9 @@
       "logo": "logo/farsi-film-tv_datis-tv.svg",
       "category_path": "/farsi-film-tv",
       "slug": "datis-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734811Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/farsi-tv",
@@ -1053,7 +1213,9 @@
       "logo": "logo/farsi-film-tv_farsi-tv.svg",
       "category_path": "/farsi-film-tv",
       "slug": "farsi-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734826Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/fx-movies",
@@ -1066,7 +1228,9 @@
       "logo": "logo/farsi-film-tv_fx-movies.svg",
       "category_path": "/farsi-film-tv",
       "slug": "fx-movies",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "movie",
+      "ai_labeled_at": "2026-08-22T18:29:25.734837Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/gem-bollywood",
@@ -1079,7 +1243,9 @@
       "logo": "logo/farsi-film-tv_gem-bollywood.svg",
       "category_path": "/farsi-film-tv",
       "slug": "gem-bollywood",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "movie",
+      "ai_labeled_at": "2026-08-22T18:29:25.734849Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/gem-classic",
@@ -1092,7 +1258,9 @@
       "logo": "logo/farsi-film-tv_gem-classic.svg",
       "category_path": "/farsi-film-tv",
       "slug": "gem-classic",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734866Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/gem-comedy",
@@ -1105,7 +1273,9 @@
       "logo": "logo/farsi-film-tv_gem-comedy.svg",
       "category_path": "/farsi-film-tv",
       "slug": "gem-comedy",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "entertainment",
+      "ai_labeled_at": "2026-08-22T18:29:25.734881Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/gem-drama",
@@ -1118,7 +1288,9 @@
       "logo": "logo/farsi-film-tv_gem-drama.svg",
       "category_path": "/farsi-film-tv",
       "slug": "gem-drama",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "series",
+      "ai_labeled_at": "2026-08-22T18:29:25.734895Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/gem-drama-plus",
@@ -1131,7 +1303,9 @@
       "logo": "logo/farsi-film-tv_gem-drama-plus.svg",
       "category_path": "/farsi-film-tv",
       "slug": "gem-drama-plus",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "series",
+      "ai_labeled_at": "2026-08-22T18:29:25.734911Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/gem-film",
@@ -1144,7 +1318,9 @@
       "logo": "logo/farsi-film-tv_gem-film.svg",
       "category_path": "/farsi-film-tv",
       "slug": "gem-film",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "movie",
+      "ai_labeled_at": "2026-08-22T18:29:25.734921Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/gem-pixel",
@@ -1157,7 +1333,9 @@
       "logo": "logo/farsi-film-tv_gem-pixel.svg",
       "category_path": "/farsi-film-tv",
       "slug": "gem-pixel",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734936Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/gem-tv",
@@ -1170,7 +1348,9 @@
       "logo": "logo/farsi-film-tv_gem-tv.svg",
       "category_path": "/farsi-film-tv",
       "slug": "gem-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734951Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/home",
@@ -1183,7 +1363,9 @@
       "logo": "logo/farsi-film-tv_home.svg",
       "category_path": "/farsi-film-tv",
       "slug": "home",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734966Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/icc",
@@ -1196,7 +1378,9 @@
       "logo": "logo/farsi-film-tv_icc.svg",
       "category_path": "/farsi-film-tv",
       "slug": "icc",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.734980Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/ifilm-persian",
@@ -1209,7 +1393,9 @@
       "logo": "logo/farsi-film-tv_ifilm-persian.svg",
       "category_path": "/farsi-film-tv",
       "slug": "ifilm-persian",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "movie",
+      "ai_labeled_at": "2026-08-22T18:29:25.734992Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/maah-tv",
@@ -1222,7 +1408,9 @@
       "logo": "logo/farsi-film-tv_maah-tv.svg",
       "category_path": "/farsi-film-tv",
       "slug": "maah-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735007Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/mbc-persia",
@@ -1235,7 +1423,9 @@
       "logo": "logo/farsi-film-tv_mbc-persia.svg",
       "category_path": "/farsi-film-tv",
       "slug": "mbc-persia",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735028Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/meta-film",
@@ -1248,7 +1438,9 @@
       "logo": "logo/farsi-film-tv_meta-film.svg",
       "category_path": "/farsi-film-tv",
       "slug": "meta-film",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "movie",
+      "ai_labeled_at": "2026-08-22T18:29:25.735039Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/net-tv",
@@ -1261,7 +1453,9 @@
       "logo": "logo/farsi-film-tv_net-tv.svg",
       "category_path": "/farsi-film-tv",
       "slug": "net-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735053Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/onyx",
@@ -1274,7 +1468,9 @@
       "logo": "logo/farsi-film-tv_onyx.svg",
       "category_path": "/farsi-film-tv",
       "slug": "onyx",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735068Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/orange-tv",
@@ -1287,7 +1483,9 @@
       "logo": "logo/farsi-film-tv_orange-tv.svg",
       "category_path": "/farsi-film-tv",
       "slug": "orange-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735084Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/oxir-tv",
@@ -1300,7 +1498,9 @@
       "logo": "logo/farsi-film-tv_oxir-tv.svg",
       "category_path": "/farsi-film-tv",
       "slug": "oxir-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735098Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/persiana-cinema",
@@ -1313,7 +1513,9 @@
       "logo": "logo/farsi-film-tv_persiana-cinema.svg",
       "category_path": "/farsi-film-tv",
       "slug": "persiana-cinema",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "movie",
+      "ai_labeled_at": "2026-08-22T18:29:25.735112Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/persiana-comedy",
@@ -1326,7 +1528,9 @@
       "logo": "logo/farsi-film-tv_persiana-comedy.svg",
       "category_path": "/farsi-film-tv",
       "slug": "persiana-comedy",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "entertainment",
+      "ai_labeled_at": "2026-08-22T18:29:25.735128Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/persiana-family",
@@ -1339,7 +1543,9 @@
       "logo": "logo/farsi-film-tv_persiana-family.svg",
       "category_path": "/farsi-film-tv",
       "slug": "persiana-family",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735144Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/persiana-iranian",
@@ -1352,7 +1558,9 @@
       "logo": "logo/farsi-film-tv_persiana-iranian.svg",
       "category_path": "/farsi-film-tv",
       "slug": "persiana-iranian",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735163Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/persiana-plus",
@@ -1365,7 +1573,9 @@
       "logo": "logo/farsi-film-tv_persiana-plus.svg",
       "category_path": "/farsi-film-tv",
       "slug": "persiana-plus",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735179Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/royal-tv",
@@ -1378,7 +1588,9 @@
       "logo": "logo/farsi-film-tv_royal-tv.svg",
       "category_path": "/farsi-film-tv",
       "slug": "royal-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735194Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/sl-1",
@@ -1391,7 +1603,9 @@
       "logo": "logo/farsi-film-tv_sl-1.svg",
       "category_path": "/farsi-film-tv",
       "slug": "sl-1",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735209Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/sl-2",
@@ -1404,7 +1618,9 @@
       "logo": "logo/farsi-film-tv_sl-2.svg",
       "category_path": "/farsi-film-tv",
       "slug": "sl-2",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735222Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-film-tv/today-tv",
@@ -1417,7 +1633,9 @@
       "logo": "logo/farsi-film-tv_today-tv.svg",
       "category_path": "/farsi-film-tv",
       "slug": "today-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735236Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-kids-tv/fx-cartoon-live-tv",
@@ -1430,7 +1648,9 @@
       "logo": "logo/farsi-kids-tv_fx-cartoon-live-tv.svg",
       "category_path": "/farsi-kids-tv",
       "slug": "fx-cartoon-live-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "kids",
+      "ai_labeled_at": "2026-08-22T18:29:25.735244Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-kids-tv/gem-junior",
@@ -1443,7 +1663,9 @@
       "logo": "logo/farsi-kids-tv_gem-junior.svg",
       "category_path": "/farsi-kids-tv",
       "slug": "gem-junior",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "kids",
+      "ai_labeled_at": "2026-08-22T18:29:25.735253Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-kids-tv/gem-kids",
@@ -1456,7 +1678,9 @@
       "logo": "logo/farsi-kids-tv_gem-kids.svg",
       "category_path": "/farsi-kids-tv",
       "slug": "gem-kids",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "kids",
+      "ai_labeled_at": "2026-08-22T18:29:25.735261Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-kids-tv/persiana-junior",
@@ -1469,7 +1693,9 @@
       "logo": "logo/farsi-kids-tv_persiana-junior.svg",
       "category_path": "/farsi-kids-tv",
       "slug": "persiana-junior",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "kids",
+      "ai_labeled_at": "2026-08-22T18:29:25.735269Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-kids-tv/persiana-teen",
@@ -1482,7 +1708,9 @@
       "logo": "logo/farsi-kids-tv_persiana-teen.svg",
       "category_path": "/farsi-kids-tv",
       "slug": "persiana-teen",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735286Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-music-tv/afn-music",
@@ -1495,7 +1723,9 @@
       "logo": "logo/farsi-music-tv_afn-music.svg",
       "category_path": "/farsi-music-tv",
       "slug": "afn-music",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "music",
+      "ai_labeled_at": "2026-08-22T18:29:25.735297Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-music-tv/avang-music-live",
@@ -1508,7 +1738,9 @@
       "logo": "logo/farsi-music-tv_avang-music-live.svg",
       "category_path": "/farsi-music-tv",
       "slug": "avang-music-live",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "music",
+      "ai_labeled_at": "2026-08-22T18:29:25.735314Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-music-tv/gem-mifa-music",
@@ -1521,7 +1753,9 @@
       "logo": "logo/farsi-music-tv_gem-mifa-music.svg",
       "category_path": "/farsi-music-tv",
       "slug": "gem-mifa-music",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "music",
+      "ai_labeled_at": "2026-08-22T18:29:25.735325Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-music-tv/gem-mifa-plus-music",
@@ -1534,7 +1768,9 @@
       "logo": "logo/farsi-music-tv_gem-mifa-plus-music.svg",
       "category_path": "/farsi-music-tv",
       "slug": "gem-mifa-plus-music",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "music",
+      "ai_labeled_at": "2026-08-22T18:29:25.735337Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-music-tv/khatereh-tv",
@@ -1547,7 +1783,9 @@
       "logo": "logo/farsi-music-tv_khatereh-tv.svg",
       "category_path": "/farsi-music-tv",
       "slug": "khatereh-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735354Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-music-tv/mtc",
@@ -1560,7 +1798,9 @@
       "logo": "logo/farsi-music-tv_mtc.svg",
       "category_path": "/farsi-music-tv",
       "slug": "mtc",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735371Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-music-tv/navahang-live-tv",
@@ -1573,7 +1813,9 @@
       "logo": "logo/farsi-music-tv_navahang-live-tv.svg",
       "category_path": "/farsi-music-tv",
       "slug": "navahang-live-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735394Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-music-tv/persiana-kpop",
@@ -1586,7 +1828,9 @@
       "logo": "logo/farsi-music-tv_persiana-kpop.svg",
       "category_path": "/farsi-music-tv",
       "slug": "persiana-kpop",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "music",
+      "ai_labeled_at": "2026-08-22T18:29:25.735406Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-music-tv/persiana-music",
@@ -1599,7 +1843,9 @@
       "logo": "logo/farsi-music-tv_persiana-music.svg",
       "category_path": "/farsi-music-tv",
       "slug": "persiana-music",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "music",
+      "ai_labeled_at": "2026-08-22T18:29:25.735418Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-music-tv/persiana-nostalgia",
@@ -1612,7 +1858,9 @@
       "logo": "logo/farsi-music-tv_persiana-nostalgia.svg",
       "category_path": "/farsi-music-tv",
       "slug": "persiana-nostalgia",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735437Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-music-tv/persiana-setmix",
@@ -1625,7 +1873,9 @@
       "logo": "logo/farsi-music-tv_persiana-setmix.svg",
       "category_path": "/farsi-music-tv",
       "slug": "persiana-setmix",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735454Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-music-tv/persiana-sonnati",
@@ -1638,7 +1888,9 @@
       "logo": "logo/farsi-music-tv_persiana-sonnati.svg",
       "category_path": "/farsi-music-tv",
       "slug": "persiana-sonnati",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735472Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-music-tv/pmc",
@@ -1651,7 +1903,9 @@
       "logo": "logo/farsi-music-tv_pmc.svg",
       "category_path": "/farsi-music-tv",
       "slug": "pmc",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735487Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-music-tv/pmc-royal",
@@ -1664,7 +1918,9 @@
       "logo": "logo/farsi-music-tv_pmc-royal.svg",
       "category_path": "/farsi-music-tv",
       "slug": "pmc-royal",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735503Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-music-tv/radio-dej",
@@ -1677,7 +1933,9 @@
       "logo": "logo/farsi-music-tv_radio-dej.svg",
       "category_path": "/farsi-music-tv",
       "slug": "radio-dej",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.735523Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-music-tv/radio-javan-live",
@@ -1690,7 +1948,9 @@
       "logo": "logo/farsi-music-tv_radio-javan-live.svg",
       "category_path": "/farsi-music-tv",
       "slug": "radio-javan-live",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.735545Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-music-tv/radio-shadi",
@@ -1703,7 +1963,9 @@
       "logo": "logo/farsi-music-tv_radio-shadi.svg",
       "category_path": "/farsi-music-tv",
       "slug": "radio-shadi",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.735565Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-music-tv/romantico-tv",
@@ -1716,7 +1978,9 @@
       "logo": "logo/farsi-music-tv_romantico-tv.svg",
       "category_path": "/farsi-music-tv",
       "slug": "romantico-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735584Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-music-tv/sun-music-tv",
@@ -1729,7 +1993,9 @@
       "logo": "logo/farsi-music-tv_sun-music-tv.svg",
       "category_path": "/farsi-music-tv",
       "slug": "sun-music-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "music",
+      "ai_labeled_at": "2026-08-22T18:29:25.735597Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-music-tv/t2-tapesh",
@@ -1742,7 +2008,9 @@
       "logo": "logo/farsi-music-tv_t2-tapesh.svg",
       "category_path": "/farsi-music-tv",
       "slug": "t2-tapesh",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735613Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-news-tv/bbc-farsi-live-tv",
@@ -1755,7 +2023,9 @@
       "logo": "logo/farsi-news-tv_bbc-farsi-live-tv.svg",
       "category_path": "/farsi-news-tv",
       "slug": "bbc-farsi-live-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.735625Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-news-tv/cheshm-oghab",
@@ -1768,7 +2038,9 @@
       "logo": "logo/farsi-news-tv_cheshm-oghab.svg",
       "category_path": "/farsi-news-tv",
       "slug": "cheshm-oghab",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735644Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-news-tv/euronews-farsi",
@@ -1781,7 +2053,9 @@
       "logo": "logo/farsi-news-tv_euronews-farsi.svg",
       "category_path": "/farsi-news-tv",
       "slug": "euronews-farsi",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.735656Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-news-tv/iran-international-live",
@@ -1794,7 +2068,9 @@
       "logo": "logo/farsi-news-tv_iran-international-live.svg",
       "category_path": "/farsi-news-tv",
       "slug": "iran-international-live",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "international",
+      "ai_labeled_at": "2026-08-22T18:29:25.735677Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-news-tv/iran-international-radio",
@@ -1807,7 +2083,9 @@
       "logo": "logo/farsi-news-tv_iran-international-radio.svg",
       "category_path": "/farsi-news-tv",
       "slug": "iran-international-radio",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "international",
+      "ai_labeled_at": "2026-08-22T18:29:25.735699Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-news-tv/irna24-tv-1",
@@ -1820,7 +2098,9 @@
       "logo": "logo/farsi-news-tv_irna24-tv-1.svg",
       "category_path": "/farsi-news-tv",
       "slug": "irna24-tv-1",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735720Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-news-tv/irna24-tv-2",
@@ -1833,7 +2113,9 @@
       "logo": "logo/farsi-news-tv_irna24-tv-2.svg",
       "category_path": "/farsi-news-tv",
       "slug": "irna24-tv-2",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735737Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-news-tv/khabarbin",
@@ -1846,7 +2128,9 @@
       "logo": "logo/farsi-news-tv_khabarbin.svg",
       "category_path": "/farsi-news-tv",
       "slug": "khabarbin",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735757Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-news-tv/radio-farda",
@@ -1859,7 +2143,9 @@
       "logo": "logo/farsi-news-tv_radio-farda.svg",
       "category_path": "/farsi-news-tv",
       "slug": "radio-farda",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.735776Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-news-tv/voa-persian",
@@ -1872,7 +2158,9 @@
       "logo": "logo/farsi-news-tv_voa-persian.svg",
       "category_path": "/farsi-news-tv",
       "slug": "voa-persian",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735811Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-religious-tv/derakhte-zendegi-tv",
@@ -1885,7 +2173,9 @@
       "logo": "logo/farsi-religious-tv_derakhte-zendegi-tv.svg",
       "category_path": "/farsi-religious-tv",
       "slug": "derakhte-zendegi-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735831Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-religious-tv/erfan-e-halgheh",
@@ -1898,7 +2188,9 @@
       "logo": "logo/farsi-religious-tv_erfan-e-halgheh.svg",
       "category_path": "/farsi-religious-tv",
       "slug": "erfan-e-halgheh",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735849Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-religious-tv/ganj-e-hozour",
@@ -1911,7 +2203,9 @@
       "logo": "logo/farsi-religious-tv_ganj-e-hozour.svg",
       "category_path": "/farsi-religious-tv",
       "slug": "ganj-e-hozour",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735867Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-religious-tv/icnet-2",
@@ -1924,7 +2218,9 @@
       "logo": "logo/farsi-religious-tv_icnet-2.svg",
       "category_path": "/farsi-religious-tv",
       "slug": "icnet-2",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735883Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-religious-tv/icnet-3",
@@ -1937,7 +2233,9 @@
       "logo": "logo/farsi-religious-tv_icnet-3.svg",
       "category_path": "/farsi-religious-tv",
       "slug": "icnet-3",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735897Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-religious-tv/icnet1",
@@ -1950,7 +2248,9 @@
       "logo": "logo/farsi-religious-tv_icnet1.svg",
       "category_path": "/farsi-religious-tv",
       "slug": "icnet1",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735911Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-religious-tv/marjaeyat-tv",
@@ -1963,7 +2263,9 @@
       "logo": "logo/farsi-religious-tv_marjaeyat-tv.svg",
       "category_path": "/farsi-religious-tv",
       "slug": "marjaeyat-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735929Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-religious-tv/mohabat-tv",
@@ -1976,7 +2278,9 @@
       "logo": "logo/farsi-religious-tv_mohabat-tv.svg",
       "category_path": "/farsi-religious-tv",
       "slug": "mohabat-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735946Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-religious-tv/nejat-tv",
@@ -1989,7 +2293,9 @@
       "logo": "logo/farsi-religious-tv_nejat-tv.svg",
       "category_path": "/farsi-religious-tv",
       "slug": "nejat-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735962Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-religious-tv/nour-tv",
@@ -2002,7 +2308,9 @@
       "logo": "logo/farsi-religious-tv_nour-tv.svg",
       "category_path": "/farsi-religious-tv",
       "slug": "nour-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.735981Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-religious-tv/payam-aramesh",
@@ -2015,7 +2323,9 @@
       "logo": "logo/farsi-religious-tv_payam-aramesh.svg",
       "category_path": "/farsi-religious-tv",
       "slug": "payam-aramesh",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.735993Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-religious-tv/payvand-tv",
@@ -2028,7 +2338,9 @@
       "logo": "logo/farsi-religious-tv_payvand-tv.svg",
       "category_path": "/farsi-religious-tv",
       "slug": "payvand-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736009Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-religious-tv/piroozi-tv",
@@ -2041,7 +2353,9 @@
       "logo": "logo/farsi-religious-tv_piroozi-tv.svg",
       "category_path": "/farsi-religious-tv",
       "slug": "piroozi-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736028Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-religious-tv/rahe-nejat",
@@ -2054,7 +2368,9 @@
       "logo": "logo/farsi-religious-tv_rahe-nejat.svg",
       "category_path": "/farsi-religious-tv",
       "slug": "rahe-nejat",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736044Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-religious-tv/salaam-tv",
@@ -2067,7 +2383,9 @@
       "logo": "logo/farsi-religious-tv_salaam-tv.svg",
       "category_path": "/farsi-religious-tv",
       "slug": "salaam-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736060Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-religious-tv/sat7-pars",
@@ -2080,7 +2398,9 @@
       "logo": "logo/farsi-religious-tv_sat7-pars.svg",
       "category_path": "/farsi-religious-tv",
       "slug": "sat7-pars",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736076Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-religious-tv/shabakeh-7",
@@ -2093,7 +2413,9 @@
       "logo": "logo/farsi-religious-tv_shabakeh-7.svg",
       "category_path": "/farsi-religious-tv",
       "slug": "shabakeh-7",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736091Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-scientific-tv/cafetrade-tv",
@@ -2106,7 +2428,9 @@
       "logo": "logo/farsi-scientific-tv_cafetrade-tv.svg",
       "category_path": "/farsi-scientific-tv",
       "slug": "cafetrade-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736109Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-scientific-tv/eplanet-tv",
@@ -2119,7 +2443,9 @@
       "logo": "logo/farsi-scientific-tv_eplanet-tv.svg",
       "category_path": "/farsi-scientific-tv",
       "slug": "eplanet-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "documentary",
+      "ai_labeled_at": "2026-08-22T18:29:25.736121Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-scientific-tv/gem-documentary",
@@ -2132,7 +2458,9 @@
       "logo": "logo/farsi-scientific-tv_gem-documentary.svg",
       "category_path": "/farsi-scientific-tv",
       "slug": "gem-documentary",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "documentary",
+      "ai_labeled_at": "2026-08-22T18:29:25.736134Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-scientific-tv/gem-nature",
@@ -2145,7 +2473,9 @@
       "logo": "logo/farsi-scientific-tv_gem-nature.svg",
       "category_path": "/farsi-scientific-tv",
       "slug": "gem-nature",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "documentary",
+      "ai_labeled_at": "2026-08-22T18:29:25.736146Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-scientific-tv/persiana-documentary",
@@ -2158,7 +2488,9 @@
       "logo": "logo/farsi-scientific-tv_persiana-documentary.svg",
       "category_path": "/farsi-scientific-tv",
       "slug": "persiana-documentary",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "documentary",
+      "ai_labeled_at": "2026-08-22T18:29:25.736161Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-scientific-tv/persiana-medical",
@@ -2171,7 +2503,9 @@
       "logo": "logo/farsi-scientific-tv_persiana-medical.svg",
       "category_path": "/farsi-scientific-tv",
       "slug": "persiana-medical",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736181Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-scientific-tv/tm-tv",
@@ -2184,7 +2518,9 @@
       "logo": "logo/farsi-scientific-tv_tm-tv.svg",
       "category_path": "/farsi-scientific-tv",
       "slug": "tm-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736198Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-series-tv/afra-series",
@@ -2197,7 +2533,9 @@
       "logo": "logo/farsi-series-tv_afra-series.svg",
       "category_path": "/farsi-series-tv",
       "slug": "afra-series",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "series",
+      "ai_labeled_at": "2026-08-22T18:29:25.736216Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-series-tv/arax-tv",
@@ -2210,7 +2548,9 @@
       "logo": "logo/farsi-series-tv_arax-tv.svg",
       "category_path": "/farsi-series-tv",
       "slug": "arax-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736233Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-series-tv/ava-series",
@@ -2223,7 +2563,9 @@
       "logo": "logo/farsi-series-tv_ava-series.svg",
       "category_path": "/farsi-series-tv",
       "slug": "ava-series",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "series",
+      "ai_labeled_at": "2026-08-22T18:29:25.736249Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-series-tv/ekran-movies",
@@ -2236,7 +2578,9 @@
       "logo": "logo/farsi-series-tv_ekran-movies.svg",
       "category_path": "/farsi-series-tv",
       "slug": "ekran-movies",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "movie",
+      "ai_labeled_at": "2026-08-22T18:29:25.736261Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-series-tv/gem-river",
@@ -2249,7 +2593,9 @@
       "logo": "logo/farsi-series-tv_gem-river.svg",
       "category_path": "/farsi-series-tv",
       "slug": "gem-river",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736277Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-series-tv/gem-river-plus",
@@ -2262,7 +2608,9 @@
       "logo": "logo/farsi-series-tv_gem-river-plus.svg",
       "category_path": "/farsi-series-tv",
       "slug": "gem-river-plus",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736295Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-series-tv/gem-rubix",
@@ -2275,7 +2623,9 @@
       "logo": "logo/farsi-series-tv_gem-rubix.svg",
       "category_path": "/farsi-series-tv",
       "slug": "gem-rubix",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736310Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-series-tv/gem-rubix-plus",
@@ -2288,7 +2638,9 @@
       "logo": "logo/farsi-series-tv_gem-rubix-plus.svg",
       "category_path": "/farsi-series-tv",
       "slug": "gem-rubix-plus",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736327Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-series-tv/gem-series",
@@ -2301,7 +2653,9 @@
       "logo": "logo/farsi-series-tv_gem-series.svg",
       "category_path": "/farsi-series-tv",
       "slug": "gem-series",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "series",
+      "ai_labeled_at": "2026-08-22T18:29:25.736343Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-series-tv/gem-series-plus",
@@ -2314,7 +2668,9 @@
       "logo": "logo/farsi-series-tv_gem-series-plus.svg",
       "category_path": "/farsi-series-tv",
       "slug": "gem-series-plus",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "series",
+      "ai_labeled_at": "2026-08-22T18:29:25.736358Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-series-tv/gem-tv-plus",
@@ -2327,7 +2683,9 @@
       "logo": "logo/farsi-series-tv_gem-tv-plus.svg",
       "category_path": "/farsi-series-tv",
       "slug": "gem-tv-plus",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736375Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-series-tv/gold-star-tv",
@@ -2340,7 +2698,9 @@
       "logo": "logo/farsi-series-tv_gold-star-tv.svg",
       "category_path": "/farsi-series-tv",
       "slug": "gold-star-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736391Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-series-tv/persiana-series",
@@ -2353,7 +2713,9 @@
       "logo": "logo/farsi-series-tv_persiana-series.svg",
       "category_path": "/farsi-series-tv",
       "slug": "persiana-series",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "series",
+      "ai_labeled_at": "2026-08-22T18:29:25.736406Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-series-tv/persiana-turkiye",
@@ -2366,7 +2728,9 @@
       "logo": "logo/farsi-series-tv_persiana-turkiye.svg",
       "category_path": "/farsi-series-tv",
       "slug": "persiana-turkiye",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736425Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-series-tv/ravi-tv",
@@ -2379,7 +2743,9 @@
       "logo": "logo/farsi-series-tv_ravi-tv.svg",
       "category_path": "/farsi-series-tv",
       "slug": "ravi-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736441Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-series-tv/ronix-tv",
@@ -2392,7 +2758,9 @@
       "logo": "logo/farsi-series-tv_ronix-tv.svg",
       "category_path": "/farsi-series-tv",
       "slug": "ronix-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736456Z"
     },
     {
       "page_url": "https://www.aparatchii.com/farsi-series-tv/royal-time-tv",
@@ -2405,7 +2773,9 @@
       "logo": "logo/farsi-series-tv_royal-time-tv.svg",
       "category_path": "/farsi-series-tv",
       "slug": "royal-time-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736474Z"
     },
     {
       "page_url": "https://www.aparatchii.com/film/ifilm-arabic",
@@ -2418,7 +2788,9 @@
       "logo": "logo/film_ifilm-arabic.svg",
       "category_path": "/film",
       "slug": "ifilm-arabic",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "movie",
+      "ai_labeled_at": "2026-08-22T18:29:25.736486Z"
     },
     {
       "page_url": "https://www.aparatchii.com/french-news-tv/press-tv-fr",
@@ -2431,7 +2803,9 @@
       "logo": "logo/french-news-tv_press-tv-fr.svg",
       "category_path": "/french-news-tv",
       "slug": "press-tv-fr",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736497Z"
     },
     {
       "page_url": "https://www.aparatchii.com/indian-music-tv/7x-music",
@@ -2444,7 +2818,9 @@
       "logo": "logo/indian-music-tv_7x-music.svg",
       "category_path": "/indian-music-tv",
       "slug": "7x-music",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "music",
+      "ai_labeled_at": "2026-08-22T18:29:25.736509Z"
     },
     {
       "page_url": "https://www.aparatchii.com/indian-music-tv/shree-shyam-tv",
@@ -2457,7 +2833,9 @@
       "logo": "logo/indian-music-tv_shree-shyam-tv.svg",
       "category_path": "/indian-music-tv",
       "slug": "shree-shyam-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736526Z"
     },
     {
       "page_url": "https://www.aparatchii.com/indian-music-tv/vidhata-darshan-tv",
@@ -2470,7 +2848,9 @@
       "logo": "logo/indian-music-tv_vidhata-darshan-tv.svg",
       "category_path": "/indian-music-tv",
       "slug": "vidhata-darshan-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.736545Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radio-arina",
@@ -2483,7 +2863,9 @@
       "logo": "logo/iranian-radio_radio-arina.svg",
       "category_path": "/iranian-radio",
       "slug": "radio-arina",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736553Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radio-donya",
@@ -2496,7 +2878,9 @@
       "logo": "logo/iranian-radio_radio-donya.svg",
       "category_path": "/iranian-radio",
       "slug": "radio-donya",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736561Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radio-goftegoo",
@@ -2509,7 +2893,9 @@
       "logo": "logo/iranian-radio_radio-goftegoo.svg",
       "category_path": "/iranian-radio",
       "slug": "radio-goftegoo",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736569Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radio-hamrah",
@@ -2522,7 +2908,9 @@
       "logo": "logo/iranian-radio_radio-hamrah.svg",
       "category_path": "/iranian-radio",
       "slug": "radio-hamrah",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736577Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radio-novin",
@@ -2535,7 +2923,9 @@
       "logo": "logo/iranian-radio_radio-novin.svg",
       "category_path": "/iranian-radio",
       "slug": "radio-novin",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736584Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radio-yar",
@@ -2548,7 +2938,9 @@
       "logo": "logo/iranian-radio_radio-yar.svg",
       "category_path": "/iranian-radio",
       "slug": "radio-yar",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736592Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radionama-ava",
@@ -2561,7 +2953,9 @@
       "logo": "logo/iranian-radio_radionama-ava.png",
       "category_path": "/iranian-radio",
       "slug": "radionama-ava",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736600Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radionama-eghtesad",
@@ -2574,7 +2968,9 @@
       "logo": "logo/iranian-radio_radionama-eghtesad.svg",
       "category_path": "/iranian-radio",
       "slug": "radionama-eghtesad",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736607Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radionama-farhang",
@@ -2587,7 +2983,9 @@
       "logo": "logo/iranian-radio_radionama-farhang.svg",
       "category_path": "/iranian-radio",
       "slug": "radionama-farhang",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736615Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radionama-iran",
@@ -2600,7 +2998,9 @@
       "logo": "logo/iranian-radio_radionama-iran.svg",
       "category_path": "/iranian-radio",
       "slug": "radionama-iran",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736622Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radionama-javan",
@@ -2613,7 +3013,9 @@
       "logo": "logo/iranian-radio_radionama-javan.svg",
       "category_path": "/iranian-radio",
       "slug": "radionama-javan",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736629Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radionama-maaref",
@@ -2626,7 +3028,9 @@
       "logo": "logo/iranian-radio_radionama-maaref.svg",
       "category_path": "/iranian-radio",
       "slug": "radionama-maaref",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736637Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radionama-namayesh",
@@ -2639,7 +3043,9 @@
       "logo": "logo/iranian-radio_radionama-namayesh.svg",
       "category_path": "/iranian-radio",
       "slug": "radionama-namayesh",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736645Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radionama-payam",
@@ -2652,7 +3058,9 @@
       "logo": "logo/iranian-radio_radionama-payam.svg",
       "category_path": "/iranian-radio",
       "slug": "radionama-payam",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736652Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radionama-quran",
@@ -2665,7 +3073,9 @@
       "logo": "logo/iranian-radio_radionama-quran.svg",
       "category_path": "/iranian-radio",
       "slug": "radionama-quran",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736659Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radionama-saba",
@@ -2678,7 +3088,9 @@
       "logo": "logo/iranian-radio_radionama-saba.svg",
       "category_path": "/iranian-radio",
       "slug": "radionama-saba",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736667Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radionama-salamat",
@@ -2691,7 +3103,9 @@
       "logo": "logo/iranian-radio_radionama-salamat.svg",
       "category_path": "/iranian-radio",
       "slug": "radionama-salamat",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736674Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radionama-tartil",
@@ -2704,7 +3118,9 @@
       "logo": "logo/iranian-radio_radionama-tartil.svg",
       "category_path": "/iranian-radio",
       "slug": "radionama-tartil",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736682Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radionama-tehran",
@@ -2717,7 +3133,9 @@
       "logo": "logo/iranian-radio_radionama-tehran.svg",
       "category_path": "/iranian-radio",
       "slug": "radionama-tehran",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736689Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radionama-varzesh",
@@ -2730,7 +3148,9 @@
       "logo": "logo/iranian-radio_radionama-varzesh.svg",
       "category_path": "/iranian-radio",
       "slug": "radionama-varzesh",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736696Z"
     },
     {
       "page_url": "https://www.aparatchii.com/iranian-radio/radionama-ziarat",
@@ -2743,7 +3163,9 @@
       "logo": "logo/iranian-radio_radionama-ziarat.svg",
       "category_path": "/iranian-radio",
       "slug": "radionama-ziarat",
-      "media_type": "radio"
+      "media_type": "radio",
+      "ai_category": "radio",
+      "ai_labeled_at": "2026-08-22T18:29:25.736704Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-live-tv/ifilm-persian-2",
@@ -2756,7 +3178,9 @@
       "logo": "logo/irib-live-tv_ifilm-persian-2.svg",
       "category_path": "/irib-live-tv",
       "slug": "ifilm-persian-2",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736711Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-live-tv/irib-amoozesh",
@@ -2769,7 +3193,9 @@
       "logo": "logo/irib-live-tv_irib-amoozesh.svg",
       "category_path": "/irib-live-tv",
       "slug": "irib-amoozesh",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736719Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-live-tv/irib-mosbat-1-live",
@@ -2782,7 +3208,9 @@
       "logo": "logo/irib-live-tv_irib-mosbat-1-live.svg",
       "category_path": "/irib-live-tv",
       "slug": "irib-mosbat-1-live",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736726Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-live-tv/irib-mostanad",
@@ -2795,7 +3223,9 @@
       "logo": "logo/irib-live-tv_irib-mostanad.svg",
       "category_path": "/irib-live-tv",
       "slug": "irib-mostanad",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736734Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-live-tv/irib-namayesh",
@@ -2808,7 +3238,9 @@
       "logo": "logo/irib-live-tv_irib-namayesh.svg",
       "category_path": "/irib-live-tv",
       "slug": "irib-namayesh",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736741Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-live-tv/irib-nasim-live",
@@ -2821,7 +3253,9 @@
       "logo": "logo/irib-live-tv_irib-nasim-live.svg",
       "category_path": "/irib-live-tv",
       "slug": "irib-nasim-live",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736752Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-live-tv/irib-ofogh",
@@ -2834,7 +3268,9 @@
       "logo": "logo/irib-live-tv_irib-ofogh.svg",
       "category_path": "/irib-live-tv",
       "slug": "irib-ofogh",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736760Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-live-tv/irib-omid",
@@ -2847,7 +3283,9 @@
       "logo": "logo/irib-live-tv_irib-omid.svg",
       "category_path": "/irib-live-tv",
       "slug": "irib-omid",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736767Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-live-tv/irib-pooya",
@@ -2860,7 +3298,9 @@
       "logo": "logo/irib-live-tv_irib-pooya.svg",
       "category_path": "/irib-live-tv",
       "slug": "irib-pooya",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736774Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-live-tv/irib-quran",
@@ -2873,7 +3313,9 @@
       "logo": "logo/irib-live-tv_irib-quran.svg",
       "category_path": "/irib-live-tv",
       "slug": "irib-quran",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736782Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-live-tv/irib-salamat",
@@ -2886,7 +3328,9 @@
       "logo": "logo/irib-live-tv_irib-salamat.svg",
       "category_path": "/irib-live-tv",
       "slug": "irib-salamat",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736800Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-live-tv/irib-tamasha",
@@ -2899,7 +3343,9 @@
       "logo": "logo/irib-live-tv_irib-tamasha.svg",
       "category_path": "/irib-live-tv",
       "slug": "irib-tamasha",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736808Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-live-tv/irib-tv4",
@@ -2912,7 +3358,9 @@
       "logo": "logo/irib-live-tv_irib-tv4.svg",
       "category_path": "/irib-live-tv",
       "slug": "irib-tv4",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736816Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-live-tv/irib-varzesh-live-tv",
@@ -2925,7 +3373,9 @@
       "logo": "logo/irib-live-tv_irib-varzesh-live-tv.svg",
       "category_path": "/irib-live-tv",
       "slug": "irib-varzesh-live-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736824Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-live-tv/irib1-live",
@@ -2938,7 +3388,9 @@
       "logo": "logo/irib-live-tv_irib1-live.svg",
       "category_path": "/irib-live-tv",
       "slug": "irib1-live",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736832Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-live-tv/irib2-live",
@@ -2951,7 +3403,9 @@
       "logo": "logo/irib-live-tv_irib2-live.svg",
       "category_path": "/irib-live-tv",
       "slug": "irib2-live",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736839Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-live-tv/irib3-live",
@@ -2964,7 +3418,9 @@
       "logo": "logo/irib-live-tv_irib3-live.svg",
       "category_path": "/irib-live-tv",
       "slug": "irib3-live",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736846Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-live-tv/irinn-2-shabakeh-khabar-2",
@@ -2977,7 +3433,9 @@
       "logo": "logo/irib-live-tv_irinn-2-shabakeh-khabar-2.svg",
       "category_path": "/irib-live-tv",
       "slug": "irinn-2-shabakeh-khabar-2",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736854Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-live-tv/shabakeh-khabar-live",
@@ -2990,7 +3448,9 @@
       "logo": "logo/irib-live-tv_shabakeh-khabar-live.svg",
       "category_path": "/irib-live-tv",
       "slug": "shabakeh-khabar-live",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736861Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-abadan-live-tv",
@@ -3003,7 +3463,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-abadan-live-tv.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-abadan-live-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736869Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-aflak-live-tv",
@@ -3016,7 +3478,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-aflak-live-tv.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-aflak-live-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736877Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-aftab-live-tv",
@@ -3029,7 +3493,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-aftab-live-tv.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-aftab-live-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736885Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-alborz",
@@ -3042,7 +3508,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-alborz.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-alborz",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736893Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-ardabil",
@@ -3055,7 +3523,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-ardabil.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-ardabil",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736900Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-baran-live-tv",
@@ -3068,7 +3538,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-baran-live-tv.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-baran-live-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736908Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-bushehr",
@@ -3081,7 +3553,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-bushehr.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-bushehr",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736915Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-chaharmahal-and-bakhtiari",
@@ -3094,7 +3568,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-chaharmahal-and-bakhtiari.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-chaharmahal-and-bakhtiari",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736923Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-esfahan-live-tv",
@@ -3107,7 +3583,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-esfahan-live-tv.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-esfahan-live-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736931Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-fars-live-tv",
@@ -3120,7 +3598,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-fars-live-tv.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-fars-live-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736939Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-golestan",
@@ -3133,7 +3613,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-golestan.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-golestan",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736946Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-hamedan",
@@ -3146,7 +3628,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-hamedan.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-hamedan",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736954Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-ilam",
@@ -3159,7 +3643,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-ilam.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-ilam",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736961Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-kerman-live-tv",
@@ -3172,7 +3658,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-kerman-live-tv.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-kerman-live-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736969Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-kermanshah",
@@ -3185,7 +3673,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-kermanshah.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-kermanshah",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736977Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-khalij-e-fars",
@@ -3198,7 +3688,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-khalij-e-fars.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-khalij-e-fars",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736985Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-khoozestan-live-tv",
@@ -3211,7 +3703,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-khoozestan-live-tv.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-khoozestan-live-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.736992Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-khorasan-jonoobi",
@@ -3224,7 +3718,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-khorasan-jonoobi.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-khorasan-jonoobi",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737001Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-khorasan-razavi-live-tv",
@@ -3237,7 +3733,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-khorasan-razavi-live-tv.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-khorasan-razavi-live-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737009Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-khorasan-shomali",
@@ -3250,7 +3748,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-khorasan-shomali.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-khorasan-shomali",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737017Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-kish",
@@ -3263,7 +3763,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-kish.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-kish",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737024Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-kurdistan",
@@ -3276,7 +3778,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-kurdistan.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-kurdistan",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737032Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-mahabad",
@@ -3289,7 +3793,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-mahabad.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-mahabad",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737039Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-qazvin-live-tv",
@@ -3302,7 +3808,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-qazvin-live-tv.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-qazvin-live-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737047Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-qom",
@@ -3315,7 +3823,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-qom.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-qom",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737054Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-sahand-live-tv",
@@ -3328,7 +3838,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-sahand-live-tv.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-sahand-live-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737061Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-semnan",
@@ -3341,7 +3853,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-semnan.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-semnan",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737069Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-tabarestan-live",
@@ -3354,7 +3868,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-tabarestan-live.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-tabarestan-live",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737077Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-tehran-live-tv",
@@ -3367,7 +3883,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-tehran-live-tv.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-tehran-live-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737085Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-urmia",
@@ -3380,7 +3898,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-urmia.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-urmia",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737093Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-yasouj",
@@ -3393,7 +3913,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-yasouj.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-yasouj",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737100Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-yazd",
@@ -3406,7 +3928,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-yazd.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-yazd",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737108Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-zahedan",
@@ -3419,7 +3943,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-zahedan.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-zahedan",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737115Z"
     },
     {
       "page_url": "https://www.aparatchii.com/irib-ostani-live-tv/irib-zanjan",
@@ -3432,7 +3958,9 @@
       "logo": "logo/irib-ostani-live-tv_irib-zanjan.svg",
       "category_path": "/irib-ostani-live-tv",
       "slug": "irib-zanjan",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737123Z"
     },
     {
       "page_url": "https://www.aparatchii.com/korean-kids-tv/ebs-kids",
@@ -3445,7 +3973,9 @@
       "logo": "logo/korean-kids-tv_ebs-kids.svg",
       "category_path": "/korean-kids-tv",
       "slug": "ebs-kids",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "kids",
+      "ai_labeled_at": "2026-08-22T18:29:25.737131Z"
     },
     {
       "page_url": "https://www.aparatchii.com/korean-series/persiana-korea",
@@ -3458,7 +3988,9 @@
       "logo": "logo/korean-series_persiana-korea.svg",
       "category_path": "/korean-series",
       "slug": "persiana-korea",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737149Z"
     },
     {
       "page_url": "https://www.aparatchii.com/kurdish-entertainment-tv/kurd-max-show",
@@ -3471,7 +4003,9 @@
       "logo": "logo/kurdish-entertainment-tv_kurd-max-show.svg",
       "category_path": "/kurdish-entertainment-tv",
       "slug": "kurd-max-show",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737169Z"
     },
     {
       "page_url": "https://www.aparatchii.com/kurdish-entertainment-tv/kurd-max-tv",
@@ -3484,7 +4018,9 @@
       "logo": "logo/kurdish-entertainment-tv_kurd-max-tv.svg",
       "category_path": "/kurdish-entertainment-tv",
       "slug": "kurd-max-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737185Z"
     },
     {
       "page_url": "https://www.aparatchii.com/kurdish-entertainment-tv/kurdistan-tv",
@@ -3497,7 +4033,9 @@
       "logo": "logo/kurdish-entertainment-tv_kurdistan-tv.svg",
       "category_path": "/kurdish-entertainment-tv",
       "slug": "kurdistan-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737202Z"
     },
     {
       "page_url": "https://www.aparatchii.com/kurdish-entertainment-tv/kurdsat-tv",
@@ -3510,7 +4048,9 @@
       "logo": "logo/kurdish-entertainment-tv_kurdsat-tv.svg",
       "category_path": "/kurdish-entertainment-tv",
       "slug": "kurdsat-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737218Z"
     },
     {
       "page_url": "https://www.aparatchii.com/kurdish-entertainment-tv/mihrab-tv",
@@ -3523,7 +4063,9 @@
       "logo": "logo/kurdish-entertainment-tv_mihrab-tv.svg",
       "category_path": "/kurdish-entertainment-tv",
       "slug": "mihrab-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737233Z"
     },
     {
       "page_url": "https://www.aparatchii.com/kurdish-entertainment-tv/one-plus",
@@ -3536,7 +4078,9 @@
       "logo": "logo/kurdish-entertainment-tv_one-plus.svg",
       "category_path": "/kurdish-entertainment-tv",
       "slug": "one-plus",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737249Z"
     },
     {
       "page_url": "https://www.aparatchii.com/kurdish-kids-tv/afarin-kids-tv",
@@ -3549,7 +4093,9 @@
       "logo": "logo/kurdish-kids-tv_afarin-kids-tv.svg",
       "category_path": "/kurdish-kids-tv",
       "slug": "afarin-kids-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "kids",
+      "ai_labeled_at": "2026-08-22T18:29:25.737257Z"
     },
     {
       "page_url": "https://www.aparatchii.com/kurdish-kids-tv/baxchai-afarin",
@@ -3562,7 +4108,9 @@
       "logo": "logo/kurdish-kids-tv_baxchai-afarin.svg",
       "category_path": "/kurdish-kids-tv",
       "slug": "baxchai-afarin",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737275Z"
     },
     {
       "page_url": "https://www.aparatchii.com/kurdish-kids-tv/one-kids",
@@ -3575,7 +4123,9 @@
       "logo": "logo/kurdish-kids-tv_one-kids.svg",
       "category_path": "/kurdish-kids-tv",
       "slug": "one-kids",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "kids",
+      "ai_labeled_at": "2026-08-22T18:29:25.737283Z"
     },
     {
       "page_url": "https://www.aparatchii.com/kurdish-kids-tv/zarok-tv",
@@ -3588,7 +4138,9 @@
       "logo": "logo/kurdish-kids-tv_zarok-tv.svg",
       "category_path": "/kurdish-kids-tv",
       "slug": "zarok-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737298Z"
     },
     {
       "page_url": "https://www.aparatchii.com/kurdish-music-tv/4-kurd-hd",
@@ -3601,7 +4153,9 @@
       "logo": "logo/kurdish-music-tv_4-kurd-hd.svg",
       "category_path": "/kurdish-music-tv",
       "slug": "4-kurd-hd",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737313Z"
     },
     {
       "page_url": "https://www.aparatchii.com/kurdish-music-tv/kurd-max-music",
@@ -3614,7 +4168,9 @@
       "logo": "logo/kurdish-music-tv_kurd-max-music.svg",
       "category_path": "/kurdish-music-tv",
       "slug": "kurd-max-music",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "music",
+      "ai_labeled_at": "2026-08-22T18:29:25.737325Z"
     },
     {
       "page_url": "https://www.aparatchii.com/kurdish-music-tv/waar",
@@ -3627,7 +4183,9 @@
       "logo": "logo/kurdish-music-tv_waar.svg",
       "category_path": "/kurdish-music-tv",
       "slug": "waar",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737340Z"
     },
     {
       "page_url": "https://www.aparatchii.com/kurdish-news-tv/aryen-tv",
@@ -3640,7 +4198,9 @@
       "logo": "logo/kurdish-news-tv_aryen-tv.svg",
       "category_path": "/kurdish-news-tv",
       "slug": "aryen-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737355Z"
     },
     {
       "page_url": "https://www.aparatchii.com/kurdish-news-tv/ava-news",
@@ -3653,7 +4213,9 @@
       "logo": "logo/kurdish-news-tv_ava-news.svg",
       "category_path": "/kurdish-news-tv",
       "slug": "ava-news",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737365Z"
     },
     {
       "page_url": "https://www.aparatchii.com/kurdish-news-tv/kurd-channel",
@@ -3666,7 +4228,9 @@
       "logo": "logo/kurdish-news-tv_kurd-channel.svg",
       "category_path": "/kurdish-news-tv",
       "slug": "kurd-channel",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737381Z"
     },
     {
       "page_url": "https://www.aparatchii.com/kurdish-news-tv/kurdistan-24",
@@ -3679,7 +4243,9 @@
       "logo": "logo/kurdish-news-tv_kurdistan-24.svg",
       "category_path": "/kurdish-news-tv",
       "slug": "kurdistan-24",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737397Z"
     },
     {
       "page_url": "https://www.aparatchii.com/kurdish-news-tv/rudaw",
@@ -3692,7 +4258,9 @@
       "logo": "logo/kurdish-news-tv_rudaw.svg",
       "category_path": "/kurdish-news-tv",
       "slug": "rudaw",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737412Z"
     },
     {
       "page_url": "https://www.aparatchii.com/kurdish-news-tv/zagros-tv",
@@ -3705,7 +4273,9 @@
       "logo": "logo/kurdish-news-tv_zagros-tv.svg",
       "category_path": "/kurdish-news-tv",
       "slug": "zagros-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737428Z"
     },
     {
       "page_url": "https://www.aparatchii.com/politics-live-tv/channel-one",
@@ -3718,7 +4288,9 @@
       "logo": "logo/politics-live-tv_channel-one.svg",
       "category_path": "/politics-live-tv",
       "slug": "channel-one",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737436Z"
     },
     {
       "page_url": "https://www.aparatchii.com/politics-live-tv/didgah-tv",
@@ -3731,7 +4303,9 @@
       "logo": "logo/politics-live-tv_didgah-tv.svg",
       "category_path": "/politics-live-tv",
       "slug": "didgah-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737443Z"
     },
     {
       "page_url": "https://www.aparatchii.com/politics-live-tv/gord-afarid-tv",
@@ -3744,7 +4318,9 @@
       "logo": "logo/politics-live-tv_gord-afarid-tv.svg",
       "category_path": "/politics-live-tv",
       "slug": "gord-afarid-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737451Z"
     },
     {
       "page_url": "https://www.aparatchii.com/politics-live-tv/hambastegi-tv",
@@ -3757,7 +4333,9 @@
       "logo": "logo/politics-live-tv_hambastegi-tv.svg",
       "category_path": "/politics-live-tv",
       "slug": "hambastegi-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737458Z"
     },
     {
       "page_url": "https://www.aparatchii.com/politics-live-tv/iran-aryaee",
@@ -3770,7 +4348,9 @@
       "logo": "logo/politics-live-tv_iran-aryaee.svg",
       "category_path": "/politics-live-tv",
       "slug": "iran-aryaee",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737466Z"
     },
     {
       "page_url": "https://www.aparatchii.com/politics-live-tv/iran-e-farda",
@@ -3783,7 +4363,9 @@
       "logo": "logo/politics-live-tv_iran-e-farda.svg",
       "category_path": "/politics-live-tv",
       "slug": "iran-e-farda",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737473Z"
     },
     {
       "page_url": "https://www.aparatchii.com/politics-live-tv/iran-national-revolution-tv",
@@ -3796,7 +4378,9 @@
       "logo": "logo/politics-live-tv_iran-national-revolution-tv.svg",
       "category_path": "/politics-live-tv",
       "slug": "iran-national-revolution-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737481Z"
     },
     {
       "page_url": "https://www.aparatchii.com/politics-live-tv/iran-wire-tv",
@@ -3809,7 +4393,9 @@
       "logo": "logo/politics-live-tv_iran-wire-tv.svg",
       "category_path": "/politics-live-tv",
       "slug": "iran-wire-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737488Z"
     },
     {
       "page_url": "https://www.aparatchii.com/politics-live-tv/kalemeh-tv",
@@ -3822,7 +4408,9 @@
       "logo": "logo/politics-live-tv_kalemeh-tv.svg",
       "category_path": "/politics-live-tv",
       "slug": "kalemeh-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737496Z"
     },
     {
       "page_url": "https://www.aparatchii.com/politics-live-tv/kanal-e-jadid",
@@ -3835,7 +4423,9 @@
       "logo": "logo/politics-live-tv_kanal-e-jadid.svg",
       "category_path": "/politics-live-tv",
       "slug": "kanal-e-jadid",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737503Z"
     },
     {
       "page_url": "https://www.aparatchii.com/politics-live-tv/melli-gara-party",
@@ -3848,7 +4438,9 @@
       "logo": "logo/politics-live-tv_melli-gara-party.svg",
       "category_path": "/politics-live-tv",
       "slug": "melli-gara-party",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737511Z"
     },
     {
       "page_url": "https://www.aparatchii.com/politics-live-tv/mihan-tv",
@@ -3861,7 +4453,9 @@
       "logo": "logo/politics-live-tv_mihan-tv.svg",
       "category_path": "/politics-live-tv",
       "slug": "mihan-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737518Z"
     },
     {
       "page_url": "https://www.aparatchii.com/politics-live-tv/nahade-azadi",
@@ -3874,7 +4468,9 @@
       "logo": "logo/politics-live-tv_nahade-azadi.svg",
       "category_path": "/politics-live-tv",
       "slug": "nahade-azadi",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737525Z"
     },
     {
       "page_url": "https://www.aparatchii.com/politics-live-tv/novin-tv",
@@ -3887,7 +4483,9 @@
       "logo": "logo/politics-live-tv_novin-tv.svg",
       "category_path": "/politics-live-tv",
       "slug": "novin-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737533Z"
     },
     {
       "page_url": "https://www.aparatchii.com/politics-live-tv/pars-tv",
@@ -3900,7 +4498,9 @@
       "logo": "logo/politics-live-tv_pars-tv.svg",
       "category_path": "/politics-live-tv",
       "slug": "pars-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737540Z"
     },
     {
       "page_url": "https://www.aparatchii.com/politics-live-tv/project-leon",
@@ -3913,7 +4513,9 @@
       "logo": "logo/politics-live-tv_project-leon.svg",
       "category_path": "/politics-live-tv",
       "slug": "project-leon",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737547Z"
     },
     {
       "page_url": "https://www.aparatchii.com/politics-live-tv/pulse-media",
@@ -3926,7 +4528,9 @@
       "logo": "logo/politics-live-tv_pulse-media.svg",
       "category_path": "/politics-live-tv",
       "slug": "pulse-media",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737555Z"
     },
     {
       "page_url": "https://www.aparatchii.com/politics-live-tv/zan-zendegi-azadi-tv",
@@ -3939,7 +4543,9 @@
       "logo": "logo/politics-live-tv_zan-zendegi-azadi-tv.svg",
       "category_path": "/politics-live-tv",
       "slug": "zan-zendegi-azadi-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737562Z"
     },
     {
       "page_url": "https://www.aparatchii.com/politics-live-tv/zed-tv",
@@ -3952,7 +4558,9 @@
       "logo": "logo/politics-live-tv_zed-tv.svg",
       "category_path": "/politics-live-tv",
       "slug": "zed-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "news",
+      "ai_labeled_at": "2026-08-22T18:29:25.737570Z"
     },
     {
       "page_url": "https://www.aparatchii.com/religion-english-tv/marjaeyat-tv-eng",
@@ -3965,7 +4573,9 @@
       "logo": "logo/religion-english-tv_marjaeyat-tv-eng.svg",
       "category_path": "/religion-english-tv",
       "slug": "marjaeyat-tv-eng",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737589Z"
     },
     {
       "page_url": "https://www.aparatchii.com/spanish-entertainment-tv/activa-tv-honduras",
@@ -3978,7 +4588,9 @@
       "logo": "logo/spanish-entertainment-tv_activa-tv-honduras.svg",
       "category_path": "/spanish-entertainment-tv",
       "slug": "activa-tv-honduras",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737607Z"
     },
     {
       "page_url": "https://www.aparatchii.com/tajik/varzish-tv",
@@ -3991,7 +4603,9 @@
       "logo": "logo/tajik_varzish-tv.svg",
       "category_path": "/tajik",
       "slug": "varzish-tv",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737624Z"
     },
     {
       "page_url": "https://www.aparatchii.com/turkish-entertainment-tv/tvnet",
@@ -4004,7 +4618,9 @@
       "logo": "logo/turkish-entertainment-tv_tvnet.svg",
       "category_path": "/turkish-entertainment-tv",
       "slug": "tvnet",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737639Z"
     },
     {
       "page_url": "https://www.aparatchii.com/turkish-kids-tv/trt-cocuk",
@@ -4017,7 +4633,9 @@
       "logo": "logo/turkish-kids-tv_trt-cocuk.svg",
       "category_path": "/turkish-kids-tv",
       "slug": "trt-cocuk",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737655Z"
     },
     {
       "page_url": "https://www.aparatchii.com/turkish-religious-tv/sat7-turk",
@@ -4030,7 +4648,26 @@
       "logo": "logo/turkish-religious-tv_sat7-turk.svg",
       "category_path": "/turkish-religious-tv",
       "slug": "sat7-turk",
-      "media_type": "tv"
+      "media_type": "tv",
+      "ai_category": "other",
+      "ai_labeled_at": "2026-08-22T18:29:25.737670Z"
     }
-  ]
+  ],
+  "ai_taxonomy": [
+    "sport",
+    "movie",
+    "news",
+    "music",
+    "kids",
+    "documentary",
+    "religious",
+    "entertainment",
+    "education",
+    "series",
+    "lifestyle",
+    "international",
+    "radio",
+    "other"
+  ],
+  "ai_model": "name-heuristic-v1"
 }
