@@ -47,6 +47,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "chore: update channels and logos [skip ci]"
+            git commit -m "chore: update channels and logos"
             git push
+            echo "Pushed; the Pages deploy runs on backend/data/channels.json and regenerates sitemap.xml."
           fi

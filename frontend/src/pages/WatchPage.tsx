@@ -318,6 +318,24 @@ export function WatchPage() {
     if (channel) recordVisit(channel)
   }, [channel, recordVisit])
 
+  // Every route in sitemap.xml otherwise shares the shell's single <title>,
+  // which gives a crawler nothing to tell 300+ channel pages apart.
+  useEffect(() => {
+    if (!channel) return
+    const name = channel.name ?? channel.slug
+    const previous = document.title
+    document.title = `${name} — Live TV`
+    const description = document.querySelector('meta[name="description"]')
+    const previousDescription = description?.getAttribute("content") ?? null
+    description?.setAttribute("content", `Watch ${name} live online.`)
+    return () => {
+      document.title = previous
+      if (previousDescription !== null) {
+        description?.setAttribute("content", previousDescription)
+      }
+    }
+  }, [channel?.page_url, channel?.name, channel?.slug])
+
   useEffect(() => {
     if (!channel) return
     const base = (import.meta.env.VITE_API_BASE ?? "").replace(/\/$/, "")

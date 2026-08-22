@@ -1,3 +1,4 @@
+import { gzipSync } from "node:zlib"
 import { Readable } from "node:stream"
 import type { Connect, PreviewServer, ViteDevServer } from "vite"
 
@@ -126,7 +127,10 @@ function invalidateManifestsFor(segmentUrl: string): void {
  * Fetch a playlist and cache it. Session params are dropped on the way out:
  * chunks.m3u8 serves fine without one, so all viewers share one canonical fetch.
  */
-async function fetchUpstreamManifest(url: string): Promise<ManifestEntry> {
+async function fetchUpstreamManifest(
+  url: string,
+  { prefetchSegments = true }: { prefetchSegments?: boolean } = {},
+): Promise<ManifestEntry> {
   const canonical = cacheKey(url)
   const r = await fetch(canonical, {
     headers: upstreamHeaders(new URL(url).hostname),
@@ -138,7 +142,7 @@ async function fetchUpstreamManifest(url: string): Promise<ManifestEntry> {
   }
   const body = await r.text()
   manifestStore(url, body, canonical)
-  scheduleLiveEdgePrefetch(body, canonical)
+  scheduleLiveEdgePrefetch(body, canonical, prefetchSegments)
   return { fresh: 0, stale: 0, body, resolved: canonical }
 }
 
@@ -165,7 +169,9 @@ function noteWarmTarget(url: string): void {
         warmTargets.delete(target)
         continue
       }
-      void fetchUpstreamManifest(target).catch(() => {})
+      // Playlists only — see scheduleLiveEdgePrefetch on why the warm loop must
+      // never pull segments.
+      void fetchUpstreamManifest(target, { prefetchSegments: false }).catch(() => {})
     }
     if (warmTargets.size === 0 && warmTimer) {
       clearInterval(warmTimer)
@@ -228,7 +234,17 @@ function playlistEntries(body: string, playlistUrl: string): string[] {
  * hls.js starts at the live edge, so after serving a media playlist begin
  * fetching its last segment — by the time the player asks, it is in memory.
  */
-function scheduleLiveEdgePrefetch(body: string, playlistUrl: string): void {
+/**
+ * `prefetchSegments = false` warms playlists only. The warm-keep loop must use
+ * it: at the measured 2.08 Mbps mean bitrate a segment is ~2.6 MB, so pulling two
+ * per channel every 45 s across 8 idle channels burns ~7.4 Mbps for streams
+ * nobody is watching. Playlists alone cost ~44 B/s.
+ */
+function scheduleLiveEdgePrefetch(
+  body: string,
+  playlistUrl: string,
+  prefetchSegments = true,
+): void {
   const entries = playlistEntries(body, playlistUrl)
   const last = entries[entries.length - 1]
   if (!last) return
@@ -238,10 +254,12 @@ function scheduleLiveEdgePrefetch(body: string, playlistUrl: string): void {
     // player's next request — an unavoidable round trip before any media
     // arrives — into a cache hit.
     if (!manifestCached(cacheKey(last))) {
-      void fetchUpstreamManifest(last).catch(() => {})
+      void fetchUpstreamManifest(last, { prefetchSegments }).catch(() => {})
     }
     return
   }
+
+  if (!prefetchSegments) return
 
   for (const target of entries.slice(-PREFETCH_SEGMENTS)) {
     const key = cacheKey(target)
@@ -319,6 +337,38 @@ function rewritePlaylist(
     .join("\n")
 }
 
+/**
+ * Playlists are text and compress ~2:1 (a 317 B media playlist gzips to 156 B).
+ * Segments are NOT compressed and must not be: already-encoded H.264/AAC in
+ * MPEG-TS measured a 1.9% saving for ~50 ms of CPU per segment, and compressing
+ * them would force buffering each one whole instead of streaming it through.
+ * Below the floor, gzip's header costs more than it saves (a 162 B master
+ * playlist grew to 168 B).
+ */
+const GZIP_MIN_BYTES = 256
+
+function sendPlaylist(
+  res: Parameters<Connect.NextHandleFunction>[1],
+  text: string,
+  acceptEncoding: string,
+): void {
+  res.statusCode = 200
+  res.setHeader("Content-Type", "application/vnd.apple.mpegurl")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+  res.setHeader("Cache-Control", "no-cache")
+  res.setHeader("Vary", "Accept-Encoding")
+  const raw = Buffer.from(text, "utf-8")
+  if (raw.length >= GZIP_MIN_BYTES && acceptEncoding.toLowerCase().includes("gzip")) {
+    const packed = gzipSync(raw, { level: 1 })
+    if (packed.length < raw.length) {
+      res.setHeader("Content-Encoding", "gzip")
+      res.end(packed)
+      return
+    }
+  }
+  res.end(raw)
+}
+
 function installHlsProxy(
   middlewares: Connect.Server,
   viteBase: string,
@@ -393,6 +443,7 @@ function installHlsProxy(
       }
     }
 
+    const acceptEncoding = (req.headers["accept-encoding"] as string) ?? ""
     if (looksLikeManifest) noteWarmTarget(target)
 
     void (async () => {
@@ -407,11 +458,11 @@ function installHlsProxy(
               manifestInflight.set(key, refresh)
               void refresh.catch(() => {}).finally(() => manifestInflight.delete(key))
             }
-            res.statusCode = 200
-            res.setHeader("Content-Type", "application/vnd.apple.mpegurl")
-            res.setHeader("Access-Control-Allow-Origin", "*")
-            res.setHeader("Cache-Control", "no-cache")
-            res.end(rewritePlaylist(hit.entry.body, hit.entry.resolved, proxySelfOrigin))
+            sendPlaylist(
+              res,
+              rewritePlaylist(hit.entry.body, hit.entry.resolved, proxySelfOrigin),
+              acceptEncoding,
+            )
             return
           }
           // Single-flight: concurrent requests for one playlist share a fetch.
@@ -422,11 +473,11 @@ function installHlsProxy(
             void pending.catch(() => {}).finally(() => manifestInflight.delete(key))
           }
           const body = await pending
-          res.statusCode = 200
-          res.setHeader("Content-Type", "application/vnd.apple.mpegurl")
-          res.setHeader("Access-Control-Allow-Origin", "*")
-          res.setHeader("Cache-Control", "no-cache")
-          res.end(rewritePlaylist(body, cacheKey(target), proxySelfOrigin))
+          sendPlaylist(
+            res,
+            rewritePlaylist(body, cacheKey(target), proxySelfOrigin),
+            acceptEncoding,
+          )
           return
         }
 

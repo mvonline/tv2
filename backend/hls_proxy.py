@@ -19,6 +19,7 @@ Latency notes (measured against gg.hls2.xyz):
 from __future__ import annotations
 
 import asyncio
+import gzip
 import re
 import time
 from collections import OrderedDict
@@ -360,11 +361,21 @@ async def _prefetch_segment(url: str, key: str) -> None:
         _segment_prefetching.discard(key)
 
 
-def schedule_live_edge_prefetch(body: str, playlist_url: str) -> None:
+def schedule_live_edge_prefetch(
+    body: str,
+    playlist_url: str,
+    *,
+    segments: bool = True,
+) -> None:
     """
     After serving a media playlist, start fetching the segments the player will
     ask for next. hls.js begins at the live edge and buffers
     `liveSyncDurationCount` segments, so warm that many from the end.
+
+    `segments=False` warms playlists only. The warm-keep loop must use it: at the
+    measured 2.08 Mbps mean bitrate a segment is ~2.6 MB, so prefetching two per
+    channel every 45 s across 8 idle channels burns ~7.4 Mbps of CDN egress for
+    streams nobody is watching. Playlists alone cost ~44 B/s.
     """
     urls = segment_urls(body, playlist_url)
     if not urls:
@@ -373,7 +384,9 @@ def schedule_live_edge_prefetch(body: str, playlist_url: str) -> None:
         # Master playlist: entries are playlists. Fetching the variant now turns
         # the player's next request — an unavoidable extra round trip before any
         # media arrives — into a cache hit.
-        _spawn(_prefetch_manifest(urls[-1]))
+        _spawn(_prefetch_manifest(urls[-1], segments=segments))
+        return
+    if not segments:
         return
     for target in urls[-PREFETCH_SEGMENTS:]:
         key = cache_key(target)
@@ -383,7 +396,7 @@ def schedule_live_edge_prefetch(body: str, playlist_url: str) -> None:
         _spawn(_prefetch_segment(target, key))
 
 
-async def _prefetch_manifest(url: str) -> None:
+async def _prefetch_manifest(url: str, *, segments: bool = True) -> None:
     """Warm a variant playlist named by a master playlist, and its live edge."""
     if _manifest_cached(cache_key(url)) is not None:
         return
@@ -391,7 +404,7 @@ async def _prefetch_manifest(url: str) -> None:
         body, resolved = await _fetch_upstream_manifest(url)
     except Exception:
         return  # Best effort; the player's own request will fetch it.
-    schedule_live_edge_prefetch(body, resolved)
+    schedule_live_edge_prefetch(body, resolved, segments=segments)
 
 
 def _spawn(coro) -> None:
@@ -442,7 +455,9 @@ async def _warm_loop() -> None:
                 body, resolved = await _fetch_upstream_manifest(url)
             except Exception:
                 continue
-            schedule_live_edge_prefetch(body, resolved)
+            # Playlists only: see schedule_live_edge_prefetch on why the warm
+            # loop must never pull segments.
+            schedule_live_edge_prefetch(body, resolved, segments=False)
         if not _warm_targets:
             return
 
@@ -455,13 +470,45 @@ _MANIFEST_HEADERS = {
     "Access-Control-Allow-Origin": "*",
     "Cache-Control": "no-cache",
 }
+
+# Playlists are text and compress ~2:1 (measured: a 317 B media playlist gzips to
+# 156 B). Segments are NOT compressed and must not be: they are already-encoded
+# H.264/AAC in MPEG-TS, where gzip measured a 1.9% saving (3,068,912 -> 3,011,868 B)
+# for ~50 ms of CPU per segment, and compressing them would also mean buffering
+# each one whole instead of streaming it through.
+#
+# Below this size gzip's own header costs more than it saves — a 162 B master
+# playlist grew to 168 B in measurement.
+GZIP_MIN_BYTES = 256
+
+
+def _maybe_gzip(body: str, accept_encoding: str) -> tuple[bytes, dict[str, str]]:
+    """Returns (payload, extra headers). Falls back to plain bytes."""
+    raw = body.encode("utf-8")
+    if len(raw) < GZIP_MIN_BYTES or "gzip" not in accept_encoding.lower():
+        return raw, {}
+    packed = gzip.compress(raw, 1)
+    if len(packed) >= len(raw):
+        return raw, {}
+    return packed, {"Content-Encoding": "gzip"}
+
+
+def _manifest_body_response(body: str, resolved: str, proxy_self: str, accept_encoding: str) -> Response:
+    payload, extra = _maybe_gzip(
+        rewrite_playlist(body, resolved, proxy_self), accept_encoding
+    )
+    return Response(
+        content=payload,
+        media_type="application/vnd.apple.mpegurl",
+        headers={**_MANIFEST_HEADERS, **extra, "Vary": "Accept-Encoding"},
+    )
 _SEGMENT_HEADERS = {
     "Access-Control-Allow-Origin": "*",
     "Cache-Control": "public, max-age=30",
 }
 
 
-async def _manifest_response(url: str, proxy_self: str) -> Response:
+async def _manifest_response(url: str, proxy_self: str, accept_encoding: str) -> Response:
     key = cache_key(url)
     hit = _manifest_cached(key)
 
@@ -471,11 +518,7 @@ async def _manifest_response(url: str, proxy_self: str) -> Response:
             # Serve now, refresh behind the response.
             if key not in _manifest_inflight:
                 _spawn(_refresh_manifest(url))
-        return Response(
-            content=rewrite_playlist(body, resolved, proxy_self),
-            media_type="application/vnd.apple.mpegurl",
-            headers=_MANIFEST_HEADERS,
-        )
+        return _manifest_body_response(body, resolved, proxy_self, accept_encoding)
 
     # Single-flight: concurrent viewers of one channel share one upstream fetch.
     task = _manifest_inflight.get(key)
@@ -491,11 +534,7 @@ async def _manifest_response(url: str, proxy_self: str) -> Response:
         return Response("Upstream unreachable", status_code=504, media_type="text/plain")
 
     schedule_live_edge_prefetch(body, resolved)
-    return Response(
-        content=rewrite_playlist(body, resolved, proxy_self),
-        media_type="application/vnd.apple.mpegurl",
-        headers=_MANIFEST_HEADERS,
-    )
+    return _manifest_body_response(body, resolved, proxy_self, accept_encoding)
 
 
 async def _refresh_manifest(url: str) -> None:
@@ -536,7 +575,9 @@ async def proxy_hls(request: Request, url: str = Query(..., description="Upstrea
 
     if looks_like_manifest:
         note_warm_target(url)
-        return await _manifest_response(url, proxy_self)
+        return await _manifest_response(
+            url, proxy_self, request.headers.get("accept-encoding", "")
+        )
 
     # Segments (.ts, AAC, etc.): stream in fixed-size chunks so the browser starts
     # receiving data before the full segment has been fetched from upstream, while

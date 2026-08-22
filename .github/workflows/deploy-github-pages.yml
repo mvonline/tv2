@@ -29,17 +29,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set Vite base path
+      - name: Set Vite base path and site URL
         id: base
         shell: bash
         run: |
           NAME="${{ github.event.repository.name }}"
+          OWNER="${{ github.repository_owner }}"
+          # Pages hostnames are lowercase regardless of how the owner is spelled.
+          OWNER_LC="$(echo "$OWNER" | tr '[:upper:]' '[:lower:]')"
           if [[ "$NAME" == *.github.io ]]; then
             echo "Vite base: / (user or org site)"
             echo "vite_base=/" >> "$GITHUB_OUTPUT"
+            echo "site_url=https://$NAME/" >> "$GITHUB_OUTPUT"
           else
             echo "Vite base: /$NAME/ (project site)"
             echo "vite_base=/$NAME/" >> "$GITHUB_OUTPUT"
+            echo "site_url=https://$OWNER_LC.github.io/$NAME/" >> "$GITHUB_OUTPUT"
+          fi
+          # A custom domain (public/CNAME) overrides the github.io hostname, or set
+          # the SITE_URL repository variable to pin it explicitly.
+          if [[ -n "${{ vars.SITE_URL }}" ]]; then
+            echo "site_url=${{ vars.SITE_URL }}" >> "$GITHUB_OUTPUT"
+          elif [[ -f frontend/public/CNAME ]]; then
+            echo "site_url=https://$(tr -d '[:space:]' < frontend/public/CNAME)/" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Set up Node
@@ -56,6 +68,8 @@ jobs:
         working-directory: frontend
         env:
           VITE_BASE: ${{ steps.base.outputs.vite_base }}
+          # Consumed by scripts/sitemap.mjs for absolute <loc> URLs.
+          SITE_URL: ${{ steps.base.outputs.site_url }}
         run: |
           npm ci
           npm run build
