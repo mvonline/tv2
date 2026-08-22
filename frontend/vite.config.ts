@@ -86,7 +86,7 @@ export default defineConfig(({ mode }) => {
             dest: "data",
             rename: { stripBase: 2 },
           },
-          { src: "../logo", dest: "logo" },
+          { src: "../logo/*", dest: "logo" },
         ],
       }),
     ],

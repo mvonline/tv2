@@ -1,7 +1,7 @@
 import re
 from urllib.parse import urlparse
 
-BASE_URL = "https://www.aparatchi.com"
+BASE_URL = "https://www.aparatchii.com"
 USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -50,7 +50,7 @@ CATEGORY_INDEX_RE = re.compile(
 
 # Hosts that must go through the HLS proxy (CORS-blocked or geo/ISP-blocked in EU).
 _PROXY_HOSTS = (
-    ".hls2.xyz",    # aparatchi CDN — blocks off-site Origin/Referer
+    ".hls2.xyz",    # aparatchii CDN — blocks off-site Origin/Referer
     ".presstv.ir",  # iFilm / PressTV — DNS-blocked by many EU ISPs (live*, live4*, etc.)
     ".telewebion.ir",
 )

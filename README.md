@@ -1,6 +1,6 @@
 # TV2 — channel guide, scraper & stack
 
-Python tooling pulls live TV metadata from [aparatchi.com](https://www.aparatchi.com): stream URLs, proxy flags, and **logos stored locally** (no hotlinked URLs in JSON). The **React (Vite)** app is a channel guide with search, watch view, favorites, optional **drag-and-drop channel order** (saved in the browser), and **topic sections** driven by `ai_category` plus an optional **SQLite category admin** API.
+Python tooling pulls live TV metadata from [aparatchii.com](https://www.aparatchii.com): stream URLs, proxy flags, and **logos stored locally** (no hotlinked URLs in JSON). The **React (Vite)** app is a channel guide with search, watch view, favorites, optional **drag-and-drop channel order** (saved in the browser), and **topic sections** driven by `ai_category` plus an optional **SQLite category admin** API.
 
 ---
 
@@ -304,7 +304,7 @@ Workflows need **contents: write** where they push (see repo **Settings → Acti
 
 ## HLS proxy (`gg.*`)
 
-CDNs often return **403** unless requests use the same **Origin / Referer** as the embedder (`https://www.aparatchi.com`).
+CDNs often return **403** unless requests use the same **Origin / Referer** as the embedder (`https://www.aparatchii.com`).
 
 
 | Mode                                 | What to use                                                                                                                                                                                                                                                               |

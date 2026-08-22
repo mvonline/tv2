@@ -65,7 +65,7 @@ def fetch(url: str) -> str:
 
 def _same_site(host: str) -> bool:
     h = host.lower().removeprefix("www.")
-    return h == "aparatchi.com"
+    return h == "aparatchii.com"
 
 
 def normalize_path(href: str) -> str | None:

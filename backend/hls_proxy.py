@@ -1,5 +1,5 @@
 """
-Standalone HLS proxy for gg.* hosts (same Origin + Referer as aparatchi.com).
+Standalone HLS proxy for gg.* hosts (same Origin + Referer as aparatchii.com).
 
 Run: uvicorn hls_proxy:app --host 127.0.0.1 --port 8787
 
@@ -32,9 +32,9 @@ SESSION.mount("https://", adapter)
 SEGMENT_CHUNK = 64 * 1024
 
 UPSTREAM_HEADERS = {
-    # Nimble/CDN expects the embedder site (same as a browser on aparatchi.com).
-    "Referer": "https://www.aparatchi.com/",
-    "Origin": "https://www.aparatchi.com",
+    # Nimble/CDN expects the embedder site (same as a browser on aparatchii.com).
+    "Referer": "https://www.aparatchii.com/",
+    "Origin": "https://www.aparatchii.com",
     "Accept": "*/*",
     "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8",
     "User-Agent": (

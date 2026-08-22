@@ -21,3 +21,9 @@ frontend/.env.*.local
 # OS
 .DS_Store
 Thumbs.db
+
+# Desktop (Wails v3)
+desktop/frontend_dist/*
+!desktop/frontend_dist/.gitkeep
+desktop/tv2-desktop
+

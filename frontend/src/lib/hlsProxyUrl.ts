@@ -1,5 +1,5 @@
 /**
- * gg.hls2.xyz returns 403 unless requests use the embedder Origin + Referer (aparatchi.com),
+ * gg.hls2.xyz returns 403 unless requests use the embedder Origin + Referer (aparatchii.com),
  * same as the main site — applies to playlists, sub-playlists (e.g. chunks.m3u8), and .ts segments.
  * Browser requests send the app origin (localhost / GitHub Pages) → blocked.
  * Route HLS through /proxy/hls (Vite dev/preview middleware or external server) which

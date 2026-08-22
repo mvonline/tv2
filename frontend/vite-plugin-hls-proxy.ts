@@ -6,10 +6,10 @@ function allowedHost(hostname: string): boolean {
   return h.startsWith("gg.") || h.startsWith("www.gg.")
 }
 
-/** Nimble/CDN expects embedder Origin + Referer (same as aparatchi.com in the browser). */
+/** Nimble/CDN expects embedder Origin + Referer (same as aparatchii.com in the browser). */
 const UPSTREAM_HEADERS: Record<string, string> = {
-  Referer: "https://www.aparatchi.com/",
-  Origin: "https://www.aparatchi.com",
+  Referer: "https://www.aparatchii.com/",
+  Origin: "https://www.aparatchii.com",
   Accept: "*/*",
   "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8",
   "User-Agent":

@@ -227,21 +227,6 @@ export function VideoPlayer({
 
     const playbackSrc = isHls ? (hlsUrl ?? url) : url
 
-    // Prefer native HLS when the stack advertises support (common on LG/Samsung/AppleTV Safari).
-    if (isHls && nativeHlsLikely(video)) {
-      const playRetrier = createPlayRetrier(video)
-      video.src = playbackSrc
-      const onCanPlay = () => playRetrier.attempt()
-      video.addEventListener("canplay", onCanPlay)
-      playRetrier.attempt()
-      return () => {
-        playRetrier.stop()
-        video.removeEventListener("canplay", onCanPlay)
-        video.removeAttribute("src")
-        video.load()
-      }
-    }
-
     if (isHls && Hls.isSupported()) {
       const playRetrier = createPlayRetrier(video)
       // Workers unreliable on TV Chromium; LL-HLS stresses weak demuxers.
@@ -282,6 +267,20 @@ export function VideoPlayer({
         video.removeEventListener("canplay", onCanPlay)
         hls.destroy()
         hlsRef.current = null
+      }
+    }
+
+    if (isHls && nativeHlsLikely(video)) {
+      const playRetrier = createPlayRetrier(video)
+      video.src = playbackSrc
+      const onCanPlay = () => playRetrier.attempt()
+      video.addEventListener("canplay", onCanPlay)
+      playRetrier.attempt()
+      return () => {
+        playRetrier.stop()
+        video.removeEventListener("canplay", onCanPlay)
+        video.removeAttribute("src")
+        video.load()
       }
     }
 
