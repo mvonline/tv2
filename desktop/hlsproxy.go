@@ -10,16 +10,26 @@ import (
 	"strings"
 )
 
-var allowedHosts = []string{"gg.", "www.gg."}
+// Same allowlist as backend hls_proxy.allowed_host / config.stream_requires_proxy.
+var allowedHostSuffixes = []string{".hls2.xyz", ".presstv.ir", ".telewebion.ir"}
 
 func isHostAllowed(hostname string) bool {
 	h := strings.ToLower(hostname)
-	for _, allowed := range allowedHosts {
-		if strings.HasPrefix(h, allowed) {
+	for _, suffix := range allowedHostSuffixes {
+		if strings.HasSuffix(h, suffix) {
 			return true
 		}
 	}
 	return false
+}
+
+// Telewebion checks its own embedder origin, not aparatchii.com.
+func embedderOrigin(hostname string) string {
+	h := strings.ToLower(hostname)
+	if h == "telewebion.ir" || strings.HasSuffix(h, ".telewebion.ir") {
+		return "https://www.telewebion.com"
+	}
+	return "https://www.aparatchii.com"
 }
 
 var uriRegex = regexp.MustCompile(`URI="([^"]+)"`)
@@ -58,9 +68,10 @@ func HLSProxyHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Upstream headers matching aparatchii embedder context
-	req.Header.Set("Referer", "https://www.aparatchii.com/")
-	req.Header.Set("Origin", "https://www.aparatchii.com")
+	// Upstream headers matching the embedder context the CDN expects
+	origin := embedderOrigin(targetURL.Hostname())
+	req.Header.Set("Referer", origin+"/")
+	req.Header.Set("Origin", origin)
 	req.Header.Set("Accept", "*/*")
 	req.Header.Set("Accept-Language", "en-GB,en-US;q=0.9,en;q=0.8")
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")

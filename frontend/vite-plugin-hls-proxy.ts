@@ -1,9 +1,11 @@
 import type { Connect, PreviewServer, ViteDevServer } from "vite"
 
-/** Same allowlist as backend `stream_requires_proxy` (gg.*). */
+/** Same allowlist as backend `hls_proxy.allowed_host` / `config.stream_requires_proxy`. */
+const ALLOWED_SUFFIXES = [".hls2.xyz", ".presstv.ir", ".telewebion.ir"]
+
 function allowedHost(hostname: string): boolean {
   const h = hostname.toLowerCase()
-  return h.startsWith("gg.") || h.startsWith("www.gg.")
+  return ALLOWED_SUFFIXES.some((s) => h.endsWith(s))
 }
 
 /** Nimble/CDN expects embedder Origin + Referer (same as aparatchii.com in the browser). */
@@ -18,6 +20,20 @@ const UPSTREAM_HEADERS: Record<string, string> = {
   "Sec-Fetch-Mode": "cors",
   "Sec-Fetch-Dest": "empty",
   DNT: "1",
+}
+
+/** Telewebion checks its own embedder origin, not aparatchii.com. */
+const TELEWEBION_HEADERS: Record<string, string> = {
+  ...UPSTREAM_HEADERS,
+  Referer: "https://www.telewebion.com/",
+  Origin: "https://www.telewebion.com",
+}
+
+function upstreamHeaders(hostname: string): Record<string, string> {
+  const h = hostname.toLowerCase()
+  return h.endsWith(".telewebion.ir") || h === "telewebion.ir"
+    ? TELEWEBION_HEADERS
+    : UPSTREAM_HEADERS
 }
 
 function normalizeProxyPath(viteBase: string): string {
@@ -134,7 +150,9 @@ function installHlsProxy(
 
     void (async () => {
       try {
-        const r = await fetch(target, { headers: UPSTREAM_HEADERS })
+        const r = await fetch(target, {
+          headers: upstreamHeaders(targetUrl.hostname),
+        })
         const ct = r.headers.get("content-type") ?? ""
         const lowerTarget = target.toLowerCase()
         const isM3u8 =
