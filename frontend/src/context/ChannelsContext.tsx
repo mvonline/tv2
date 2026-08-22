@@ -34,7 +34,7 @@ type ChannelsContextValue = {
 const ChannelsContext = createContext<ChannelsContextValue | null>(null)
 
 async function loadChannels(): Promise<Channel[]> {
-  const res = await fetch(publicUrl("data/channels.json"), { cache: "no-store" })
+  const res = await fetch(publicUrl("data/channels.json"), { cache: "no-cache" })
   if (!res.ok) throw new Error(`Failed to load channels (${res.status})`)
   const ct = (res.headers.get("content-type") ?? "").toLowerCase()
   if (!ct.includes("json")) {

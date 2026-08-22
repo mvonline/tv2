@@ -19,18 +19,30 @@ function logosBaseFromEnv(): string {
   return normalizeBase(import.meta.env.LOGOS_BASE_URL ?? "")
 }
 
-export async function initLogosBase(): Promise<void> {
-  if (logosBaseFromEnv()) return
+/**
+ * Resolve the logos base from the API. Returns true when it produced a value the
+ * first render did not have, so the caller can re-render.
+ *
+ * This must never gate the first paint: static hosts have no /api/config, so
+ * awaiting it before rendering spent a whole round trip (measured 375 ms against
+ * the deployed site, which 404s) on a blank screen.
+ */
+export async function initLogosBase(): Promise<boolean> {
+  if (logosBaseFromEnv()) return false
 
   const api = import.meta.env.VITE_API_BASE?.trim().replace(/\/$/, "") ?? ""
   const url = api ? `${api}/api/config` : "/api/config"
   try {
     const r = await fetch(url, { cache: "no-store" })
-    if (!r.ok) return
+    if (!r.ok) return false
     const j = (await r.json()) as { logos_base_url?: string }
-    resolved = normalizeBase(j.logos_base_url ?? "")
+    const next = normalizeBase(j.logos_base_url ?? "")
+    if (!next || next === resolved) return false
+    resolved = next
+    return true
   } catch {
     /* same-origin static hosts have no API */
+    return false
   }
 }
 

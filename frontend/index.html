@@ -5,6 +5,9 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#07090f" />
+    <!-- The app cannot render a channel until this lands; without the hint the
+         fetch only starts after the bundle has downloaded and executed. -->
+    <link rel="preload" as="fetch" type="application/json" crossorigin href="%BASE_URL%data/channels.json" />
     <title>Live TV</title>
     <meta
       name="description"

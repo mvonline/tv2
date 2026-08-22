@@ -59,6 +59,27 @@ export default defineConfig(({ mode }) => {
 
   return {
     base,
+    build: {
+      rollupOptions: {
+        output: {
+          // The framework changes far less often than the app, so keeping it in
+          // its own chunk means an app deploy does not re-download it.
+          // Function form: this project builds with rolldown-vite, which types
+          // manualChunks as a function only.
+          manualChunks(id: string) {
+            if (
+              id.includes("node_modules/react/") ||
+              id.includes("node_modules/react-dom/") ||
+              id.includes("node_modules/react-router") ||
+              id.includes("node_modules/scheduler/")
+            ) {
+              return "vendor"
+            }
+            return null
+          },
+        },
+      },
+    },
     // Allow `LOGOS_BASE_URL` in frontend `.env` (same name as backend) alongside `VITE_*`.
     envPrefix: ["VITE_", "LOGOS_"],
     server: {
