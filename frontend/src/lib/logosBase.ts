@@ -6,6 +6,8 @@
  * 2. `GET /api/config` → `logos_base_url` (backend `LOGOS_BASE_URL`) — filled in `initLogosBase` when no env set
  */
 
+import { apiGetJson } from "@/lib/apiBase"
+
 let resolved = ""
 
 function normalizeBase(raw: string): string {
@@ -30,20 +32,11 @@ function logosBaseFromEnv(): string {
 export async function initLogosBase(): Promise<boolean> {
   if (logosBaseFromEnv()) return false
 
-  const api = import.meta.env.VITE_API_BASE?.trim().replace(/\/$/, "") ?? ""
-  const url = api ? `${api}/api/config` : "/api/config"
-  try {
-    const r = await fetch(url, { cache: "no-store" })
-    if (!r.ok) return false
-    const j = (await r.json()) as { logos_base_url?: string }
-    const next = normalizeBase(j.logos_base_url ?? "")
-    if (!next || next === resolved) return false
-    resolved = next
-    return true
-  } catch {
-    /* same-origin static hosts have no API */
-    return false
-  }
+  const config = await apiGetJson<{ logos_base_url?: string }>("/api/config")
+  const next = normalizeBase(config?.logos_base_url ?? "")
+  if (!next || next === resolved) return false
+  resolved = next
+  return true
 }
 
 /** Effective logos origin without trailing slash; empty = use `channelLogoUrl` fallback (`BASE_URL`). */

@@ -60,6 +60,10 @@ export default defineConfig(({ mode }) => {
   return {
     base,
     build: {
+      // Published so production stack traces are readable (and Lighthouse can
+      // attribute bundle weight). The repository is public, so the sources are
+      // not secret; maps are fetched only when devtools is open.
+      sourcemap: true,
       rollupOptions: {
         output: {
           // The framework changes far less often than the app, so keeping it in

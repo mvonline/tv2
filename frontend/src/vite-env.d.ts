@@ -2,6 +2,8 @@
 
 interface ImportMetaEnv {
   readonly VITE_BASE: string
+  /** "false" when the deployment has no backend; see lib/apiBase.ts. */
+  readonly VITE_HAS_API: string
   /** Optional API origin for `/api/categories` (default: same origin). */
   readonly VITE_API_BASE?: string
   readonly VITE_HLS_PROXY_BASE?: string

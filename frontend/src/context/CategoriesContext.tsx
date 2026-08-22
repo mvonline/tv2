@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from "react"
 import type { CategoryConfig } from "@/types/categoryConfig"
+import { apiGetJson } from "@/lib/apiBase"
 
 export type { CategoryConfig }
 
@@ -27,44 +28,22 @@ type CategoriesContextValue = {
 
 const CategoriesContext = createContext<CategoriesContextValue | null>(null)
 
-function apiBase(): string {
-  const raw = import.meta.env.VITE_API_BASE?.trim()
-  if (raw) return raw.replace(/\/$/, "")
-  return ""
-}
-
 async function fetchCategories(): Promise<CategoryConfig[] | null> {
-  const base = apiBase()
-  try {
-    const res = await fetch(`${base}/api/categories`, { cache: "no-store" })
-    if (!res.ok) return null
-    const ct = (res.headers.get("content-type") ?? "").toLowerCase()
-    if (!ct.includes("json")) return null
-    const data = (await res.json()) as unknown
-    if (!Array.isArray(data)) return null
-    return data.filter(
-      (x): x is CategoryConfig =>
-        typeof x === "object" &&
-        x !== null &&
-        typeof (x as CategoryConfig).slug === "string" &&
-        typeof (x as CategoryConfig).label === "string",
-    )
-  } catch {
-    return null
-  }
+  const data = await apiGetJson<unknown>("/api/categories")
+  if (!Array.isArray(data)) return null
+  return data.filter(
+    (x): x is CategoryConfig =>
+      typeof x === "object" &&
+      x !== null &&
+      typeof (x as CategoryConfig).slug === "string" &&
+      typeof (x as CategoryConfig).label === "string",
+  )
 }
 
 async function fetchChannelConfig(): Promise<ChannelConfig | null> {
-  const base = apiBase()
-  try {
-    const res = await fetch(`${base}/api/channel-config`, { cache: "no-store" })
-    if (!res.ok) return null
-    const data = (await res.json()) as unknown
-    if (typeof data !== "object" || data === null) return null
-    return data as ChannelConfig
-  } catch {
-    return null
-  }
+  const data = await apiGetJson<ChannelConfig>("/api/channel-config")
+  if (typeof data !== "object" || data === null) return null
+  return data
 }
 
 export function CategoriesProvider({ children }: { children: ReactNode }) {

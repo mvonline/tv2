@@ -32,6 +32,7 @@ import {
 import type { AmbilightSettings, AmbilightSide } from "@/components/VideoPlayer"
 import { useChannels } from "@/context/ChannelsContext"
 import { useRecentlyWatched } from "@/context/RecentlyWatchedContext"
+import { apiPostJson } from "@/lib/apiBase"
 import { channelNumber } from "@/lib/channelNumber"
 import { useTvRemote, DIGIT_AUTO_SUBMIT_AFTER_MS } from "@/hooks/useTvRemote"
 import { useMobileViewport } from "@/hooks/useMobileViewport"
@@ -338,12 +339,10 @@ export function WatchPage() {
 
   useEffect(() => {
     if (!channel) return
-    const base = (import.meta.env.VITE_API_BASE ?? "").replace(/\/$/, "")
-    fetch(`${base}/api/analytics/view`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ channel_slug: channel.slug, channel_name: channel.name ?? null }),
-    }).catch(() => {})
+    apiPostJson("/api/analytics/view", {
+      channel_slug: channel.slug,
+      channel_name: channel.name ?? null,
+    })
   }, [channel?.page_url])
 
   useEffect(() => {

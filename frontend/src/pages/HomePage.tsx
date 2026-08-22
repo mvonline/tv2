@@ -20,6 +20,7 @@ import { groupChannelsByAiCategory, formatAiCategoryTitle } from "@/lib/groupByC
 import { thumbHueForChannel } from "@/lib/topicAccent"
 import { useTvRemote, DIGIT_AUTO_SUBMIT_AFTER_MS } from "@/hooks/useTvRemote"
 import { useMobileViewport } from "@/hooks/useMobileViewport"
+import { apiGetJson } from "@/lib/apiBase"
 import { isMobileViewport } from "@/lib/mobileLayout"
 import { watchUrlForChannel } from "@/lib/paths"
 import { channelLogoUrl } from "@/lib/publicUrl"
@@ -39,14 +40,8 @@ type FeaturedConfig = {
 }
 
 async function fetchFeaturedSlugs(): Promise<string[]> {
-  try {
-    const res = await fetch("/api/featured-channels", { cache: "no-store" })
-    if (!res.ok) return []
-    const data = (await res.json()) as FeaturedConfig
-    return Array.isArray(data.slugs) ? data.slugs : []
-  } catch {
-    return []
-  }
+  const data = await apiGetJson<FeaturedConfig>("/api/featured-channels")
+  return Array.isArray(data?.slugs) ? data.slugs : []
 }
 
 export function HomePage() {

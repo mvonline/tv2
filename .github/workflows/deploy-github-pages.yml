@@ -61,6 +61,10 @@ jobs:
         working-directory: frontend
         env:
           VITE_BASE: ${{ steps.base.outputs.vite_base }}
+          # GitHub Pages is static: no /api/*. Without this the home page fires
+          # four 404 requests per load (config, featured-channels, categories,
+          # channel-config), each a wasted round trip and a console error.
+          VITE_HAS_API: "false"
           # Optional override for scripts/sitemap.mjs; it otherwise derives the
           # Pages URL from GITHUB_REPOSITORY (or public/CNAME).
           SITE_URL: ${{ vars.SITE_URL }}
