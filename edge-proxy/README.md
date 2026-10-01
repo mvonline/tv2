@@ -78,8 +78,11 @@ VITE_HLS_PROXY_BASE=https://tv2-hls-edge.<account>.workers.dev/proxy/hls
 
 ## Rollback
 
-Remove `HLS_PROXY_BASE` and rebuild the frontend to return to its existing proxy
-configuration. No Render settings or DNS records are changed by this branch.
+Set `HLS_PROXY_BASE` back to
+`https://bctv2.onrender.com/proxy/hls` and rebuild the frontend to temporarily
+return video traffic to Render. Removing the value entirely is only appropriate
+when the frontend and a working proxy share the same origin. No Render settings
+or DNS records are changed by this branch.
 
 ## Limits
 

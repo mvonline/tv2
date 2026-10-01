@@ -161,8 +161,10 @@ async function proxyManifest(target, request) {
 
   const body = await upstream.text()
   const resolvedUrl = upstream.url || target.toString()
+  const headers = corsHeaders("application/vnd.apple.mpegurl", "no-cache")
+  headers.set("X-TV2-Edge-Cache", "BYPASS")
   return new Response(rewritePlaylist(body, resolvedUrl, request.url), {
-    headers: corsHeaders("application/vnd.apple.mpegurl", "no-cache"),
+    headers,
   })
 }
 
@@ -180,7 +182,15 @@ async function proxySegment(target, request, context) {
 
   if (!range) {
     const cached = await caches.default.match(cacheKey)
-    if (cached) return cached
+    if (cached) {
+      const headers = new Headers(cached.headers)
+      headers.set("X-TV2-Edge-Cache", "HIT")
+      return new Response(cached.body, {
+        status: cached.status,
+        statusText: cached.statusText,
+        headers,
+      })
+    }
   }
 
   const upstream = await fetchAllowed(target, range)
@@ -193,6 +203,7 @@ async function proxySegment(target, request, context) {
     range ? "no-store" : "public, max-age=30, s-maxage=60",
   )
   copyRepresentationHeaders(upstream.headers, headers)
+  headers.set("X-TV2-Edge-Cache", range ? "BYPASS" : "MISS")
   const response = new Response(upstream.body, {
     status: upstream.status,
     statusText: upstream.statusText,

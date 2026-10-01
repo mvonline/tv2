@@ -18,6 +18,7 @@ Python tooling pulls live TV metadata from [aparatchii.com](https://www.aparatch
 - [GitHub Actions](#github-actions)
 - [HLS proxy (`gg.*`)](#hls-proxy-gg)
 - [Edge HLS deployment](#edge-hls-deployment)
+- [Complete edge/CDN setup](EDGE_CDN_SETUP.md)
 - [Notes](#notes)
 
 ---
@@ -353,7 +354,9 @@ copy to every viewer. The FastAPI proxy remains available as a local-development
 and rollback path.
 
 Deployment and GitHub Pages configuration are documented in
-`[edge-proxy/README.md](edge-proxy/README.md)`.
+`[edge-proxy/README.md](edge-proxy/README.md)`. For the complete production
+checklist—including Render, GitHub Actions, the image CDN, verification, and
+rollback—follow `[EDGE_CDN_SETUP.md](EDGE_CDN_SETUP.md)`.
 
 ---
 
