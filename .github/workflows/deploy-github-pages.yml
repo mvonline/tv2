@@ -64,7 +64,14 @@ jobs:
           # GitHub Pages is static: no /api/*. Without this the home page fires
           # four 404 requests per load (config, featured-channels, categories,
           # channel-config), each a wasted round trip and a console error.
-          VITE_HAS_API: "false"
+          VITE_HAS_API: ${{ vars.HAS_API || 'false' }}
+          VITE_API_BASE: ${{ vars.API_BASE }}
+          # Commit-pinned GitHub CDN URLs are immutable and avoid stale logos.
+          # Set LOGOS_BASE_URL to override this default.
+          VITE_LOGOS_BASE_URL: ${{ vars.LOGOS_BASE_URL || format('https://cdn.jsdelivr.net/gh/{0}@{1}', github.repository, github.sha) }}
+          # Set repository variable HLS_PROXY_BASE to the deployed edge Worker
+          # URL, ending in /proxy/hls. Video then bypasses the Render API.
+          VITE_HLS_PROXY_BASE: ${{ vars.HLS_PROXY_BASE }}
           # Optional override for scripts/sitemap.mjs; it otherwise derives the
           # Pages URL from GITHUB_REPOSITORY (or public/CNAME).
           SITE_URL: ${{ vars.SITE_URL }}

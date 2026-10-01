@@ -17,6 +17,7 @@ Python tooling pulls live TV metadata from [aparatchii.com](https://www.aparatch
 - [Channel JSON](#channel-json)
 - [GitHub Actions](#github-actions)
 - [HLS proxy (`gg.*`)](#hls-proxy-gg)
+- [Edge HLS deployment](#edge-hls-deployment)
 - [Notes](#notes)
 
 ---
@@ -35,6 +36,7 @@ Python tooling pulls live TV metadata from [aparatchii.com](https://www.aparatch
 | `backend/data/categories.db`    | SQLite: section **labels**, **sort order**, **active** (optional; synced in CI)       |
 | `logo/`                         | Downloaded images referenced by relative paths in JSON                                |
 | `frontend/`                     | React + Vite SPA                                                                      |
+| `edge-proxy/`                   | Cloudflare Worker that keeps public HLS traffic off Render                            |
 | `docker-compose.yml`, `docker/` | **web** (nginx + static build) + **api** (FastAPI)                                    |
 
 
@@ -159,6 +161,8 @@ Admin credentials are read from `**backend/.env**` (see `**ADMIN_USER**` / `**AD
 | `POST /api/admin/session`                     | HTTP Basic                           | Sets `admin_session` cookie for the admin UI   |
 | `GET /admin`, `GET /api/admin`                | HTTP Basic or cookie                 | Static HTML admin                              |
 | `GET /proxy/hls?url=…`                        | None                                 | HLS proxy for `gg.*` hosts (embedder headers)  |
+| `GET/HEAD /healthz`                           | None                                 | Render/service health check                    |
+| `GET /api/admin/runtime`                      | HTTP Basic or `admin_session` cookie | Process memory and HLS cache/request metrics   |
 
 
 
@@ -169,6 +173,7 @@ Admin credentials are read from `**backend/.env**` (see `**ADMIN_USER**` / `**AD
 | `ADMIN_SESSION_SECRET` | HMAC for session cookie                            |
 | `CATEGORY_DB_PATH`     | SQLite path (default `backend/data/categories.db`) |
 | `CORS_ORIGINS`         | Comma-separated origins (default `*`)              |
+| `ANALYTICS_DEDUPE_SECONDS` | Duplicate IP/channel suppression window (default `30`; `0` disables) |
 | `HLS_SEGMENT_CACHE_MB` | In-memory HLS cache in MiB (default `32`; `0` disables it) |
 | `HLS_MAX_SEGMENT_BUFFERS` | Concurrent HLS cache/prefetch buffers (default `2`; `0` disables them) |
 
@@ -229,6 +234,24 @@ npm run preview
 | `VITE_API_BASE`       | API on another origin            | Full origin for `/api/categories` (no trailing slash). Omit if same origin (Docker or local combined stack). |
 | `VITE_HLS_PROXY_BASE` | Static host **without** `/proxy` | Full URL to the **proxy base** ending with `/proxy/hls` (see [HLS](#hls-proxy-gg))                           |
 | `VITE_DEV_API_PROXY`  | Local dev only                   | Where to proxy `/api` (default `http://127.0.0.1:8787`)                                                      |
+
+
+### GitHub image CDN
+
+The GitHub Pages workflow automatically sets `VITE_LOGOS_BASE_URL` to a
+commit-pinned jsDelivr URL:
+
+```text
+https://cdn.jsdelivr.net/gh/<owner>/<repository>@<commit-sha>
+```
+
+Because channel logo paths already begin with `logo/`, no JSON rewrite is
+needed. Pinning the commit makes every deployment immutable and avoids stale
+images. When this external base is configured, Vite also skips copying the logo
+directory into the frontend artifact. This requires a public GitHub repository.
+
+Create the optional GitHub Actions repository variable `LOGOS_BASE_URL` to use
+another CDN or a fixed tag instead.
 
 
 ### GitHub Pages
@@ -314,9 +337,23 @@ CDNs often return **403** unless requests use the same **Origin / Referer** as t
 | **Vite dev / `npm run preview`**     | Built-in `**/proxy/hls**` in `[vite-plugin-hls-proxy.ts](frontend/vite-plugin-hls-proxy.ts)`                                                                                                                                                                              |
 | **Docker / `main:app` behind nginx** | Browser uses **same origin**; no `VITE_HLS_PROXY_BASE` needed. The bundled `[nginx.conf](docker/nginx.conf)` forwards `**Host` with port** (`$http_host`) so rewritten playlist URLs stay on the same host:port (using `$host` alone drops the port and breaks segments). |
 | **Static hosting only**              | Run `**hls_proxy.py`** or `**main:app**` somewhere and build with e.g. `VITE_HLS_PROXY_BASE=http://your-host:8787/proxy/hls`                                                                                                                                              |
+| **Public edge deployment**           | Deploy `[edge-proxy/](edge-proxy/)` and build with `VITE_HLS_PROXY_BASE=https://tv2-hls-edge.<account>.workers.dev/proxy/hls`; Render then serves API traffic only.                                                                                                      |
 
 
 FastAPI alone: `uvicorn hls_proxy:app --host 127.0.0.1 --port 8787` (proxy only). Full stack: `**uvicorn main:app**` (proxy + API + admin).
+
+---
+
+## Edge HLS deployment
+
+For public traffic, the recommended configuration is the Worker under
+`[edge-proxy/](edge-proxy/)`. It rewrites live playlists and caches immutable
+segments at Cloudflare's edge, preventing Render from sending a separate video
+copy to every viewer. The FastAPI proxy remains available as a local-development
+and rollback path.
+
+Deployment and GitHub Pages configuration are documented in
+`[edge-proxy/README.md](edge-proxy/README.md)`.
 
 ---
 

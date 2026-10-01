@@ -250,10 +250,17 @@ export function VideoPlayer({
       const hls = new Hls({
         enableWorker: false,
         lowLatencyMode: false,
-        // Pre-buffer 30 s ahead; allow up to 45 s when bandwidth allows.
-        maxBufferLength: 30,
-        maxMaxBufferLength: 45,
-        maxBufferSize: 30 * 1024 * 1024,
+        // Do not download a high-resolution rendition for a small multiview
+        // pane. CSS pixels are intentional: device pixel ratio should not turn
+        // a 360p-sized pane into a 1080p network request.
+        capLevelToPlayerSize: true,
+        ignoreDevicePixelRatio: true,
+        // Keep only a short live look-ahead. Large buffers waste entire
+        // segments whenever a viewer changes channel or leaves the page.
+        maxBufferLength: 15,
+        maxMaxBufferLength: 20,
+        maxBufferSize: 16 * 1024 * 1024,
+        backBufferLength: 30,
         // Start ABR estimate at 1 Mbps so the first segment isn't always lowest quality.
         abrEwmaDefaultEstimate: 1_000_000,
         // Give the proxy extra time to relay the first segment on slow uplinks.

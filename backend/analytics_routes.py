@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Request
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 import analytics_db
 from category_routes import require_admin
@@ -22,14 +22,14 @@ def _client_ip(request: Request) -> str:
 
 
 class ViewBody(BaseModel):
-    channel_slug: str
-    channel_name: str | None = None
+    channel_slug: str = Field(min_length=1, max_length=128)
+    channel_name: str | None = Field(default=None, max_length=256)
 
 
 @router.post("/analytics/view", status_code=204)
 def record_view(body: ViewBody, request: Request) -> None:
-    ip = _client_ip(request)
-    ua = request.headers.get("user-agent") or None
+    ip = _client_ip(request)[:64]
+    ua = (request.headers.get("user-agent") or "")[:512] or None
     analytics_db.record_view(body.channel_slug, body.channel_name, ip, ua)
 
 
