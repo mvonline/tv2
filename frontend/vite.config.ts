@@ -56,6 +56,9 @@ function devAssetsMiddleware() {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, __dirname, "")
   const base = env.VITE_BASE ?? "/"
+  const externalLogosBase = (
+    env.VITE_LOGOS_BASE_URL ?? env.LOGOS_BASE_URL ?? ""
+  ).trim()
 
   return {
     base,
@@ -111,7 +114,11 @@ export default defineConfig(({ mode }) => {
             dest: "data",
             rename: { stripBase: 2 },
           },
-          { src: "../logo/*", dest: "logo" },
+          // An external logo CDN makes these hundreds of files unnecessary in
+          // the frontend artifact. Local/Docker builds retain the fallback.
+          ...(externalLogosBase
+            ? []
+            : [{ src: "../logo/*", dest: "logo" }]),
         ],
       }),
     ],

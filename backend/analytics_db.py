@@ -39,6 +39,8 @@ def init_db() -> None:
             CREATE INDEX IF NOT EXISTS idx_cv_slug ON channel_views (channel_slug);
             CREATE INDEX IF NOT EXISTS idx_cv_at   ON channel_views (viewed_at);
             CREATE INDEX IF NOT EXISTS idx_cv_ip   ON channel_views (ip);
+            CREATE INDEX IF NOT EXISTS idx_cv_dedupe
+                ON channel_views (channel_slug, ip, viewed_at);
         """)
         conn.commit()
     finally:
@@ -50,15 +52,52 @@ def record_view(
     channel_name: str | None,
     ip: str,
     user_agent: str | None,
-) -> None:
+) -> bool:
+    """Record a view unless the same IP/channel was just recorded.
+
+    Returns True when a row was inserted. The single INSERT ... SELECT statement
+    keeps the check and write atomic across concurrent FastAPI worker threads.
+    """
+    try:
+        dedupe_seconds = max(
+            0, int(os.environ.get("ANALYTICS_DEDUPE_SECONDS", "30"))
+        )
+    except ValueError:
+        dedupe_seconds = 30
+    now = int(time.time())
     conn = connect()
     try:
-        conn.execute(
-            "INSERT INTO channel_views (channel_slug, channel_name, ip, user_agent, viewed_at) "
-            "VALUES (?, ?, ?, ?, ?)",
-            (channel_slug, channel_name, ip, user_agent, int(time.time())),
-        )
+        if dedupe_seconds == 0:
+            cur = conn.execute(
+                "INSERT INTO channel_views "
+                "(channel_slug, channel_name, ip, user_agent, viewed_at) "
+                "VALUES (?, ?, ?, ?, ?)",
+                (channel_slug, channel_name, ip, user_agent, now),
+            )
+        else:
+            cur = conn.execute(
+                """
+                INSERT INTO channel_views
+                    (channel_slug, channel_name, ip, user_agent, viewed_at)
+                SELECT ?, ?, ?, ?, ?
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM channel_views
+                    WHERE channel_slug = ? AND ip = ? AND viewed_at >= ?
+                )
+                """,
+                (
+                    channel_slug,
+                    channel_name,
+                    ip,
+                    user_agent,
+                    now,
+                    channel_slug,
+                    ip,
+                    now - dedupe_seconds,
+                ),
+            )
         conn.commit()
+        return cur.rowcount > 0
     finally:
         conn.close()
 

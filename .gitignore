@@ -5,6 +5,10 @@ __pycache__/
 .venv/
 *.egg-info/
 
+# Node / edge tooling
+node_modules/
+.wrangler/
+
 # Environment files — keep .example files, ignore real secrets
 .env
 backend/.env
@@ -26,4 +30,3 @@ Thumbs.db
 desktop/frontend_dist/*
 !desktop/frontend_dist/.gitkeep
 desktop/tv2-desktop
-

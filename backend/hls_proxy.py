@@ -192,6 +192,14 @@ _segment_cache: "OrderedDict[str, tuple[float, str, bytes]]" = OrderedDict()
 _segment_cache_bytes = 0
 _segment_prefetching: set[str] = set()
 _active_segment_buffers = 0
+# key -> completion of the one upstream download currently filling this segment.
+# Followers wait briefly for that shared result instead of stampeding the CDN.
+_segment_inflight: dict[str, asyncio.Future[bool]] = {}
+_active_upstream_segments = 0
+_segment_cache_hits = 0
+_segment_cache_misses = 0
+_segment_coalesced_requests = 0
+_segment_upstream_requests = 0
 
 # Only the *upstream* body is cached: rewriting is a few regexes over ~250 bytes,
 # so it is cheaper to redo per request than to key the cache by proxy origin too.
@@ -281,16 +289,18 @@ def _segment_drop(url: str) -> None:
         _segment_cache_bytes -= len(hit[2])
 
 
-def _segment_store(url: str, ctype: str, body: bytes) -> None:
+def _segment_store(url: str, ctype: str, body: bytes) -> bool:
     global _segment_cache_bytes
-    if len(body) > SEGMENT_MAX_BYTES:
-        return
+    if len(body) > SEGMENT_MAX_BYTES or len(body) > SEGMENT_CACHE_MAX_BYTES:
+        return False
     _segment_drop(url)
-    _segment_cache[cache_key(url)] = (time.monotonic() + SEGMENT_TTL_S, ctype, body)
+    key = cache_key(url)
+    _segment_cache[key] = (time.monotonic() + SEGMENT_TTL_S, ctype, body)
     _segment_cache_bytes += len(body)
     while _segment_cache_bytes > SEGMENT_CACHE_MAX_BYTES and _segment_cache:
         oldest = next(iter(_segment_cache))
         _segment_drop(oldest)
+    return key in _segment_cache
 
 
 def _reserve_segment_buffer() -> bool:
@@ -308,6 +318,38 @@ def _reserve_segment_buffer() -> bool:
 def _release_segment_buffer() -> None:
     global _active_segment_buffers
     _active_segment_buffers = max(0, _active_segment_buffers - 1)
+
+
+def _finish_segment_inflight(
+    key: str,
+    future: asyncio.Future[bool] | None,
+    cached: bool,
+) -> None:
+    if future is None:
+        return
+    if not future.done():
+        future.set_result(cached)
+    if _segment_inflight.get(key) is future:
+        _segment_inflight.pop(key, None)
+
+
+def runtime_stats() -> dict[str, int]:
+    """Small, JSON-safe snapshot for the authenticated runtime endpoint."""
+    return {
+        "segment_cache_bytes": _segment_cache_bytes,
+        "segment_cache_limit_bytes": SEGMENT_CACHE_MAX_BYTES,
+        "segment_cache_entries": len(_segment_cache),
+        "active_segment_buffers": _active_segment_buffers,
+        "segment_buffer_limit": MAX_ACTIVE_SEGMENT_BUFFERS,
+        "active_upstream_segments": _active_upstream_segments,
+        "inflight_segment_keys": len(_segment_inflight),
+        "segment_cache_hits": _segment_cache_hits,
+        "segment_cache_misses": _segment_cache_misses,
+        "segment_coalesced_requests": _segment_coalesced_requests,
+        "segment_upstream_requests": _segment_upstream_requests,
+        "manifest_cache_entries": len(_manifest_cache),
+        "warm_channels": len(_warm_targets),
+    }
 
 
 # ── Playlist rewriting ───────────────────────────────────────────────────────
@@ -387,10 +429,19 @@ _prefetch_tasks: set[asyncio.Task] = set()
 
 async def _prefetch_segment(url: str, key: str) -> None:
     """Warm the cache for a segment the client is about to ask for."""
+    global _active_upstream_segments, _segment_upstream_requests
+    if key in _segment_inflight:
+        _segment_prefetching.discard(key)
+        return
     reserved = _reserve_segment_buffer()
     if not reserved:
         _segment_prefetching.discard(key)
         return
+    future = asyncio.get_running_loop().create_future()
+    _segment_inflight[key] = future
+    cached = False
+    _active_upstream_segments += 1
+    _segment_upstream_requests += 1
     try:
         client = await get_client()
         async with client.stream(
@@ -410,10 +461,12 @@ async def _prefetch_segment(url: str, key: str) -> None:
                 chunks.append(chunk)
             if chunks:
                 ctype = r.headers.get("content-type") or "application/octet-stream"
-                _segment_store(url, ctype, b"".join(chunks))
+                cached = _segment_store(url, ctype, b"".join(chunks))
     except Exception:
         pass  # Prefetch is best-effort; the real request will fetch it.
     finally:
+        _active_upstream_segments -= 1
+        _finish_segment_inflight(key, future, cached)
         _release_segment_buffer()
         _segment_prefetching.discard(key)
 
@@ -610,6 +663,10 @@ async def _refresh_manifest(url: str) -> None:
 
 @router.get("/proxy/hls")
 async def proxy_hls(request: Request, url: str = Query(..., description="Upstream HLS or segment URL")):
+    global _active_upstream_segments
+    global _segment_cache_hits, _segment_cache_misses
+    global _segment_coalesced_requests, _segment_upstream_requests
+
     try:
         target = urlparse(url)
     except Exception:
@@ -625,8 +682,10 @@ async def proxy_hls(request: Request, url: str = Query(..., description="Upstrea
     if not looks_like_manifest:
         cached = _segment_cached(url)
         if cached is not None:
+            _segment_cache_hits += 1
             ctype, body = cached
             return Response(content=body, media_type=ctype, headers=_SEGMENT_HEADERS)
+        _segment_cache_misses += 1
 
     proxy_self = proxy_base_url(request)
 
@@ -636,19 +695,54 @@ async def proxy_hls(request: Request, url: str = Query(..., description="Upstrea
             url, proxy_self, request.headers.get("accept-encoding", "")
         )
 
+    # If another request (including prefetch) is already downloading this exact
+    # immutable segment, wait for its cache fill instead of opening another CDN
+    # connection. A timeout/failure falls back to an independent streamed fetch.
+    key = cache_key(url)
+    inflight = _segment_inflight.get(key)
+    if inflight is not None:
+        _segment_coalesced_requests += 1
+        try:
+            await asyncio.wait_for(asyncio.shield(inflight), timeout=25.0)
+        except TimeoutError:
+            pass
+        cached = _segment_cached(url)
+        if cached is not None:
+            _segment_cache_hits += 1
+            ctype, body = cached
+            return Response(content=body, media_type=ctype, headers=_SEGMENT_HEADERS)
+
+    # Reserve accumulation memory before opening the upstream response. When no
+    # slot is available, the segment still streams normally but is not retained.
+    reserved = key not in _segment_inflight and _reserve_segment_buffer()
+    segment_future: asyncio.Future[bool] | None = None
+    if reserved:
+        segment_future = asyncio.get_running_loop().create_future()
+        _segment_inflight[key] = segment_future
+
     # Segments (.ts, AAC, etc.): stream in fixed-size chunks so the browser starts
     # receiving data before the full segment has been fetched from upstream, while
-    # accumulating a copy so the next viewer is served from memory.
+    # accumulating a bounded copy so following viewers use the shared cache.
     client = await get_client()
     req = client.build_request("GET", url, headers=upstream_headers(target.netloc))
+    _active_upstream_segments += 1
+    _segment_upstream_requests += 1
     try:
         r = await client.send(req, stream=True)
     except httpx.HTTPError:
+        _active_upstream_segments -= 1
+        if reserved:
+            _release_segment_buffer()
+        _finish_segment_inflight(key, segment_future, False)
         return Response("Upstream unreachable", status_code=504, media_type="text/plain")
 
     if r.status_code != 200:
         status = r.status_code
         await r.aclose()
+        _active_upstream_segments -= 1
+        if reserved:
+            _release_segment_buffer()
+        _finish_segment_inflight(key, segment_future, False)
         if status in _PERMANENT_STATUSES:
             _invalidate_manifests_for(url)
         return _upstream_error(status)
@@ -657,10 +751,11 @@ async def proxy_hls(request: Request, url: str = Query(..., description="Upstrea
     content_length = r.headers.get("content-length")
 
     async def _stream():
+        global _active_upstream_segments
         chunks: list[bytes] = []
         total = 0
-        reserved = _reserve_segment_buffer()
         cacheable = reserved
+        stored = False
         if content_length:
             try:
                 cacheable = cacheable and int(content_length) <= SEGMENT_MAX_BYTES
@@ -681,8 +776,10 @@ async def proxy_hls(request: Request, url: str = Query(..., description="Upstrea
             raise
         else:
             if cacheable and chunks:
-                _segment_store(url, ctype, b"".join(chunks))
+                stored = _segment_store(url, ctype, b"".join(chunks))
         finally:
+            _active_upstream_segments -= 1
+            _finish_segment_inflight(key, segment_future, stored)
             if reserved:
                 _release_segment_buffer()
             await r.aclose()

@@ -8,6 +8,7 @@ Env:
   CATEGORY_DB_PATH — optional sqlite path (default: backend/data/categories.db)
   ANALYTICS_DB_PATH — optional sqlite path (default: backend/data/analytics.db)
   ANALYTICS_RETENTION_DAYS — delete analytics rows older than N days (default: 90)
+  ANALYTICS_DEDUPE_SECONDS — suppress rapid duplicate IP/channel views (default: 30)
   ADMIN_SESSION_SECRET — optional HMAC secret for admin_session cookie
   CHANNELS_JSON_URL — optional; HTTP(S) URL to download channels.json at startup
   CHANNELS_JSON_PATH — optional; destination for URL fetch (default: backend/data/channels.json)
@@ -25,25 +26,35 @@ import os
 import time
 from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import Annotated
 from urllib.parse import urlsplit, urlunsplit
 
 from dotenv import load_dotenv
 
 load_dotenv(Path(__file__).parent / ".env")
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 import analytics_db
 import epg_db
 from analytics_routes import admin_router as analytics_admin_router
 from analytics_routes import router as analytics_router
-from category_routes import admin_router, router as category_public_router, serve_admin_page
+from category_routes import (
+    admin_router,
+    require_admin,
+    router as category_public_router,
+    serve_admin_page,
+)
 from channels_fetch import maybe_fetch_channels_json
 from epg_routes import admin_router as epg_admin_router
 from epg_routes import refresh_all_configured_sources
 from epg_routes import router as epg_router
-from hls_proxy import aclose_client as aclose_hls_client, router as hls_router
+from hls_proxy import (
+    aclose_client as aclose_hls_client,
+    router as hls_router,
+    runtime_stats as hls_runtime_stats,
+)
 from scraper_routes import router as scraper_router
 
 
@@ -102,6 +113,34 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+_started_at = time.time()
+
+
+def _process_rss_bytes() -> int | None:
+    """Current resident memory on Linux, without adding a psutil dependency."""
+    try:
+        resident_pages = int(Path("/proc/self/statm").read_text().split()[1])
+        return resident_pages * os.sysconf("SC_PAGE_SIZE")
+    except (OSError, IndexError, ValueError):
+        return None
+
+
+@app.api_route("/", methods=["GET", "HEAD"], include_in_schema=False)
+@app.api_route("/healthz", methods=["GET", "HEAD"], include_in_schema=False)
+async def healthcheck() -> dict[str, str]:
+    return {"status": "ok"}
+
+
+@app.get("/api/admin/runtime", tags=["admin"])
+async def runtime_status(
+    _: Annotated[None, Depends(require_admin)],
+) -> dict:
+    return {
+        "process_rss_bytes": _process_rss_bytes(),
+        "uptime_seconds": int(time.time() - _started_at),
+        "hls": hls_runtime_stats(),
+    }
 
 app.include_router(hls_router)
 app.include_router(category_public_router, prefix="/api")
