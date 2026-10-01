@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import asyncio
 import gzip
+import os
 import re
 import time
 from collections import OrderedDict
@@ -56,7 +57,26 @@ MANIFEST_STALE_S = 5.0
 # Segments are immutable, so they only leave the cache by age or LRU pressure.
 SEGMENT_TTL_S = 60.0
 SEGMENT_MAX_BYTES = 8 * 1024 * 1024
-SEGMENT_CACHE_MAX_BYTES = 192 * 1024 * 1024
+
+
+def _nonnegative_env_int(name: str, default: int) -> int:
+    try:
+        return max(0, int(os.environ.get(name, str(default))))
+    except ValueError:
+        return default
+
+
+# Render's smaller instances have little headroom beyond the Python process and
+# socket buffers.  A 192 MiB cache can therefore OOM a 512 MiB instance once a
+# few concurrent streams are also accumulating segments.  Keep the default
+# deliberately modest and let larger instances opt in to a bigger cache.
+SEGMENT_CACHE_MAX_BYTES = (
+    _nonnegative_env_int("HLS_SEGMENT_CACHE_MB", 32) * 1024 * 1024
+)
+# Each cacheable in-flight segment can use up to SEGMENT_MAX_BYTES and briefly
+# needs a second copy while its chunks are joined.  Bound those accumulators;
+# streams that cannot reserve a slot are still proxied, just not cached.
+MAX_ACTIVE_SEGMENT_BUFFERS = _nonnegative_env_int("HLS_MAX_SEGMENT_BUFFERS", 2)
 # hls.js starts at the live edge and buffers liveSyncDurationCount segments, so
 # warming only the last one still left the second fetch paying full latency.
 PREFETCH_SEGMENTS = 2
@@ -171,6 +191,7 @@ async def aclose_client() -> None:
 _segment_cache: "OrderedDict[str, tuple[float, str, bytes]]" = OrderedDict()
 _segment_cache_bytes = 0
 _segment_prefetching: set[str] = set()
+_active_segment_buffers = 0
 
 # Only the *upstream* body is cached: rewriting is a few regexes over ~250 bytes,
 # so it is cheaper to redo per request than to key the cache by proxy origin too.
@@ -272,6 +293,23 @@ def _segment_store(url: str, ctype: str, body: bytes) -> None:
         _segment_drop(oldest)
 
 
+def _reserve_segment_buffer() -> bool:
+    """Reserve bounded memory for one segment accumulator without waiting."""
+    global _active_segment_buffers
+    if (
+        SEGMENT_CACHE_MAX_BYTES <= 0
+        or _active_segment_buffers >= MAX_ACTIVE_SEGMENT_BUFFERS
+    ):
+        return False
+    _active_segment_buffers += 1
+    return True
+
+
+def _release_segment_buffer() -> None:
+    global _active_segment_buffers
+    _active_segment_buffers = max(0, _active_segment_buffers - 1)
+
+
 # ── Playlist rewriting ───────────────────────────────────────────────────────
 
 def proxy_base_url(request: Request) -> str:
@@ -349,15 +387,34 @@ _prefetch_tasks: set[asyncio.Task] = set()
 
 async def _prefetch_segment(url: str, key: str) -> None:
     """Warm the cache for a segment the client is about to ask for."""
+    reserved = _reserve_segment_buffer()
+    if not reserved:
+        _segment_prefetching.discard(key)
+        return
     try:
         client = await get_client()
-        r = await client.get(url, headers=upstream_headers(urlparse(url).netloc))
-        if r.status_code == 200 and len(r.content) <= SEGMENT_MAX_BYTES:
-            ctype = r.headers.get("content-type") or "application/octet-stream"
-            _segment_store(url, ctype, r.content)
+        async with client.stream(
+            "GET", url, headers=upstream_headers(urlparse(url).netloc)
+        ) as r:
+            if r.status_code != 200:
+                return
+            content_length = r.headers.get("content-length")
+            if content_length and int(content_length) > SEGMENT_MAX_BYTES:
+                return
+            chunks: list[bytes] = []
+            total = 0
+            async for chunk in r.aiter_bytes(SEGMENT_CHUNK):
+                total += len(chunk)
+                if total > SEGMENT_MAX_BYTES:
+                    return
+                chunks.append(chunk)
+            if chunks:
+                ctype = r.headers.get("content-type") or "application/octet-stream"
+                _segment_store(url, ctype, b"".join(chunks))
     except Exception:
         pass  # Prefetch is best-effort; the real request will fetch it.
     finally:
+        _release_segment_buffer()
         _segment_prefetching.discard(key)
 
 
@@ -597,11 +654,18 @@ async def proxy_hls(request: Request, url: str = Query(..., description="Upstrea
         return _upstream_error(status)
 
     ctype = r.headers.get("content-type") or "application/octet-stream"
+    content_length = r.headers.get("content-length")
 
     async def _stream():
         chunks: list[bytes] = []
         total = 0
-        cacheable = True
+        reserved = _reserve_segment_buffer()
+        cacheable = reserved
+        if content_length:
+            try:
+                cacheable = cacheable and int(content_length) <= SEGMENT_MAX_BYTES
+            except ValueError:
+                pass
         try:
             async for chunk in r.aiter_bytes(SEGMENT_CHUNK):
                 if cacheable:
@@ -619,6 +683,8 @@ async def proxy_hls(request: Request, url: str = Query(..., description="Upstrea
             if cacheable and chunks:
                 _segment_store(url, ctype, b"".join(chunks))
         finally:
+            if reserved:
+                _release_segment_buffer()
             await r.aclose()
 
     return StreamingResponse(_stream(), media_type=ctype, headers=_SEGMENT_HEADERS)

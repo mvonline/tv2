@@ -14,6 +14,8 @@ Env:
   SKIP_CHANNELS_FETCH — set to 1 to skip CHANNELS_JSON_URL download
   LOGOS_BASE_URL — optional prefix URL for relative channel.logo paths (see GET /api/config)
   CORS_ORIGINS — comma-separated allowed browser origins, or * (default). Empty env falls back to *.
+  HLS_SEGMENT_CACHE_MB — in-memory segment cache limit (default: 32; 0 disables)
+  HLS_MAX_SEGMENT_BUFFERS — concurrent cache/prefetch accumulators (default: 2; 0 disables)
 """
 
 from __future__ import annotations

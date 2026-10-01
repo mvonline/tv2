@@ -169,6 +169,8 @@ Admin credentials are read from `**backend/.env**` (see `**ADMIN_USER**` / `**AD
 | `ADMIN_SESSION_SECRET` | HMAC for session cookie                            |
 | `CATEGORY_DB_PATH`     | SQLite path (default `backend/data/categories.db`) |
 | `CORS_ORIGINS`         | Comma-separated origins (default `*`)              |
+| `HLS_SEGMENT_CACHE_MB` | In-memory HLS cache in MiB (default `32`; `0` disables it) |
+| `HLS_MAX_SEGMENT_BUFFERS` | Concurrent HLS cache/prefetch buffers (default `2`; `0` disables them) |
 
 
 ---
@@ -323,4 +325,3 @@ FastAPI alone: `uvicorn hls_proxy:app --host 127.0.0.1 --port 8787` (proxy only)
 - Respect the source site’s terms of use; keep scrape `**--delay**` reasonable.
 - `**requires_proxy: true**` streams expect the HLS proxy path above.
 - Re-running the scraper overwrites matching files under `logo/`.
-
