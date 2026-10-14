@@ -13,6 +13,24 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://tv2.vafa.one/watch/afghan-education-tv%2Fnoor-tv</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tv2.vafa.one/watch/afghan-entertainment-tv%2Fafghan-theatre</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tv2.vafa.one/watch/afghan-entertainment-tv%2Famu-tv</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://tv2.vafa.one/watch/afghan-entertainment-tv%2Fariana-television</loc>
     <lastmod>2026-10-14</lastmod>
     <changefreq>daily</changefreq>
@@ -31,13 +49,31 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://tv2.vafa.one/watch/afghan-entertainment-tv%2Fiman-tv</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://tv2.vafa.one/watch/afghan-entertainment-tv%2Flemar-tv</loc>
     <lastmod>2026-10-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://tv2.vafa.one/watch/afghan-entertainment-tv%2Fmaawj-tv</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://tv2.vafa.one/watch/afghan-entertainment-tv%2Fpayame-afghan-tv</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tv2.vafa.one/watch/afghan-entertainment-tv%2Fshamshad-tv</loc>
     <lastmod>2026-10-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -50,6 +86,12 @@
   </url>
   <url>
     <loc>https://tv2.vafa.one/watch/afghan-music-live-tv%2Fasia-music-channel</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tv2.vafa.one/watch/afghan-music-live-tv%2Fkayhan-tv</loc>
     <lastmod>2026-10-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -541,6 +583,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://tv2.vafa.one/watch/farsi-film-tv%2Forange-tv</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://tv2.vafa.one/watch/farsi-film-tv%2Foxir-tv</loc>
     <lastmod>2026-10-14</lastmod>
     <changefreq>daily</changefreq>
@@ -572,6 +620,12 @@
   </url>
   <url>
     <loc>https://tv2.vafa.one/watch/farsi-film-tv%2Fpersiana-plus</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tv2.vafa.one/watch/farsi-film-tv%2Froyal-tv</loc>
     <lastmod>2026-10-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -937,6 +991,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://tv2.vafa.one/watch/farsi-scientific-tv%2Ftm-tv</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://tv2.vafa.one/watch/farsi-series-tv%2Fafra-series</loc>
     <lastmod>2026-10-14</lastmod>
     <changefreq>daily</changefreq>
@@ -950,6 +1010,12 @@
   </url>
   <url>
     <loc>https://tv2.vafa.one/watch/farsi-series-tv%2Fava-series</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tv2.vafa.one/watch/farsi-series-tv%2Fekran-movies</loc>
     <lastmod>2026-10-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -1519,7 +1585,25 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://tv2.vafa.one/watch/kurdish-entertainment-tv%2Fkurd-max-show</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tv2.vafa.one/watch/kurdish-entertainment-tv%2Fkurd-max-tv</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://tv2.vafa.one/watch/kurdish-entertainment-tv%2Fkurdistan-tv</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tv2.vafa.one/watch/kurdish-entertainment-tv%2Fkurdsat-tv</loc>
     <lastmod>2026-10-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -1736,6 +1820,12 @@
   </url>
   <url>
     <loc>https://tv2.vafa.one/watch/tajik%2Fvarzish-tv</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tv2.vafa.one/watch/turkish-entertainment-tv%2Ftvnet</loc>
     <lastmod>2026-10-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
