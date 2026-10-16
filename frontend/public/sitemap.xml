@@ -559,6 +559,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://tv2.vafa.one/watch/farsi-film-tv%2Firan-film</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://tv2.vafa.one/watch/farsi-film-tv%2Fmaah-tv</loc>
     <lastmod>2026-10-16</lastmod>
     <changefreq>daily</changefreq>
@@ -596,6 +602,12 @@
   </url>
   <url>
     <loc>https://tv2.vafa.one/watch/farsi-film-tv%2Foxir-tv</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tv2.vafa.one/watch/farsi-film-tv%2Fpersiana-china</loc>
     <lastmod>2026-10-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -799,6 +811,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://tv2.vafa.one/watch/farsi-news-tv%2Fbalochestan-tv</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://tv2.vafa.one/watch/farsi-news-tv%2Fbbc-farsi-live-tv</loc>
     <lastmod>2026-10-16</lastmod>
     <changefreq>daily</changefreq>
@@ -997,6 +1015,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://tv2.vafa.one/watch/farsi-scientific-tv%2Fpersiana-podcast</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://tv2.vafa.one/watch/farsi-scientific-tv%2Ftm-tv</loc>
     <lastmod>2026-10-16</lastmod>
     <changefreq>daily</changefreq>
@@ -1160,6 +1184,12 @@
   </url>
   <url>
     <loc>https://tv2.vafa.one/watch/iranian-radio%2Fradio-novin</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tv2.vafa.one/watch/iranian-radio%2Fradio-shemroon</loc>
     <lastmod>2026-10-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -1730,6 +1760,12 @@
   </url>
   <url>
     <loc>https://tv2.vafa.one/watch/politics-live-tv%2Firan-national-revolution-tv</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tv2.vafa.one/watch/politics-live-tv%2Firan-republic-tv</loc>
     <lastmod>2026-10-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
