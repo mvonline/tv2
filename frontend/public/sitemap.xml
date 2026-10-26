@@ -313,12 +313,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://tv2.vafa.one/watch/farsi-entertainment-tv%2Fgem-life</loc>
-    <lastmod>2026-10-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://tv2.vafa.one/watch/farsi-entertainment-tv%2Fgem-sport-live</loc>
     <lastmod>2026-10-26</lastmod>
     <changefreq>daily</changefreq>
@@ -445,12 +439,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://tv2.vafa.one/watch/farsi-film-tv%2Farvan-tv</loc>
-    <lastmod>2026-10-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://tv2.vafa.one/watch/farsi-film-tv%2Fava-family</loc>
     <lastmod>2026-10-26</lastmod>
     <changefreq>daily</changefreq>
@@ -518,12 +506,6 @@
   </url>
   <url>
     <loc>https://tv2.vafa.one/watch/farsi-film-tv%2Fgem-drama-plus</loc>
-    <lastmod>2026-10-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://tv2.vafa.one/watch/farsi-film-tv%2Fgem-film</loc>
     <lastmod>2026-10-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -680,12 +662,6 @@
   </url>
   <url>
     <loc>https://tv2.vafa.one/watch/farsi-kids-tv%2Fgem-junior</loc>
-    <lastmod>2026-10-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://tv2.vafa.one/watch/farsi-kids-tv%2Fgem-kids</loc>
     <lastmod>2026-10-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -1621,12 +1597,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://tv2.vafa.one/watch/korean-kids-tv%2Febs-kids</loc>
-    <lastmod>2026-10-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://tv2.vafa.one/watch/korean-series%2Fpersiana-korea</loc>
     <lastmod>2026-10-26</lastmod>
     <changefreq>daily</changefreq>
@@ -1730,12 +1700,6 @@
   </url>
   <url>
     <loc>https://tv2.vafa.one/watch/kurdish-news-tv%2Fzagros-tv</loc>
-    <lastmod>2026-10-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://tv2.vafa.one/watch/politics-live-tv%2Fchannel-one</loc>
     <lastmod>2026-10-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
