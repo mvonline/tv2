@@ -367,6 +367,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://tv2.vafa.one/watch/farsi-entertainment-tv%2Fpersiana-sports-4</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://tv2.vafa.one/watch/farsi-entertainment-tv%2Fpersiana-sports2</loc>
     <lastmod>2026-11-13</lastmod>
     <changefreq>daily</changefreq>
@@ -991,6 +997,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://tv2.vafa.one/watch/farsi-scientific-tv%2Fgem-modern-economy</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://tv2.vafa.one/watch/farsi-scientific-tv%2Fgem-nature</loc>
     <lastmod>2026-11-13</lastmod>
     <changefreq>daily</changefreq>
@@ -1507,7 +1519,19 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://tv2.vafa.one/watch/irib-ostani-live-tv%2Firib-qazvin-live-tv</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://tv2.vafa.one/watch/irib-ostani-live-tv%2Firib-qom</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tv2.vafa.one/watch/irib-ostani-live-tv%2Firib-sahand-live-tv</loc>
     <lastmod>2026-11-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
