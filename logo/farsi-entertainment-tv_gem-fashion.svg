@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="312" height="312" viewBox="0 0 312 312" role="img" aria-labelledby="title">
+  <title id="title">White gem shield with serif f</title>
+  <g fill="#fff" transform="translate(16 50.9) scale(.2314) translate(-163 -93)">
+    <path fill-rule="evenodd" d="M476 93H1055L1373 411 768 1001 163 411ZM499 152 247 411 768 919 1289 411 1032 152Z"/>
+    <path d="M635 437H704V387C704 279 758 196 844 196 887 196 920 218 920 250 920 269 907 284 888 284 868 284 855 270 855 252 855 240 859 230 865 222 860 218 853 216 844 216 803 216 774 271 774 376V437H845V462H774V734H849V759H648V734H704V462H635Z"/>
+    <circle cx="958" cy="448" r="34"/>
+  </g>
+</svg>
